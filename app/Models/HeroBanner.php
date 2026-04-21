@@ -12,8 +12,6 @@ class HeroBanner extends Model
         'image_path',
         'cta_text',
         'cta_link',
-        'sort_order',
-        'is_active',
         'is_current',
         'archived_at',
         'title_translations',
@@ -22,9 +20,7 @@ class HeroBanner extends Model
     ];
 
     protected $casts = [
-        'is_active' => 'boolean',
         'is_current' => 'boolean',
-        'sort_order' => 'integer',
         'archived_at' => 'datetime',
         'title_translations' => 'array',
         'subtitle_translations' => 'array',
@@ -63,4 +59,3 @@ class HeroBanner extends Model
         return $this->cta_text;
     }
 }
-

@@ -96,23 +96,40 @@ class HeroBannerSeeder extends Seeder
             ? null
             : $now->copy()->subDays($row['archived_days_ago']);
 
-        $titleEn = $row['title']['en'];
-        $subtitleEn = $row['subtitle']['en'];
-        $ctaTextEn = $row['cta']['text']['en'];
+        $title = $this->normalizeTranslations($row['title']);
+        $subtitle = $this->normalizeTranslations($row['subtitle']);
+        $ctaText = $this->normalizeTranslations($row['cta']['text']);
 
         return [
-            'title' => $titleEn,
-            'subtitle' => $subtitleEn,
-            'title_translations' => $row['title'],
-            'subtitle_translations' => $row['subtitle'],
-            'cta_text' => $ctaTextEn,
-            'cta_text_translations' => $row['cta']['text'],
+            // Keep legacy columns (title/subtitle/cta_text) as EN-backed values.
+            'title' => $title['en'],
+            'subtitle' => $subtitle['en'],
+            'cta_text' => $ctaText['en'],
+
+            // Bilingual JSON translations.
+            'title_translations' => $title,
+            'subtitle_translations' => $subtitle,
+            'cta_text_translations' => $ctaText,
+
             'cta_link' => $row['cta']['link'],
             'image_path' => $row['image_path'],
-            'sort_order' => 0,
-            'is_active' => true,
             'is_current' => $isCurrent,
             'archived_at' => $archivedAt,
+        ];
+    }
+
+    /**
+     * @param array{en?: string|null, vi?: string|null} $value
+     * @return array{en: string, vi: string}
+     */
+    private function normalizeTranslations(array $value): array
+    {
+        $en = $value['en'] ?? '';
+        $vi = $value['vi'] ?? '';
+
+        return [
+            'en' => is_string($en) ? $en : '',
+            'vi' => is_string($vi) ? $vi : '',
         ];
     }
 }

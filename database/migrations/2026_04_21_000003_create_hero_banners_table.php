@@ -12,14 +12,18 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->string('subtitle')->nullable();
-            $table->string('image_path')->nullable();
             $table->string('cta_text')->nullable();
             $table->string('cta_link')->nullable();
-            $table->unsignedInteger('sort_order')->default(0);
-            $table->boolean('is_active')->default(true);
+            $table->string('image_path')->nullable();
+            $table->json('title_translations')->nullable();
+            $table->json('subtitle_translations')->nullable();
+            $table->json('cta_text_translations')->nullable();
+            $table->boolean('is_current')->default(false);
+            $table->timestamp('archived_at')->nullable();
             $table->timestamps();
 
-            $table->index(['is_active', 'sort_order']);
+            $table->index('is_current');
+            $table->index('archived_at');
         });
     }
 
@@ -28,4 +32,3 @@ return new class extends Migration
         Schema::dropIfExists('hero_banners');
     }
 };
-

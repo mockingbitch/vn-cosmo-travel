@@ -4,7 +4,6 @@ namespace App\Repositories;
 
 use App\Contracts\Interfaces\HeroBannerRepositoryInterface;
 use App\Models\HeroBanner;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -12,22 +11,6 @@ use Illuminate\Support\Facades\DB;
 class HeroBannerRepository implements HeroBannerRepositoryInterface
 {
     private const HISTORY_LIMIT = 3;
-
-    public function adminPaginate(int $perPage = 15): LengthAwarePaginator
-    {
-        return HeroBanner::query()
-            ->latest('id')
-            ->paginate($perPage);
-    }
-
-    public function activeOrdered(): Collection
-    {
-        return HeroBanner::query()
-            ->where('is_active', true)
-            ->orderBy('sort_order')
-            ->orderByDesc('id')
-            ->get();
-    }
 
     public function currentOrNull(): ?HeroBanner
     {
@@ -86,14 +69,9 @@ class HeroBannerRepository implements HeroBannerRepositoryInterface
                 'image_path',
                 'cta_text',
                 'cta_link',
-                'sort_order',
-                'is_active',
             ]);
 
-            $current = $this->makeCurrent($data);
-
-            // makeCurrent already trims history
-            return $current;
+            return $this->makeCurrent($data);
         });
     }
 
@@ -112,4 +90,3 @@ class HeroBannerRepository implements HeroBannerRepositoryInterface
         }
     }
 }
-

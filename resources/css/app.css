@@ -13,6 +13,14 @@
 @layer components {
     .richtext {
         @apply text-slate-700 leading-7;
+        /* Blog body: use the OS / browser UI font stack (not the marketing `--font-sans`). */
+        font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+            'Noto Color Emoji';
+    }
+
+    /* WYSIWYG/HTML may ship inline font-family; inherit keeps everything on the system stack. */
+    .richtext * {
+        font-family: inherit !important;
     }
 
     .richtext h2 {

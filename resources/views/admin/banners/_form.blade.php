@@ -13,6 +13,9 @@
                 name="title_vi"
                 required
                 value="{{ old('title_vi', $banner?->getTitleForLocale('vi') ?? '') }}"
+                onfocus="setTimeout(() => { this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth; }, 0)"
+                onclick="this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth;"
+                onmouseup="return false;"
                 class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
             />
             @error('title_vi')
@@ -26,6 +29,9 @@
                 type="text"
                 name="subtitle_vi"
                 value="{{ old('subtitle_vi', $banner?->getSubtitleForLocale('vi') ?? '') }}"
+                onfocus="setTimeout(() => { this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth; }, 0)"
+                onclick="this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth;"
+                onmouseup="return false;"
                 class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
             />
             @error('subtitle_vi')
@@ -39,6 +45,9 @@
                 type="text"
                 name="cta_text_vi"
                 value="{{ old('cta_text_vi', $banner?->getCtaTextForLocale('vi') ?? '') }}"
+                onfocus="setTimeout(() => { this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth; }, 0)"
+                onclick="this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth;"
+                onmouseup="return false;"
                 class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
             />
             @error('cta_text_vi')
@@ -57,6 +66,9 @@
                 name="title_en"
                 required
                 value="{{ old('title_en', $banner?->getTitleForLocale('en') ?? '') }}"
+                onfocus="setTimeout(() => { this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth; }, 0)"
+                onclick="this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth;"
+                onmouseup="return false;"
                 class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
             />
             @error('title_en')
@@ -70,6 +82,9 @@
                 type="text"
                 name="subtitle_en"
                 value="{{ old('subtitle_en', $banner?->getSubtitleForLocale('en') ?? '') }}"
+                onfocus="setTimeout(() => { this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth; }, 0)"
+                onclick="this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth;"
+                onmouseup="return false;"
                 class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
             />
             @error('subtitle_en')
@@ -83,6 +98,9 @@
                 type="text"
                 name="cta_text_en"
                 value="{{ old('cta_text_en', $banner?->getCtaTextForLocale('en') ?? '') }}"
+                onfocus="setTimeout(() => { this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth; }, 0)"
+                onclick="this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth;"
+                onmouseup="return false;"
                 class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
             />
             @error('cta_text_en')
@@ -102,6 +120,9 @@
             name="cta_link"
             value="{{ old('cta_link', $banner?->cta_link ?? '') }}"
             placeholder="/tours"
+            onfocus="setTimeout(() => { this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth; }, 0)"
+            onclick="this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth;"
+            onmouseup="return false;"
             class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
         />
         @error('cta_link')

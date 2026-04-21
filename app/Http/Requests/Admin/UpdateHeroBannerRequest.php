@@ -22,8 +22,6 @@ class UpdateHeroBannerRequest extends FormRequest
             'cta_text_en' => ['nullable', 'string', 'max:50'],
             'cta_text_vi' => ['nullable', 'string', 'max:50'],
             'cta_link' => ['nullable', 'string', 'max:2048'],
-            'sort_order' => ['nullable', 'integer', 'min:0', 'max:1000000'],
-            'is_active' => ['nullable', 'boolean'],
         ];
     }
 }

@@ -17,6 +17,12 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
+// Default Laravel auth views may expect a `login` route name.
+// This project uses an admin-only login screen, so we alias `login` to `admin.login`.
+Route::get('/login', function (): RedirectResponse {
+    return redirect()->route('admin.login');
+})->name('login');
+
 Route::get('/language/{locale}', function (Request $request, string $locale): RedirectResponse {
     $supported = array_keys((array) config('locales.supported', []));
     if (!in_array($locale, $supported, true)) {

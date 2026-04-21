@@ -25,7 +25,6 @@ class HeroBannerController extends Controller
     public function update(UpdateHeroBannerRequest $request, HeroBannerAdminService $banners): RedirectResponse
     {
         $data = $request->validated();
-        $data['is_active'] = (bool) ($data['is_active'] ?? false);
 
         $banners->updateCurrent($data, $request->file('image'));
 

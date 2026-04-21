@@ -4,7 +4,6 @@ namespace App\Services\Admin;
 
 use App\Contracts\Interfaces\HeroBannerRepositoryInterface;
 use App\Models\HeroBanner;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
@@ -13,11 +12,6 @@ class HeroBannerAdminService
     public function __construct(
         private readonly HeroBannerRepositoryInterface $banners,
     ) {}
-
-    public function paginate(int $perPage = 15): LengthAwarePaginator
-    {
-        return $this->banners->adminPaginate($perPage);
-    }
 
     public function currentOrNull(): ?HeroBanner
     {
@@ -75,4 +69,3 @@ class HeroBannerAdminService
         return $this->banners->makeCurrent($data);
     }
 }
-

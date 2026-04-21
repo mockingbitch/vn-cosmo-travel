@@ -2,13 +2,13 @@
 
 @section('content')
     <div class="grid gap-6 lg:grid-cols-3">
-        <div class="lg:col-span-2">
-            <div>
-                <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('Hero Banner') }}</h1>
-                <p class="mt-1 text-sm text-slate-600">{{ __('Edit banner copy in Vietnamese and English.') }}</p>
-            </div>
+        <div class="lg:col-span-3">
+            <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('Hero Banner') }}</h1>
+            <p class="mt-1 text-sm text-slate-600">{{ __('Edit banner copy in Vietnamese and English.') }}</p>
+        </div>
 
-            <form class="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm" method="POST" action="{{ route('admin.banners.update') }}" enctype="multipart/form-data">
+        <div class="lg:col-span-2">
+            <form class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm" method="POST" action="{{ route('admin.banners.update') }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
 
@@ -57,7 +57,7 @@
                         @endphp
                         <button
                             type="button"
-                            class="max-w-full overflow-hidden rounded-2xl border border-slate-200 bg-white/60 p-3 text-left transition hover:bg-white hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-200/60"
+                            class="cursor-pointer max-w-full overflow-hidden rounded-2xl border border-slate-200 bg-white/60 p-3 text-left transition hover:bg-white hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-200/60"
                             @click="openPreview({
                                 id: {{ (int) $h->id }},
                                 title: {

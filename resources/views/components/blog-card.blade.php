@@ -13,7 +13,7 @@
                 class="h-full w-full object-cover transition duration-300 group-hover:scale-[1.03]"
             />
         </div>
-        <div class="p-5">
+        <div class="p-5 font-sans">
             <h3 class="text-base font-semibold tracking-tight text-slate-900 line-clamp-2">
                 {{ $vm->title() }}
             </h3>
