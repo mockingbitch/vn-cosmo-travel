@@ -79,7 +79,7 @@
                 <div class="grid gap-3">
                     <x-admin.button :href="route('admin.posts.create')" variant="primary">{{ __('Add new post') }}</x-admin.button>
                     <x-admin.button :href="route('admin.settings.edit')" variant="secondary">{{ __('Update settings') }}</x-admin.button>
-                    <x-admin.button :href="route('admin.banners.create')" variant="secondary">{{ __('Create hero banner') }}</x-admin.button>
+                    <x-admin.button :href="route('admin.banners.edit')" variant="secondary">{{ __('Edit hero banner') }}</x-admin.button>
                 </div>
             </x-admin.card>
 

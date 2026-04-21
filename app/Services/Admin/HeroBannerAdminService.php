@@ -6,6 +6,7 @@ use App\Contracts\Interfaces\HeroBannerRepositoryInterface;
 use App\Models\HeroBanner;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Collection;
 
 class HeroBannerAdminService
 {
@@ -18,33 +19,60 @@ class HeroBannerAdminService
         return $this->banners->adminPaginate($perPage);
     }
 
-    /**
-     * @param array<string, mixed> $data
-     */
-    public function create(array $data, ?UploadedFile $image = null): HeroBanner
+    public function currentOrNull(): ?HeroBanner
     {
-        if ($image) {
-            $data['image_path'] = $image->storePublicly('hero-banners', ['disk' => 'public']);
-        }
+        return $this->banners->currentOrNull();
+    }
 
-        return $this->banners->adminCreate($data);
+    /**
+     * @return Collection<int, HeroBanner>
+     */
+    public function history(int $limit = 50): Collection
+    {
+        return $this->banners->history($limit);
+    }
+
+    public function applyHistory(HeroBanner $historyBanner): HeroBanner
+    {
+        return $this->banners->applyHistory($historyBanner);
     }
 
     /**
      * @param array<string, mixed> $data
      */
-    public function update(HeroBanner $banner, array $data, ?UploadedFile $image = null): HeroBanner
+    public function updateCurrent(array $data, ?UploadedFile $image = null): HeroBanner
     {
         if ($image) {
             $data['image_path'] = $image->storePublicly('hero-banners', ['disk' => 'public']);
         }
 
-        return $this->banners->adminUpdate($banner, $data);
-    }
+        $data['title'] = (string) ($data['title_en'] ?? '');
+        $data['subtitle'] = $data['subtitle_en'] ?? null;
+        $data['cta_text'] = $data['cta_text_en'] ?? null;
 
-    public function delete(HeroBanner $banner): void
-    {
-        $this->banners->adminDelete($banner);
+        $data['title_translations'] = [
+            'en' => (string) ($data['title_en'] ?? ''),
+            'vi' => (string) ($data['title_vi'] ?? ''),
+        ];
+        $data['subtitle_translations'] = [
+            'en' => $data['subtitle_en'] ?? null,
+            'vi' => $data['subtitle_vi'] ?? null,
+        ];
+        $data['cta_text_translations'] = [
+            'en' => $data['cta_text_en'] ?? null,
+            'vi' => $data['cta_text_vi'] ?? null,
+        ];
+
+        unset(
+            $data['title_en'],
+            $data['title_vi'],
+            $data['subtitle_en'],
+            $data['subtitle_vi'],
+            $data['cta_text_en'],
+            $data['cta_text_vi'],
+        );
+
+        return $this->banners->makeCurrent($data);
     }
 }
 

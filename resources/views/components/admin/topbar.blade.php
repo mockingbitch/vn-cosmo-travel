@@ -38,6 +38,48 @@
         </div>
 
         <div class="flex items-center gap-2">
+            <div class="relative" x-data="{ langOpen: false }" @click.outside="langOpen = false">
+                @php
+                    $supportedLocales = (array) config('locales.supported', []);
+                    $currentLocale = app()->getLocale();
+                    $currentLocaleLabel = $supportedLocales[$currentLocale]['label'] ?? strtoupper((string) $currentLocale);
+                @endphp
+
+                <button
+                    type="button"
+                    class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
+                    @click="langOpen = !langOpen"
+                    :aria-expanded="langOpen.toString()"
+                    aria-label="{{ __('Language') }}"
+                >
+                    <svg class="h-4 w-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.6 9h16.8M3.6 15h16.8" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.6 2.4 4.1 5.5 4.1 9S14.6 18.6 12 21c-2.6-2.4-4.1-5.5-4.1-9S9.4 5.4 12 3Z" />
+                    </svg>
+                    <span>{{ $currentLocaleLabel }}</span>
+                    <svg class="h-4 w-4 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd"/>
+                    </svg>
+                </button>
+
+                <div
+                    x-show="langOpen"
+                    x-transition.opacity.origin.top.right
+                    class="absolute right-0 mt-2 w-44 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg"
+                >
+                    @foreach($supportedLocales as $key => $meta)
+                        <a
+                            href="{{ route('language.switch', ['locale' => $key]) }}"
+                            class="flex items-center justify-between gap-3 px-4 py-3 text-sm font-semibold {{ $currentLocale === $key ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-50' }}"
+                        >
+                            <span>{{ $meta['name'] ?? ($meta['label'] ?? strtoupper((string) $key)) }}</span>
+                            <span class="text-xs {{ $currentLocale === $key ? 'text-white/80' : 'text-slate-400' }}">{{ $meta['label'] ?? strtoupper((string) $key) }}</span>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
+
             <button
                 type="button"
                 class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white p-2 text-slate-700 shadow-sm transition hover:bg-slate-50"

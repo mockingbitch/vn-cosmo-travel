@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             DestinationSeeder::class,
             TourSeeder::class,
             PostSeeder::class,
+            HeroBannerSeeder::class,
         ]);
     }
 }

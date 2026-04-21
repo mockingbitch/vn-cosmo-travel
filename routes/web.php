@@ -41,7 +41,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('settings', [AdminSettingController::class, 'edit'])->name('settings.edit');
         Route::put('settings', [AdminSettingController::class, 'update'])->name('settings.update');
 
-        Route::resource('banners', AdminHeroBannerController::class)->except(['show']);
+        Route::get('banners', [AdminHeroBannerController::class, 'edit'])->name('banners.edit');
+        Route::put('banners', [AdminHeroBannerController::class, 'update'])->name('banners.update');
+        Route::post('banners/apply/{banner}', [AdminHeroBannerController::class, 'apply'])->name('banners.apply');
 
         Route::resource('tours', AdminTourController::class)->except(['show']);
         Route::resource('posts', AdminPostController::class)->except(['show']);

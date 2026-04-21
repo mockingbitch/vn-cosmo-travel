@@ -14,10 +14,13 @@ class UpdateHeroBannerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
-            'subtitle' => ['nullable', 'string', 'max:255'],
+            'title_en' => ['required', 'string', 'max:255'],
+            'title_vi' => ['required', 'string', 'max:255'],
+            'subtitle_en' => ['nullable', 'string', 'max:255'],
+            'subtitle_vi' => ['nullable', 'string', 'max:255'],
             'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:4096'],
-            'cta_text' => ['nullable', 'string', 'max:50'],
+            'cta_text_en' => ['nullable', 'string', 'max:50'],
+            'cta_text_vi' => ['nullable', 'string', 'max:50'],
             'cta_link' => ['nullable', 'string', 'max:2048'],
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:1000000'],
             'is_active' => ['nullable', 'boolean'],

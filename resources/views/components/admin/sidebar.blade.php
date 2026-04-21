@@ -1,10 +1,25 @@
 @php
-    $nav = [
-        ['label' => __('Dashboard'), 'route' => 'admin.dashboard', 'icon' => 'home'],
-        ['label' => __('Settings'), 'route' => 'admin.settings.edit', 'icon' => 'cog'],
-        ['label' => __('Hero Banners'), 'route' => 'admin.banners.index', 'icon' => 'photo'],
-        ['label' => __('Blog'), 'route' => 'admin.posts.index', 'icon' => 'document'],
-        ['label' => __('Media'), 'route' => null, 'icon' => 'folder'],
+    $sections = [
+        [
+            'title' => __('General'),
+            'items' => [
+                ['label' => __('Dashboard'), 'route' => 'admin.dashboard', 'icon' => 'home'],
+            ],
+        ],
+        [
+            'title' => __('Content'),
+            'items' => [
+                ['label' => __('Hero Banners'), 'route' => 'admin.banners.edit', 'icon' => 'photo'],
+                ['label' => __('Blog'), 'route' => 'admin.posts.index', 'icon' => 'document'],
+                ['label' => __('Media'), 'route' => null, 'icon' => 'folder'],
+            ],
+        ],
+        [
+            'title' => __('Settings'),
+            'items' => [
+                ['label' => __('Settings'), 'route' => 'admin.settings.edit', 'icon' => 'cog'],
+            ],
+        ],
     ];
 
     $icon = function (string $name): string {
@@ -19,50 +34,124 @@
     };
 @endphp
 
+<!-- Mobile overlay -->
+<div
+    x-show="sidebarOpen"
+    x-transition.opacity
+    class="fixed inset-0 z-40 bg-slate-900/40 lg:hidden"
+    @click="sidebarOpen = false"
+></div>
+
 <aside
-    class="border-b border-slate-200 bg-white lg:sticky lg:top-0 lg:h-screen lg:w-72 lg:border-b-0 lg:border-r"
-    :class="sidebarOpen ? 'block' : 'hidden lg:block'"
+    class="fixed inset-y-0 left-0 z-50 flex h-full flex-col border-r border-slate-200/70 bg-white/80 shadow-xl backdrop-blur supports-[backdrop-filter]:bg-white/70 lg:sticky lg:z-auto lg:shadow-none"
+    :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
+    class="transition-transform duration-200 ease-in-out"
+    :style="sidebarCollapsed ? 'width: 5rem;' : 'width: 18rem;'"
 >
-    <div class="flex items-center justify-between gap-3 px-4 py-4 lg:px-6">
-        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
-            <span class="grid h-9 w-9 place-items-center rounded-2xl bg-slate-900 text-sm font-semibold text-white">VC</span>
-            <span class="leading-tight">
-                <span class="block text-sm font-semibold text-slate-900">{{ config('app.name') }}</span>
-                <span class="block text-xs font-medium text-slate-500">{{ __('Admin') }}</span>
+    <div class="flex items-center justify-between gap-3 px-4 py-4">
+        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 overflow-hidden">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-slate-900 text-sm font-semibold text-white shadow-sm">VC</span>
+            <span class="min-w-0" x-show="!sidebarCollapsed" x-transition.opacity.duration.200ms>
+                <span class="block truncate text-sm font-semibold text-slate-900">{{ config('app.name') }}</span>
+                <span class="block truncate text-xs font-medium text-slate-500">{{ __('Admin') }}</span>
             </span>
         </a>
-        <button
-            type="button"
-            class="inline-flex items-center justify-center rounded-xl border border-slate-200 p-2 text-slate-700 hover:bg-slate-50 lg:hidden"
-            @click="sidebarOpen = false"
-            aria-label="Close sidebar"
-        >
-            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"/>
-            </svg>
-        </button>
+
+        <div class="flex items-center gap-2">
+            <button
+                type="button"
+                class="hidden items-center justify-center rounded-xl border border-slate-200 bg-white/70 p-2 text-slate-700 shadow-sm transition-all duration-200 hover:bg-slate-50 hover:shadow md:inline-flex lg:inline-flex"
+                @click="
+                    sidebarCollapsed = !sidebarCollapsed;
+                    try { localStorage.setItem('admin.sidebarCollapsed', sidebarCollapsed ? '1' : '0'); } catch (e) {}
+                "
+                :aria-pressed="sidebarCollapsed.toString()"
+                aria-label="Collapse sidebar"
+            >
+                <svg class="h-5 w-5 transition-transform duration-200" :class="sidebarCollapsed ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            <button
+                type="button"
+                class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white/70 p-2 text-slate-700 shadow-sm transition hover:bg-slate-50 lg:hidden"
+                @click="sidebarOpen = false"
+                aria-label="Close sidebar"
+            >
+                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"/>
+                </svg>
+            </button>
+        </div>
     </div>
 
-    <nav class="grid gap-1 px-3 pb-4 text-sm font-semibold text-slate-700 lg:px-4">
-        @foreach($nav as $item)
-            @php
-                $isDisabled = empty($item['route']);
-                $active = !$isDisabled && request()->routeIs($item['route'].'*');
-            @endphp
-            <a
-                href="{{ $isDisabled ? '#' : route($item['route']) }}"
-                class="group flex items-center gap-3 rounded-2xl px-3 py-2 transition
-                    {{ $active ? 'bg-slate-900 text-white shadow-sm' : ($isDisabled ? 'opacity-50 cursor-not-allowed' : 'hover:bg-slate-50') }}"
-                {{ $isDisabled ? 'aria-disabled=true' : '' }}
-            >
-                <svg class="h-5 w-5 {{ $active ? 'text-white' : 'text-slate-500 group-hover:text-slate-900' }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    {!! $icon($item['icon']) !!}
+    <div class="px-4 pb-3" x-show="!sidebarCollapsed" x-transition.opacity.duration.200ms>
+        <div class="relative">
+            <div class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
                 </svg>
-                <span>{{ $item['label'] }}</span>
-            </a>
+            </div>
+            <input
+                type="search"
+                placeholder="{{ __('Search') }}"
+                class="w-full rounded-2xl border border-slate-200 bg-white/70 px-10 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-200/60"
+            />
+        </div>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto px-3 pb-4 [scrollbar-width:thin] [scrollbar-color:rgb(203,213,225)_transparent]">
+        @foreach($sections as $section)
+            <div class="mt-4 first:mt-0">
+                <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400" x-show="!sidebarCollapsed" x-transition.opacity.duration.150ms>
+                    {{ $section['title'] }}
+                </div>
+
+                <div class="grid gap-1">
+                    @foreach($section['items'] as $item)
+                        @php
+                            $isDisabled = empty($item['route']);
+                            $active = !$isDisabled && request()->routeIs($item['route'].'*');
+                        @endphp
+
+                        <a
+                            href="{{ $isDisabled ? '#' : route($item['route']) }}"
+                            class="group relative flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-200 ease-in-out
+                                {{ $active ? 'bg-indigo-600/10 text-indigo-700' : ($isDisabled ? 'cursor-not-allowed opacity-50' : 'text-slate-700 hover:bg-slate-100/70 hover:shadow-sm hover:scale-[1.01]') }}"
+                            {{ $isDisabled ? 'aria-disabled=true' : '' }}
+                        >
+                            <span class="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-r bg-indigo-600 transition-opacity {{ $active ? 'opacity-100' : 'opacity-0 group-hover:opacity-50' }}"></span>
+
+                            <svg
+                                class="h-5 w-5 shrink-0 transition-colors duration-200
+                                    {{ $active ? 'text-indigo-700' : 'text-slate-400 group-hover:text-slate-700' }}"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                {!! $icon($item['icon']) !!}
+                            </svg>
+
+                            <span class="min-w-0 flex-1 truncate" x-show="!sidebarCollapsed" x-transition.opacity.duration.150ms>{{ $item['label'] }}</span>
+
+                            <!-- Tooltip when collapsed -->
+                            <span
+                                x-show="sidebarCollapsed"
+                                class="pointer-events-none absolute left-full top-1/2 z-50 ml-3 -translate-y-1/2 whitespace-nowrap rounded-xl bg-slate-900 px-3 py-2 text-xs font-semibold text-white opacity-0 shadow-lg transition duration-150 group-hover:opacity-100"
+                            >
+                                {{ $item['label'] }}
+                            </span>
+                        </a>
+                    @endforeach
+                </div>
+            </div>
         @endforeach
 
-        <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-3">
+        <div class="mt-6 h-px bg-slate-200/70"></div>
+
+        <div class="mt-4 rounded-2xl border border-slate-200/70 bg-white/60 p-3 shadow-sm" x-show="!sidebarCollapsed" x-transition.opacity.duration.200ms>
             <div class="text-xs font-semibold text-slate-600">{{ __('Tip') }}</div>
             <div class="mt-1 text-xs text-slate-600">{{ __('Keep content fresh — update banners and posts weekly.') }}</div>
         </div>

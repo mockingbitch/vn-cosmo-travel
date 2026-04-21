@@ -13,6 +13,6 @@ return [
     ],
 
     'default' => env('APP_LOCALE', 'vi'),
-    'fallback' => env('APP_FALLBACK_LOCALE', 'en'),
+    'fallback' => env('APP_FALLBACK_LOCALE', 'vi'),
 ];
 
