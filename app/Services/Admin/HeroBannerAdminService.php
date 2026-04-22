@@ -4,7 +4,6 @@ namespace App\Services\Admin;
 
 use App\Contracts\Interfaces\HeroBannerRepositoryInterface;
 use App\Models\HeroBanner;
-use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
 class HeroBannerAdminService
@@ -34,12 +33,8 @@ class HeroBannerAdminService
     /**
      * @param array<string, mixed> $data
      */
-    public function updateCurrent(array $data, ?UploadedFile $image = null): HeroBanner
+    public function updateCurrent(array $data): HeroBanner
     {
-        if ($image) {
-            $data['image_path'] = $image->storePublicly('hero-banners', ['disk' => 'public']);
-        }
-
         $data['title'] = (string) ($data['title_en'] ?? '');
         $data['subtitle'] = $data['subtitle_en'] ?? null;
         $data['cta_text'] = $data['cta_text_en'] ?? null;

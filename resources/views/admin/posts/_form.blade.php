@@ -26,13 +26,24 @@
 </div>
 
 <div>
-    <label class="block text-sm font-medium text-slate-700">{{ __('Thumbnail URL') }}</label>
-    <input name="thumbnail" value="{{ old('thumbnail', $post?->thumbnail) }}" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60" placeholder="https://...">
-    @error('thumbnail')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
+    <label class="block text-sm font-medium text-slate-700">{{ __('Thumbnail') }}</label>
+    <x-admin.media-picker
+        name="thumbnail_media_id"
+        :multiple="false"
+        :value="old('thumbnail_media_id', $post?->thumbnail_media_id)"
+        :label="null"
+        :help="__('Choose an image from Media Library')"
+    />
+    @error('thumbnail_media_id')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
 </div>
 
 <div>
     <label class="block text-sm font-medium text-slate-700">{{ __('Content (HTML allowed)') }}</label>
+    <p class="mt-1 text-xs text-slate-500">
+        {{ __('Use wordtohtml.net to format blog content.') }}
+        <a class="font-semibold text-slate-700 underline underline-offset-4 hover:text-slate-900" href="https://wordtohtml.net/" target="_blank" rel="noopener noreferrer">wordtohtml.net</a>.
+        {{ __('We will remove all font-family styles when saving.') }}
+    </p>
     <textarea name="content" rows="14" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 font-mono text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60" required>{{ old('content', $post?->content) }}</textarea>
     @error('content')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
 </div>

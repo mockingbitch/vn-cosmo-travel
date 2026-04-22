@@ -130,22 +130,16 @@
         @enderror
     </label>
 
-    <label class="grid gap-2">
+    <div class="grid gap-2">
         <span class="text-xs font-semibold text-slate-700">{{ __('Image') }}</span>
-        <input
-            type="file"
-            name="image"
-            accept="image/*"
-            class="block w-full text-sm text-slate-700 file:mr-3 file:rounded-lg file:border-0 file:bg-slate-900 file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-slate-800"
+        <x-admin.media-picker
+            name="media_id"
+            :multiple="false"
+            :value="old('media_id', $banner?->media_id)"
+            :help="__('Choose an image from Media Library')"
         />
-        @error('image')
+        @error('media_id')
             <div class="text-xs font-medium text-rose-700">{{ $message }}</div>
         @enderror
-
-        @if($banner?->image_path)
-            <div class="overflow-hidden rounded-xl border border-slate-200 bg-slate-50">
-                <img class="h-44 w-full object-cover" src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($banner->image_path) }}" alt="" />
-            </div>
-        @endif
-    </label>
+    </div>
 </div>

@@ -51,9 +51,7 @@
                             $ctaVi = $h->getCtaTextForLocale('vi');
                             $ctaEn = $h->getCtaTextForLocale('en');
                             $archivedAt = optional($h->archived_at ?? $h->created_at)?->locale($uiLocale)->isoFormat('LLL');
-                            $imageUrl = $h->image_path
-                                ? \Illuminate\Support\Facades\Storage::disk('public')->url($h->image_path)
-                                : null;
+                            $imageUrl = $h->media?->url();
                         @endphp
                         <button
                             type="button"

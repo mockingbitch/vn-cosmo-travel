@@ -18,7 +18,7 @@ class UpdateHeroBannerRequest extends FormRequest
             'title_vi' => ['required', 'string', 'max:255'],
             'subtitle_en' => ['nullable', 'string', 'max:255'],
             'subtitle_vi' => ['nullable', 'string', 'max:255'],
-            'image' => ['nullable', 'image', 'mimes:png,jpg,jpeg,webp', 'max:4096'],
+            'media_id' => ['nullable', 'integer', 'exists:media,id'],
             'cta_text_en' => ['nullable', 'string', 'max:50'],
             'cta_text_vi' => ['nullable', 'string', 'max:50'],
             'cta_link' => ['nullable', 'string', 'max:2048'],

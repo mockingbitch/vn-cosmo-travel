@@ -26,7 +26,7 @@ class HeroBannerController extends Controller
     {
         $data = $request->validated();
 
-        $banners->updateCurrent($data, $request->file('image'));
+        $banners->updateCurrent($data);
 
         return redirect()->route('admin.banners.edit')->with('status', __('flash.banner.updated'));
     }

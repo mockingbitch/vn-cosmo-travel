@@ -22,17 +22,14 @@ class PostSeeder extends Seeder
         $items = [
             [
                 'title' => 'Best time to visit Vietnam: weather by region',
-                'thumbnail' => 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1400&q=80',
                 'content' => '<p>Vietnam spans multiple climates. This guide helps you choose the best season depending on your route.</p><h2>North</h2><p>Cooler winters and hot, humid summers.</p><h2>Central</h2><p>Great beaches, but watch for rainy months.</p><h2>South</h2><p>Warm year-round with wet/dry seasons.</p>',
             ],
             [
                 'title' => 'Vietnam travel costs: a realistic budget for 3–10 days',
-                'thumbnail' => 'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1400&q=80',
                 'content' => '<p>Plan confidently with a simple budget breakdown: transport, activities, food, and accommodation.</p><h2>Quick ranges</h2><ul><li>Comfort: mid-range hotels + curated tours</li><li>Premium: private transfers + upgraded stays</li></ul>',
             ],
             [
                 'title' => 'Hanoi vs Ho Chi Minh City: which one should you start with?',
-                'thumbnail' => 'https://images.unsplash.com/photo-1533371452382-d45a9da51ad9?auto=format&fit=crop&w=1400&q=80',
                 'content' => '<p>Both cities are amazing. The best choice depends on your route and flight connections.</p><h2>Start in Hanoi</h2><p>Ideal for northern routes and cooler seasons.</p><h2>Start in HCMC</h2><p>Perfect for southern routes and dynamic city energy.</p>',
             ],
         ];
@@ -44,7 +41,7 @@ class PostSeeder extends Seeder
                     'category_id' => $category->id,
                     'title' => $item['title'],
                     'content' => $item['content'],
-                    'thumbnail' => $item['thumbnail'],
+                    'thumbnail_media_id' => null,
                 ],
             );
         }

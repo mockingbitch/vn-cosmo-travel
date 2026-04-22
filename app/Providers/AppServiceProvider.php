@@ -6,6 +6,7 @@ use App\Contracts\Interfaces\BookingRepositoryInterface;
 use App\Contracts\Interfaces\CategoryRepositoryInterface;
 use App\Contracts\Interfaces\DestinationRepositoryInterface;
 use App\Contracts\Interfaces\HeroBannerRepositoryInterface;
+use App\Contracts\Interfaces\MediaRepositoryInterface;
 use App\Contracts\Interfaces\PostRepositoryInterface;
 use App\Contracts\Interfaces\SettingRepositoryInterface;
 use App\Contracts\Interfaces\TourRepositoryInterface;
@@ -13,6 +14,7 @@ use App\Repositories\BookingRepository;
 use App\Repositories\CategoryRepository;
 use App\Repositories\DestinationRepository;
 use App\Repositories\HeroBannerRepository;
+use App\Repositories\MediaRepository;
 use App\Repositories\PostRepository;
 use App\Repositories\SettingRepository;
 use App\Repositories\TourRepository;
@@ -32,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CategoryRepositoryInterface::class, CategoryRepository::class);
         $this->app->bind(SettingRepositoryInterface::class, SettingRepository::class);
         $this->app->bind(HeroBannerRepositoryInterface::class, HeroBannerRepository::class);
+        $this->app->bind(MediaRepositoryInterface::class, MediaRepository::class);
     }
 
     /**

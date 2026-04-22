@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\TourController as AdminTourController;
 use App\Http\Controllers\Admin\HeroBannerController as AdminHeroBannerController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\MediaController as AdminMediaController;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -50,6 +51,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('banners', [AdminHeroBannerController::class, 'edit'])->name('banners.edit');
         Route::put('banners', [AdminHeroBannerController::class, 'update'])->name('banners.update');
         Route::post('banners/apply/{banner}', [AdminHeroBannerController::class, 'apply'])->name('banners.apply');
+
+        Route::get('media/picker', [AdminMediaController::class, 'picker'])->name('media.picker');
+        Route::get('media/by-ids', [AdminMediaController::class, 'byIds'])->name('media.byIds');
+        Route::get('media/{media}/usages', [AdminMediaController::class, 'usages'])->name('media.usages');
+        Route::resource('media', AdminMediaController::class)->only(['index', 'store', 'destroy']);
 
         Route::resource('tours', AdminTourController::class)->except(['show']);
         Route::resource('posts', AdminPostController::class)->except(['show']);

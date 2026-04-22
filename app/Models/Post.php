@@ -12,7 +12,7 @@ class Post extends Model
         'slug',
         'content',
         'category_id',
-        'thumbnail',
+        'thumbnail_media_id',
     ];
 
     public function getRouteKeyName(): string
@@ -23,5 +23,10 @@ class Post extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function thumbnailMedia(): BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'thumbnail_media_id');
     }
 }

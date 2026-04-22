@@ -32,7 +32,7 @@ class HeroBannerSeeder extends Seeder
      *     title: array{en: string, vi: string},
      *     subtitle: array{en: string, vi: string},
      *     cta: array{text: array{en: string, vi: string}, link: string},
-     *     image_path: string|null
+     *     media_id: int|null
      * }>
      */
     private function definitions(): array
@@ -52,7 +52,7 @@ class HeroBannerSeeder extends Seeder
                     'text' => ['en' => 'Plan with us', 'vi' => 'Lên kế hoạch cùng chúng tôi'],
                     'link' => '/#booking',
                 ],
-                'image_path' => null,
+                'media_id' => null,
             ],
             [
                 'archived_days_ago' => 7,
@@ -68,7 +68,7 @@ class HeroBannerSeeder extends Seeder
                     'text' => ['en' => 'Browse tours', 'vi' => 'Xem danh sách tour'],
                     'link' => '/tours',
                 ],
-                'image_path' => null,
+                'media_id' => null,
             ],
             [
                 'archived_days_ago' => null,
@@ -84,7 +84,7 @@ class HeroBannerSeeder extends Seeder
                     'text' => ['en' => 'Explore tours', 'vi' => 'Khám phá tour'],
                     'link' => '/tours',
                 ],
-                'image_path' => null,
+                'media_id' => null,
             ],
         ];
     }
@@ -112,7 +112,7 @@ class HeroBannerSeeder extends Seeder
             'cta_text_translations' => $ctaText,
 
             'cta_link' => $row['cta']['link'],
-            'image_path' => $row['image_path'],
+            'media_id' => $row['media_id'],
             'is_current' => $isCurrent,
             'archived_at' => $archivedAt,
         ];

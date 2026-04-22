@@ -12,6 +12,7 @@ class PostRepository implements PostRepositoryInterface
     public function paginateLatest(int $perPage = 9): LengthAwarePaginator
     {
         return Post::query()
+            ->with(['thumbnailMedia'])
             ->latest('id')
             ->paginate($perPage)
             ->withQueryString();
@@ -20,6 +21,7 @@ class PostRepository implements PostRepositoryInterface
     public function latest(int $limit = 3): Collection
     {
         return Post::query()
+            ->with(['thumbnailMedia'])
             ->latest('id')
             ->limit($limit)
             ->get();
@@ -28,7 +30,7 @@ class PostRepository implements PostRepositoryInterface
     public function findBySlugOrFail(string $slug): Post
     {
         return Post::query()
-            ->with(['category'])
+            ->with(['category', 'thumbnailMedia'])
             ->where('slug', $slug)
             ->firstOrFail();
     }
@@ -36,6 +38,7 @@ class PostRepository implements PostRepositoryInterface
     public function related(int $postId, ?int $categoryId, int $limit = 3): Collection
     {
         return Post::query()
+            ->with(['thumbnailMedia'])
             ->when($categoryId, fn ($q) => $q->where('category_id', $categoryId))
             ->where('id', '!=', $postId)
             ->latest('id')
@@ -46,7 +49,7 @@ class PostRepository implements PostRepositoryInterface
     public function adminPaginate(int $perPage = 15): LengthAwarePaginator
     {
         return Post::query()
-            ->with(['category'])
+            ->with(['category', 'thumbnailMedia'])
             ->latest('id')
             ->paginate($perPage);
     }

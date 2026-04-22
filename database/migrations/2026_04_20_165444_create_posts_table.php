@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->longText('content');
-            $table->string('thumbnail')->nullable();
+            $table->foreignId('thumbnail_media_id')->nullable()->constrained('media')->nullOnDelete();
             $table->timestamps();
 
             $table->index(['category_id']);

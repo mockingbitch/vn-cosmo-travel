@@ -3,13 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class HeroBanner extends Model
 {
     protected $fillable = [
         'title',
         'subtitle',
-        'image_path',
+        'media_id',
         'cta_text',
         'cta_link',
         'is_current',
@@ -26,6 +27,11 @@ class HeroBanner extends Model
         'subtitle_translations' => 'array',
         'cta_text_translations' => 'array',
     ];
+
+    public function media(): BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'media_id');
+    }
 
     public function getTitleForLocale(string $locale): string
     {

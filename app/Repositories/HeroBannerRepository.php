@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Application\Media\MediaUsageService;
 use App\Contracts\Interfaces\HeroBannerRepositoryInterface;
 use App\Models\HeroBanner;
 use Illuminate\Support\Carbon;
@@ -12,9 +13,14 @@ class HeroBannerRepository implements HeroBannerRepositoryInterface
 {
     private const HISTORY_LIMIT = 3;
 
+    public function __construct(
+        private readonly MediaUsageService $mediaUsage,
+    ) {}
+
     public function currentOrNull(): ?HeroBanner
     {
         return HeroBanner::query()
+            ->with(['media'])
             ->where('is_current', true)
             ->latest('id')
             ->first();
@@ -23,6 +29,7 @@ class HeroBannerRepository implements HeroBannerRepositoryInterface
     public function history(int $limit = 50): Collection
     {
         return HeroBanner::query()
+            ->with(['media'])
             ->where('is_current', false)
             ->orderByDesc('archived_at')
             ->latest('id')
@@ -46,6 +53,11 @@ class HeroBannerRepository implements HeroBannerRepositoryInterface
             $data['archived_at'] = null;
 
             $current = HeroBanner::query()->create($data);
+            $this->mediaUsage->syncSingle(
+                array_key_exists('media_id', $data) && $data['media_id'] !== null ? (int) $data['media_id'] : null,
+                $current,
+                'hero_image',
+            );
 
             $this->trimHistory(self::HISTORY_LIMIT);
 
@@ -66,7 +78,7 @@ class HeroBannerRepository implements HeroBannerRepositoryInterface
                 'title_translations',
                 'subtitle_translations',
                 'cta_text_translations',
-                'image_path',
+                'media_id',
                 'cta_text',
                 'cta_link',
             ]);

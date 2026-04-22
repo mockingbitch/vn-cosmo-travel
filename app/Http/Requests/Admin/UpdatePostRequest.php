@@ -21,7 +21,7 @@ class UpdatePostRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255'],
             'content' => ['required', 'string'],
-            'thumbnail' => ['nullable', 'string', 'max:2048'],
+            'thumbnail_media_id' => ['nullable', 'integer', 'exists:media,id'],
         ];
     }
 }

@@ -11,7 +11,7 @@
             'items' => [
                 ['label' => __('Hero Banners'), 'route' => 'admin.banners.edit', 'icon' => 'photo'],
                 ['label' => __('Blog'), 'route' => 'admin.posts.index', 'icon' => 'document'],
-                ['label' => __('Media'), 'route' => null, 'icon' => 'folder'],
+                ['label' => __('Media'), 'route' => 'admin.media.index', 'icon' => 'folder'],
             ],
         ],
         [

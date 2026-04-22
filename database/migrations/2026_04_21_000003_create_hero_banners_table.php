@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('subtitle')->nullable();
             $table->string('cta_text')->nullable();
             $table->string('cta_link')->nullable();
-            $table->string('image_path')->nullable();
+            $table->foreignId('media_id')->nullable()->constrained('media')->nullOnDelete();
             $table->json('title_translations')->nullable();
             $table->json('subtitle_translations')->nullable();
             $table->json('cta_text_translations')->nullable();
