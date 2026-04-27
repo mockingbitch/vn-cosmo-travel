@@ -2,9 +2,9 @@
 
 namespace App\Repositories;
 
-use App\Application\Media\MediaUsageService;
 use App\Contracts\Interfaces\HeroBannerRepositoryInterface;
 use App\Models\HeroBanner;
+use App\Services\Media\MediaUsageService;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;

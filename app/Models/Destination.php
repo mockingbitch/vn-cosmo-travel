@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[Fillable([
+    'name',
+    'slug',
+    'description',
+])]
 class Destination extends Model
 {
-    protected $fillable = [
-        'name',
-        'slug',
-        'description',
-    ];
-
     public function getRouteKeyName(): string
     {
         return 'slug';

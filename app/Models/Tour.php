@@ -2,26 +2,29 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+#[Fillable([
+    'title',
+    'slug',
+    'description',
+    'price',
+    'duration',
+    'destination_id',
+    'thumbnail',
+])]
 class Tour extends Model
 {
-    protected $fillable = [
-        'title',
-        'slug',
-        'description',
-        'price',
-        'duration',
-        'destination_id',
-        'thumbnail',
-    ];
-
-    protected $casts = [
-        'price' => 'integer',
-        'duration' => 'integer',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'price' => 'integer',
+            'duration' => 'integer',
+        ];
+    }
 
     public function getRouteKeyName(): string
     {

@@ -115,7 +115,7 @@
                         @click="openPreview({
                             id: {{ (int) $m->id }},
                             url: {{ \Illuminate\Support\Js::from($url) }},
-                            fileName: {{ \Illuminate\Support\Js::from($m->file_name) }},
+                            fileName: {{ \Illuminate\Support\Js::from($m->displayName()) }},
                             usedCount: {{ (int) $used }},
                             usagesUrl: {{ \Illuminate\Support\Js::from(route('admin.media.usages', $m)) }},
                             deleteUrl: {{ \Illuminate\Support\Js::from(url('/admin/media/'.$m->id)) }},
@@ -127,7 +127,7 @@
                         </div>
 
                         <div class="p-3">
-                            <div class="truncate text-sm font-semibold text-slate-900">{{ $m->file_name }}</div>
+                            <div class="truncate text-sm font-semibold text-slate-900">{{ $m->displayName() }}</div>
                             <div class="mt-1 flex items-center justify-between gap-2 text-xs font-medium text-slate-500">
                                 <span>{{ $sizeKb }} KB</span>
                                 <span class="inline-flex items-center gap-1 rounded-full bg-slate-900/5 px-2 py-0.5 text-slate-700">
@@ -166,8 +166,14 @@
 
                 <x-admin.modal name="previewOpen" :title="__('Preview')">
                     <div class="grid gap-4">
-                        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
-                            <img :src="preview.url" class="max-h-64 w-full object-cover" alt="" />
+                        <div class="h-[60vh] max-w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 p-2">
+                            <div class="grid h-full w-full place-items-center">
+                                <img
+                                    :src="preview.url"
+                                    class="block h-full w-full max-w-full object-contain"
+                                    alt=""
+                                />
+                            </div>
                         </div>
 
                         <div class="grid gap-2">

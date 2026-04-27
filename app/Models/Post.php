@@ -2,19 +2,19 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[Fillable([
+    'title',
+    'slug',
+    'content',
+    'category_id',
+    'thumbnail_media_id',
+])]
 class Post extends Model
 {
-    protected $fillable = [
-        'title',
-        'slug',
-        'content',
-        'category_id',
-        'thumbnail_media_id',
-    ];
-
     public function getRouteKeyName(): string
     {
         return 'slug';

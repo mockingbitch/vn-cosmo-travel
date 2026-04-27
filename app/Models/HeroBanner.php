@@ -2,31 +2,34 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+#[Fillable([
+    'title',
+    'subtitle',
+    'media_id',
+    'cta_text',
+    'cta_link',
+    'is_current',
+    'archived_at',
+    'title_translations',
+    'subtitle_translations',
+    'cta_text_translations',
+])]
 class HeroBanner extends Model
 {
-    protected $fillable = [
-        'title',
-        'subtitle',
-        'media_id',
-        'cta_text',
-        'cta_link',
-        'is_current',
-        'archived_at',
-        'title_translations',
-        'subtitle_translations',
-        'cta_text_translations',
-    ];
-
-    protected $casts = [
-        'is_current' => 'boolean',
-        'archived_at' => 'datetime',
-        'title_translations' => 'array',
-        'subtitle_translations' => 'array',
-        'cta_text_translations' => 'array',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'is_current' => 'boolean',
+            'archived_at' => 'datetime',
+            'title_translations' => 'array',
+            'subtitle_translations' => 'array',
+            'cta_text_translations' => 'array',
+        ];
+    }
 
     public function media(): BelongsTo
     {

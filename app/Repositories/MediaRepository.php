@@ -21,11 +21,16 @@ class MediaRepository implements MediaRepositoryInterface
         $ext = strtolower((string) ($file->getClientOriginalExtension() ?: $file->extension() ?: ''));
         $ext = $ext !== '' ? $ext : 'bin';
 
-        $safeFileName = $name.'-'.Str::random(8).'.'.$ext;
+        // Filename must match storage and be user-friendly: day_month_year_string_random10.ext
+        $date = now()->format('d_m_Y');
+        $rand = Str::lower(Str::random(10));
+        $base = Str::limit($name, 60, '');
+        $safeFileName = $date.'_'.$base.'_'.$rand.'.'.$ext;
         $path = $file->storePubliclyAs('media', $safeFileName, ['disk' => 'public']);
 
         return Media::query()->create([
-            'file_name' => $original,
+            // Keep the DB filename identical to what is stored on disk.
+            'file_name' => $safeFileName,
             'file_path' => $path,
             'mime_type' => (string) ($file->getClientMimeType() ?? 'application/octet-stream'),
             'size' => (int) $file->getSize(),

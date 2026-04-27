@@ -18,7 +18,23 @@
             <tbody class="divide-y divide-slate-100">
                 @foreach($posts as $post)
                     <tr>
-                        <td class="px-4 py-3 font-medium text-slate-900">{{ $post->title }}</td>
+                        <td class="px-4 py-3">
+                            <div class="flex items-center gap-3">
+                                @if($post->thumbnailMedia)
+                                    <img
+                                        class="h-10 w-10 rounded-xl object-cover ring-1 ring-slate-200"
+                                        src="{{ $post->thumbnailMedia->url() }}"
+                                        alt="{{ $post->thumbnailMedia->alt_text ?? '' }}"
+                                        loading="lazy"
+                                    />
+                                @else
+                                    <div class="h-10 w-10 rounded-xl bg-slate-100 ring-1 ring-slate-200"></div>
+                                @endif
+                                <div class="min-w-0">
+                                    <div class="truncate font-medium text-slate-900">{{ $post->title }}</div>
+                                </div>
+                            </div>
+                        </td>
                         <td class="px-4 py-3 text-slate-600">{{ $post->category?->name ?? '—' }}</td>
                         <td class="px-4 py-3 text-right">
                             <a href="{{ route('admin.posts.edit', $post) }}" class="font-semibold text-slate-900 hover:underline">{{ __('Edit') }}</a>

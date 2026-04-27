@@ -38,6 +38,19 @@
         </div>
 
         <div class="flex items-center gap-2">
+            <a
+                href="{{ route('home') }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white p-2 text-slate-700 shadow-sm transition hover:bg-slate-50"
+                aria-label="{{ __('Back to homepage') }}"
+                title="{{ __('Back to homepage') }}"
+            >
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12 11.204 3.045a1.125 1.125 0 0 1 1.591 0L21.75 12M4.5 9.75V19.5A2.25 2.25 0 0 0 6.75 21.75H10.5v-6a2.25 2.25 0 0 1 2.25-2.25h.75A2.25 2.25 0 0 1 15.75 15.75v6h3.75A2.25 2.25 0 0 0 21.75 19.5V9.75" />
+                </svg>
+            </a>
+
             <div class="relative" x-data="{ langOpen: false }" @click.outside="langOpen = false">
                 @php
                     $supportedLocales = (array) config('locales.supported', []);

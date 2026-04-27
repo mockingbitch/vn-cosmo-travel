@@ -2,9 +2,9 @@
 
 namespace App\Services\Admin;
 
-use App\Application\Media\MediaUsageService;
 use App\Contracts\Interfaces\PostRepositoryInterface;
 use App\Models\Post;
+use App\Services\Media\MediaUsageService;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 

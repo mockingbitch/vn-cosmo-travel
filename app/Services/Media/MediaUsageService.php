@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Media;
+namespace App\Services\Media;
 
 use App\Models\MediaUsage;
 use Illuminate\Database\Eloquent\Model;
