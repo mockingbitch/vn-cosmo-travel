@@ -34,75 +34,48 @@
         {{ __('Skip to content') }}
     </a>
 
-    <header x-data="{ open: false }" class="sticky top-0 z-40 border-b border-slate-200/70 bg-white/80 backdrop-blur">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div class="flex h-16 items-center justify-between">
-                <a href="{{ route('home') }}" class="flex items-center gap-2">
+    <header
+        x-data="mainSiteNav()"
+        @keydown.escape.window="closeAll()"
+        class="sticky top-0 z-40 border-b border-slate-200/70 bg-white/80 backdrop-blur"
+    >
+        <div class="mx-auto max-w-7xl overflow-x-visible px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between gap-2 overflow-x-visible min-[60rem]:gap-3">
+                <a href="{{ route('home') }}" class="flex min-w-0 shrink-0 items-center gap-2">
                     <div class="grid h-9 w-9 place-items-center rounded-xl bg-slate-900 text-white">
                         <span class="text-sm font-semibold">VC</span>
                     </div>
-                    <div class="leading-tight">
+                    <div class="hidden leading-tight sm:block">
                         <div class="text-sm font-semibold">{{ __('Brand name') }}</div>
                         <div class="text-xs text-slate-500">{{ __('Tailor-made Vietnam tours') }}</div>
                     </div>
                 </a>
 
-                <nav class="hidden items-center gap-7 text-sm font-medium text-slate-700 md:flex">
-                    <a class="hover:text-slate-900" href="{{ route('home') }}">{{ __('Home') }}</a>
-                    <a class="hover:text-slate-900" href="{{ route('tours.index') }}">{{ __('Tours') }}</a>
-                    <a class="hover:text-slate-900" href="{{ route('blog.index') }}">{{ __('Blog') }}</a>
-                    <a class="hover:text-slate-900" href="{{ route('home') }}#destinations">{{ __('Destinations') }}</a>
-                    <a class="hover:text-slate-900" href="{{ route('home') }}#contact">{{ __('Contact') }}</a>
-                </nav>
+                <x-site.nav-primary :primary="$mainNav['primary']" :cruise="$mainNav['cruise']" />
 
-                <div class="hidden items-center gap-3 md:flex">
-                    <div class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-2 py-1 text-xs font-semibold text-slate-700">
-                        @php($supported = (array) config('locales.supported', []))
-                        @foreach($supported as $key => $meta)
-                            <a
-                                href="{{ route('language.switch', ['locale' => $key]) }}"
-                                class="rounded-lg px-2 py-1 {{ app()->getLocale() === $key ? 'bg-slate-900 text-white' : 'hover:bg-slate-50' }}"
-                            >{{ $meta['label'] ?? strtoupper($key) }}</a>
-                        @endforeach
-                    </div>
-                    <x-button href="{{ route('tours.index') }}" variant="primary">{{ __('Explore Tours') }}</x-button>
+                <div class="flex min-w-0 shrink-0 items-center gap-1.5 sm:gap-2.5">
+                    <x-site.language-switcher />
+                    <button
+                        type="button"
+                        class="inline-flex items-center justify-center rounded-xl border border-slate-200 p-2 text-slate-700 hover:bg-slate-50 lg:hidden"
+                        @click="mobileOpen = !mobileOpen"
+                        :aria-expanded="mobileOpen.toString()"
+                        aria-controls="mobile-menu"
+                    >
+                        <span class="sr-only">{{ __('Open menu') }}</span>
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
                 </div>
-
-                <button
-                    type="button"
-                    class="inline-flex items-center justify-center rounded-xl border border-slate-200 p-2 text-slate-700 hover:bg-slate-50 md:hidden"
-                    @click="open = !open"
-                    :aria-expanded="open.toString()"
-                    aria-controls="mobile-menu"
-                >
-                    <span class="sr-only">{{ __('Open menu') }}</span>
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                </button>
             </div>
         </div>
 
-        <div id="mobile-menu" x-show="open" x-transition class="border-t border-slate-200 md:hidden">
-            <div class="mx-auto max-w-7xl px-4 py-4">
-                <div class="grid gap-2 text-sm font-medium text-slate-700">
-                    <a class="rounded-lg px-3 py-2 hover:bg-slate-50" href="{{ route('home') }}">{{ __('Home') }}</a>
-                    <a class="rounded-lg px-3 py-2 hover:bg-slate-50" href="{{ route('tours.index') }}">{{ __('Tours') }}</a>
-                    <a class="rounded-lg px-3 py-2 hover:bg-slate-50" href="{{ route('blog.index') }}">{{ __('Blog') }}</a>
-                    <a class="rounded-lg px-3 py-2 hover:bg-slate-50" href="{{ route('home') }}#destinations">{{ __('Destinations') }}</a>
-                    <a class="rounded-lg px-3 py-2 hover:bg-slate-50" href="{{ route('home') }}#contact">{{ __('Contact') }}</a>
-                    <div class="flex items-center gap-2 px-3 py-2">
-                        @foreach((array) config('locales.supported', []) as $key => $meta)
-                            <a
-                                href="{{ route('language.switch', ['locale' => $key]) }}"
-                                class="rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold {{ app()->getLocale() === $key ? 'bg-slate-900 text-white border-slate-900' : 'bg-white text-slate-700 hover:bg-slate-50' }}"
-                            >{{ $meta['label'] ?? strtoupper($key) }}</a>
-                        @endforeach
-                    </div>
-                    <div class="pt-2">
-                        <x-button class="w-full justify-center" href="{{ route('tours.index') }}" variant="primary">{{ __('Explore Tours') }}</x-button>
-                    </div>
-                </div>
+        <x-site.mega-menu-daily :daily="$mainNav['dailyMega']" />
+
+        <div id="mobile-menu" x-cloak x-show="mobileOpen" x-transition class="border-t border-slate-200 lg:hidden">
+            <div class="mx-auto max-w-7xl px-4 py-4 sm:px-6">
+                <x-site.nav-mobile :mainNav="$mainNav" />
             </div>
         </div>
     </header>

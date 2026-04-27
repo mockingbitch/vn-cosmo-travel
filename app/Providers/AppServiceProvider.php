@@ -18,6 +18,9 @@ use App\Repositories\MediaRepository;
 use App\Repositories\PostRepository;
 use App\Repositories\SettingRepository;
 use App\Repositories\TourRepository;
+use App\Services\DestinationService;
+use App\Services\MainNavigationService;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -42,6 +45,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('layouts.app', function ($view): void {
+            $destinations = app(DestinationService::class);
+            $view->with('navDestinations', $destinations->all());
+            $view->with('navDestinationGroups', $destinations->groupedByRegionForNav());
+            $view->with('mainNav', app(MainNavigationService::class)->build(request()));
+        });
     }
 }

@@ -5,7 +5,7 @@
         <div class="absolute inset-0 opacity-40">
             <img
                 src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=2400&q=80"
-                alt="{{ $destination->name }}"
+                alt="{{ $destination->localizedName() }}"
                 class="h-full w-full object-cover"
                 loading="lazy"
             />
@@ -13,13 +13,13 @@
         <div class="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
             <div class="max-w-3xl">
                 <div class="text-sm font-semibold text-white/70">{{ __('Destination') }}</div>
-                <h1 class="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-5xl">{{ $destination->name }}</h1>
+                <h1 class="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-5xl">{{ $destination->localizedName() }}</h1>
                 <p class="mt-4 text-base leading-7 text-white/85 sm:text-lg">
                     {{ $destination->description }}
                 </p>
                 <div class="mt-7">
                     <x-button href="{{ route('tours.index', ['destination' => $destination->slug]) }}" variant="primary" class="bg-white text-slate-900 hover:bg-white/90">
-                        {{ __('destinations.view_tours', ['name' => $destination->name]) }}
+                        {{ __('destinations.view_tours', ['name' => $destination->localizedName()]) }}
                     </x-button>
                 </div>
             </div>

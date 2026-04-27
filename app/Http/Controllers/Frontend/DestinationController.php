@@ -29,7 +29,7 @@ class DestinationController extends Controller
 
         return view('pages.destinations.show', [
             'seo' => new SeoViewModel(
-                title: $destination->name.' — '.__('Destination'),
+                title: $destination->localizedName().' — '.__('Destination'),
                 description: \Illuminate\Support\Str::limit(strip_tags((string) $destination->description), 155),
             ),
             'destination' => $destination,

@@ -11,6 +11,7 @@
             <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
                 <tr>
                     <th class="px-4 py-3">{{ __('Name') }}</th>
+                    <th class="px-4 py-3">{{ __('Region') }}</th>
                     <th class="px-4 py-3">{{ __('Slug') }}</th>
                     <th class="px-4 py-3 text-right">{{ __('Actions') }}</th>
                 </tr>
@@ -19,6 +20,13 @@
                 @foreach($destinations as $destination)
                     <tr>
                         <td class="px-4 py-3 font-medium text-slate-900">{{ $destination->name }}</td>
+                        <td class="px-4 py-3 text-slate-600">
+                            @if($destination->region)
+                                {{ __('dest.region.'.$destination->region) }}
+                            @else
+                                —
+                            @endif
+                        </td>
                         <td class="px-4 py-3 text-slate-600">{{ $destination->slug }}</td>
                         <td class="px-4 py-3 text-right">
                             <a href="{{ route('admin.destinations.edit', $destination) }}" class="font-semibold text-slate-900 hover:underline">{{ __('Edit') }}</a>

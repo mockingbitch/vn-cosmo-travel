@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Services\DestinationService;
 use App\Services\PostService;
+use App\Services\SettingsService;
 use App\Services\TourService;
 use App\ViewModels\PostCardViewModel;
 use App\ViewModels\SeoViewModel;
@@ -16,6 +17,7 @@ class HomeController extends Controller
         private readonly TourService $tourService,
         private readonly PostService $postService,
         private readonly DestinationService $destinationService,
+        private readonly SettingsService $settingsService,
     ) {
     }
 
@@ -30,6 +32,7 @@ class HomeController extends Controller
             ->map(fn ($post) => new PostCardViewModel($post));
 
         $destinations = $this->destinationService->all();
+        $popularDestinations = $this->destinationService->mostPopularByTourCount(4);
 
         return view('pages.home', [
             'seo' => new SeoViewModel(
@@ -39,6 +42,8 @@ class HomeController extends Controller
             'featuredTours' => $featuredTours,
             'latestPosts' => $latestPosts,
             'destinations' => $destinations,
+            'popularDestinations' => $popularDestinations,
+            'homeWhy' => $this->settingsService->getHomeWhyForLocale(),
         ]);
     }
 }

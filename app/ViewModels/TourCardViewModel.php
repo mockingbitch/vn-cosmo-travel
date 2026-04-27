@@ -35,7 +35,7 @@ class TourCardViewModel
 
     public function destinationName(): ?string
     {
-        return $this->tour->destination?->name;
+        return $this->tour->destination?->localizedName();
     }
 
     public function thumbnailUrl(): string

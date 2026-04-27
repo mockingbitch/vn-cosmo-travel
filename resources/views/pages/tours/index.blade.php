@@ -34,7 +34,7 @@
                                 <option value="">{{ __('Any') }}</option>
                                 @foreach($destinations as $destination)
                                     <option value="{{ $destination->slug }}" @selected(($filters['destination'] ?? '') === $destination->slug)>
-                                        {{ $destination->name }}
+                                        {{ $destination->localizedName() }}
                                     </option>
                                 @endforeach
                             </select>

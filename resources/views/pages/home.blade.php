@@ -50,7 +50,7 @@
                             >
                                 <option value="">{{ __('Any destination') }}</option>
                                 @foreach($destinations as $destination)
-                                    <option value="{{ $destination->slug }}">{{ $destination->name }}</option>
+                                    <option value="{{ $destination->slug }}">{{ $destination->localizedName() }}</option>
                                 @endforeach
                             </select>
                         </label>
@@ -107,21 +107,13 @@
     <section class="bg-slate-50">
         <div class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
             <x-section-title
-                :title="__('home.why.title')"
-                :subtitle="__('home.why.subtitle')"
+                :title="$homeWhy['title']"
+                :subtitle="$homeWhy['subtitle']"
                 class="max-w-2xl"
             />
 
             <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-                @php
-                    $items = [
-                        ['title' => __('home.why.fast.title'), 'desc' => __('home.why.fast.desc')],
-                        ['title' => __('home.why.pricing.title'), 'desc' => __('home.why.pricing.desc')],
-                        ['title' => __('home.why.curated.title'), 'desc' => __('home.why.curated.desc')],
-                        ['title' => __('home.why.secure.title'), 'desc' => __('home.why.secure.desc')],
-                    ];
-                @endphp
-                @foreach($items as $item)
+                @foreach($homeWhy['items'] as $item)
                     <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                         <div class="flex items-center gap-3">
                             <div class="grid h-10 w-10 place-items-center rounded-xl bg-slate-900 text-white">
@@ -146,15 +138,15 @@
         />
 
         <div class="mt-8 grid gap-6 lg:grid-cols-3">
-            @foreach([1,2,3] as $i)
+            @foreach([1, 2, 3] as $i)
                 <figure class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                     <blockquote class="text-sm leading-7 text-slate-700">
-                        “{{ __('home.testimonials.quote') }}”
+                        “{{ __('home.testimonials.quote_' . $i) }}”
                     </blockquote>
                     <figcaption class="mt-4 flex items-center justify-between">
                         <div>
-                            <div class="text-sm font-semibold text-slate-900">{{ __('Traveler :number', ['number' => $i]) }}</div>
-                            <div class="text-xs text-slate-500">{{ __('home.testimonials.meta') }}</div>
+                            <div class="text-sm font-semibold text-slate-900">{{ __('home.testimonials.author_' . $i) }}</div>
+                            <div class="text-xs text-slate-500">{{ __('home.testimonials.meta_' . $i) }}</div>
                         </div>
                         <div class="text-xs font-semibold text-amber-600">★★★★★</div>
                     </figcaption>
@@ -191,16 +183,18 @@
         />
 
         <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            @foreach($destinations as $destination)
+            @forelse($popularDestinations as $destination)
                 <a
                     href="{{ route('destinations.show', $destination) }}"
                     class="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
                 >
-                    <div class="text-sm font-semibold text-slate-900 group-hover:underline">{{ $destination->name }}</div>
+                    <div class="text-sm font-semibold text-slate-900 group-hover:underline">{{ $destination->localizedName() }}</div>
                     <div class="mt-2 text-sm text-slate-600 line-clamp-2">{{ $destination->description }}</div>
                     <div class="mt-3 text-sm font-semibold text-slate-900">{{ __('Explore tours arrow') }}</div>
                 </a>
-            @endforeach
+            @empty
+                <p class="text-sm text-slate-600 sm:col-span-2 lg:col-span-4">{{ __('home.destinations.empty') }}</p>
+            @endforelse
         </div>
     </section>
 

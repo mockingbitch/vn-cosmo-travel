@@ -129,7 +129,7 @@
                         <div class="mt-1 truncate text-sm font-semibold text-slate-900">{{ auth()->user()->email ?? '' }}</div>
                     </div>
                     <div class="h-px bg-slate-200"></div>
-                    <a class="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50" href="{{ route('admin.settings.edit') }}">{{ __('Settings') }}</a>
+                    <a class="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50" href="{{ route('admin.settings.general.edit') }}">{{ __('Settings') }}</a>
                     <form method="POST" action="{{ route('admin.logout') }}">
                         @csrf
                         <button type="submit" class="block w-full px-4 py-3 text-left text-sm font-semibold text-rose-700 hover:bg-rose-50">{{ __('Sign out') }}</button>

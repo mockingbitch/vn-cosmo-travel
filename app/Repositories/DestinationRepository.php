@@ -11,8 +11,26 @@ class DestinationRepository implements DestinationRepositoryInterface
 {
     public function all(): Collection
     {
+        $order = config('destination_regions.order', []);
+
         return Destination::query()
+            ->get()
+            ->sortBy(function (Destination $d) use ($order) {
+                $i = array_search($d->region, $order, true);
+
+                return [is_int($i) ? $i : 99, mb_strtolower($d->name ?? '')];
+            })
+            ->values();
+    }
+
+    public function mostPopularByTourCount(int $limit = 4): Collection
+    {
+        return Destination::query()
+            ->withCount('tours')
+            ->whereHas('tours')
+            ->orderByDesc('tours_count')
             ->orderBy('name')
+            ->limit($limit)
             ->get();
     }
 
@@ -26,6 +44,7 @@ class DestinationRepository implements DestinationRepositoryInterface
     public function adminPaginate(int $perPage = 15): LengthAwarePaginator
     {
         return Destination::query()
+            ->orderBy('region')
             ->orderBy('name')
             ->paginate($perPage);
     }

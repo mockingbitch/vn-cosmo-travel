@@ -10,6 +10,11 @@ interface DestinationRepositoryInterface
 {
     public function all(): Collection;
 
+    /**
+     * @return \Illuminate\Support\Collection<int, Destination>
+     */
+    public function mostPopularByTourCount(int $limit = 4): Collection;
+
     public function findBySlugOrFail(string $slug): Destination;
 
     public function adminPaginate(int $perPage = 15): LengthAwarePaginator;

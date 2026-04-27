@@ -51,3 +51,9 @@
         @apply mt-6 border-l-4 border-slate-200 pl-4 italic text-slate-700;
     }
 }
+
+@layer base {
+    [x-cloak] {
+        display: none !important;
+    }
+}
