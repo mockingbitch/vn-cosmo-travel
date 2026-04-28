@@ -253,6 +253,8 @@
   "Actions": "Actions",
   "Title": "Title",
   "Name": "Name",
+  "Name (EN)": "Name (English)",
+  "Name (VI)": "Name (Vietnamese)",
   "Slug": "Slug",
   "Days": "Days",
   "Price": "Price",

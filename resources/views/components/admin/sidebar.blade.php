@@ -9,6 +9,8 @@
         [
             'title' => __('Content'),
             'items' => [
+                ['label' => __('Tours'), 'route' => 'admin.tours.index', 'icon' => 'tours'],
+                ['label' => __('Destinations'), 'route' => 'admin.destinations.index', 'icon' => 'map'],
                 ['label' => __('Hero Banners'), 'route' => 'admin.banners.edit', 'icon' => 'photo'],
                 ['label' => __('Blog'), 'route' => 'admin.posts.index', 'icon' => 'document'],
                 ['label' => __('Media'), 'route' => 'admin.media.index', 'icon' => 'folder'],
@@ -38,6 +40,8 @@
             'photo' => '<path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.159 2.159M3 18.75h18A2.25 2.25 0 0 0 23.25 16.5V6A2.25 2.25 0 0 0 21 3.75H3A2.25 2.25 0 0 0 .75 6v10.5A2.25 2.25 0 0 0 3 18.75Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h.008v.008H7.5V8.25Z"/>',
             'document' => '<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5A3.375 3.375 0 0 0 10.125 2.25H8.25m0 11.25h7.5m-7.5 3h7.5m-7.5 3h4.5M6.75 2.25H10.5A2.25 2.25 0 0 1 12.75 4.5v2.25A2.25 2.25 0 0 0 15 9h2.25A2.25 2.25 0 0 1 19.5 11.25v9A2.25 2.25 0 0 1 17.25 22.5h-9A2.25 2.25 0 0 1 6 20.25V4.5A2.25 2.25 0 0 1 8.25 2.25Z"/>',
             'folder' => '<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V6A2.25 2.25 0 0 1 4.5 3.75h4.127c.597 0 1.17.237 1.592.659l.622.622c.422.422.995.659 1.591.659H19.5A2.25 2.25 0 0 1 21.75 7.5v5.25m-19.5 0h19.5m-19.5 0v6.75A2.25 2.25 0 0 0 4.5 21.75h15A2.25 2.25 0 0 0 21.75 19.5v-6.75"/>',
+            'tours' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 5.25h16.5M3.75 9.75h16.5M3.75 14.25h16.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 5.25h-1.5A1.5 1.5 0 0 0 1.5 6.75V18A1.5 1.5 0 0 0 3 19.5h1.5" />',
+            'map' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z"/>',
             'phone' => '<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25z"/>',
             'share' => '<path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.935-2.186 2.25 2.25 0 0 0-3.935 2.186Z"/>',
             'sparkles' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z"/>',
@@ -220,7 +224,13 @@
                         @else
                             @php
                                 $isDisabled = empty($item['route'] ?? null);
-                                $active = !$isDisabled && request()->routeIs($item['route'].'*');
+                                $routeName = (string) ($item['route'] ?? '');
+                                $activePattern = $isDisabled
+                                    ? ''
+                                    : (str_ends_with($routeName, '.index')
+                                        ? \Illuminate\Support\Str::beforeLast($routeName, '.index').'.*'
+                                        : $routeName.'*');
+                                $active = !$isDisabled && request()->routeIs($activePattern);
                             @endphp
 
                             <a

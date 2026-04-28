@@ -20,16 +20,16 @@ class DestinationAdminService
 
     public function create(array $data): Destination
     {
-        $data['slug'] = $this->uniqueSlug($data['slug'] ?? null, $data['name']);
+        $data['slug'] = $this->uniqueSlug($data['slug'] ?? null, $data['name_en'] ?? '');
 
         return $this->destinations->adminCreate($data);
     }
 
     public function update(Destination $destination, array $data): Destination
     {
-        $name = $data['name'] ?? $destination->name;
+        $name = $data['name_en'] ?? $destination->name_en;
         $slugInput = array_key_exists('slug', $data) ? $data['slug'] : $destination->slug;
-        $data['slug'] = $this->uniqueSlug($slugInput, $name, $destination->id);
+        $data['slug'] = $this->uniqueSlug($slugInput, (string) $name, $destination->id);
 
         return $this->destinations->adminUpdate($destination, $data);
     }

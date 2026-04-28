@@ -2,7 +2,7 @@
 
 return [
     /*
-    | Public destination labels (EN). If a slug is missing, the app uses `name` from the `destinations` table.
+    | Optional overrides for `Destination::localizedName()`. If a key is missing, `name_en` / `name_vi` on the model are used.
     */
     'name' => [
         'hanoi' => 'Hanoi',

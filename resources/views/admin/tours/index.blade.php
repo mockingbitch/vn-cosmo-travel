@@ -21,7 +21,7 @@
                 @foreach($tours as $tour)
                     <tr>
                         <td class="px-4 py-3 font-medium text-slate-900">{{ $tour->title }}</td>
-                        <td class="px-4 py-3 text-slate-600">{{ $tour->destination?->name }}</td>
+                        <td class="px-4 py-3 text-slate-600">{{ $tour->destination?->localizedName() }}</td>
                         <td class="px-4 py-3 text-slate-600">{{ $tour->duration }}</td>
                         <td class="px-4 py-3 text-slate-600">{{ number_format((int) $tour->price) }}₫</td>
                         <td class="px-4 py-3 text-right">

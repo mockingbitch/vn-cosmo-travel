@@ -10,7 +10,8 @@
         <table class="min-w-full divide-y divide-slate-200 text-sm">
             <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
                 <tr>
-                    <th class="px-4 py-3">{{ __('Name') }}</th>
+                    <th class="px-4 py-3">{{ __('Name (EN)') }}</th>
+                    <th class="px-4 py-3">{{ __('Name (VI)') }}</th>
                     <th class="px-4 py-3">{{ __('Region') }}</th>
                     <th class="px-4 py-3">{{ __('Slug') }}</th>
                     <th class="px-4 py-3 text-right">{{ __('Actions') }}</th>
@@ -19,7 +20,8 @@
             <tbody class="divide-y divide-slate-100">
                 @foreach($destinations as $destination)
                     <tr>
-                        <td class="px-4 py-3 font-medium text-slate-900">{{ $destination->name }}</td>
+                        <td class="px-4 py-3 font-medium text-slate-900">{{ $destination->name_en }}</td>
+                        <td class="px-4 py-3 text-slate-600">{{ $destination->name_vi }}</td>
                         <td class="px-4 py-3 text-slate-600">
                             @if($destination->region)
                                 {{ __('dest.region.'.$destination->region) }}

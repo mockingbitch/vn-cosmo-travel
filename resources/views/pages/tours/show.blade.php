@@ -5,7 +5,7 @@
         <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
             <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
                 <div>
-                    <div class="text-sm font-semibold text-slate-500">{{ $tour->destination?->name }}</div>
+                    <div class="text-sm font-semibold text-slate-500">{{ $tour->destination?->localizedName() }}</div>
                     <h1 class="mt-1 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">{{ $tour->title }}</h1>
                     <p class="mt-2 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
                         {{ \Illuminate\Support\Str::limit(strip_tags((string) $tour->description), 220) }}
@@ -148,7 +148,7 @@
                     <div class="flex items-end justify-between gap-6">
                         <h2 class="text-xl font-semibold tracking-tight text-slate-900">{{ __('Related tours') }}</h2>
                         <a href="{{ route('tours.index', ['destination' => $tour->destination?->slug]) }}" class="text-sm font-semibold text-slate-600 hover:text-slate-900">
-                            {{ __('More in destination', ['destination' => $tour->destination?->name ?? '']) }}
+                            {{ __('More in destination', ['destination' => $tour->destination?->localizedName() ?? '']) }}
                         </a>
                     </div>
                     <div class="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-2">

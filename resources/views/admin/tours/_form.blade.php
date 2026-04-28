@@ -6,7 +6,11 @@
     <label class="block text-sm font-medium text-slate-700">{{ __('Destination') }}</label>
     <select name="destination_id" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60">
         @foreach($destinations as $d)
-            <option value="{{ $d->id }}" @selected(old('destination_id', $tour?->destination_id) == $d->id)>{{ $d->name }}</option>
+            <option
+                value="{{ $d->id }}"
+                title="{{ $d->name_vi }}"
+                @selected(old('destination_id', $tour?->destination_id) == $d->id)
+            >{{ $d->name_en }}</option>
         @endforeach
     </select>
     @error('destination_id')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror

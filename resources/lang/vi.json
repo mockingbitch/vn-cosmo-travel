@@ -253,6 +253,8 @@
   "Actions": "Thao tác",
   "Title": "Tiêu đề",
   "Name": "Tên",
+  "Name (EN)": "Tên (tiếng Anh)",
+  "Name (VI)": "Tên (tiếng Việt)",
   "Slug": "Slug",
   "Days": "Số ngày",
   "Price": "Giá",

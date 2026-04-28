@@ -18,7 +18,7 @@ class DestinationRepository implements DestinationRepositoryInterface
             ->sortBy(function (Destination $d) use ($order) {
                 $i = array_search($d->region, $order, true);
 
-                return [is_int($i) ? $i : 99, mb_strtolower($d->name ?? '')];
+                return [is_int($i) ? $i : 99, mb_strtolower($d->name_en ?? '')];
             })
             ->values();
     }
@@ -29,7 +29,7 @@ class DestinationRepository implements DestinationRepositoryInterface
             ->withCount('tours')
             ->whereHas('tours')
             ->orderByDesc('tours_count')
-            ->orderBy('name')
+            ->orderBy('name_en')
             ->limit($limit)
             ->get();
     }
@@ -45,7 +45,7 @@ class DestinationRepository implements DestinationRepositoryInterface
     {
         return Destination::query()
             ->orderBy('region')
-            ->orderBy('name')
+            ->orderBy('name_en')
             ->paginate($perPage);
     }
 
