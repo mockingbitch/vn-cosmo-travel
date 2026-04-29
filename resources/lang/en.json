@@ -458,6 +458,9 @@
   "dashboard.stats.posts_hint": "Published posts in the blog.",
   "dashboard.stats.tours_hint": "Tours listed in the catalog.",
   "dashboard.stats.bookings_hint": "Booking requests submitted by visitors.",
+  "admin.guide.menu": "Guide",
+  "admin.guide.title": "Admin guide",
+  "admin.guide.subtitle": "How to use the control panel. This page reads docs/HUONG_DAN_ADMIN.md from the project.",
 
   "Recent posts": "Recent posts",
   "Latest content updates": "Latest content updates",

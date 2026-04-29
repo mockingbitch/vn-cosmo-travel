@@ -23,12 +23,37 @@
         font-family: inherit !important;
     }
 
+    .richtext h1 {
+        @apply mt-0 text-3xl font-semibold tracking-tight text-slate-900;
+    }
+
     .richtext h2 {
         @apply mt-8 text-2xl font-semibold tracking-tight text-slate-900;
     }
 
     .richtext h3 {
         @apply mt-6 text-xl font-semibold tracking-tight text-slate-900;
+    }
+
+    .richtext hr {
+        @apply my-8 border-slate-200;
+    }
+
+    .richtext table {
+        @apply mt-4 w-full border-collapse border border-slate-200 text-sm;
+    }
+
+    .richtext thead {
+        @apply bg-slate-50;
+    }
+
+    .richtext th,
+    .richtext td {
+        @apply border border-slate-200 px-3 py-2 align-top text-left text-slate-800;
+    }
+
+    .richtext th {
+        @apply font-semibold text-slate-900;
     }
 
     .richtext p {

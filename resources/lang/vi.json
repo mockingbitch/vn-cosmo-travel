@@ -493,6 +493,9 @@
   "dashboard.stats.posts_hint": "Số bài viết đã có trong blog.",
   "dashboard.stats.tours_hint": "Số tour trong danh mục.",
   "dashboard.stats.bookings_hint": "Yêu cầu đặt tour do khách gửi qua website.",
+  "admin.guide.menu": "Hướng dẫn",
+  "admin.guide.title": "Hướng dẫn quản trị",
+  "admin.guide.subtitle": "Tài liệu nội bộ cách dùng bảng điều khiển. Trang này đọc nội dung từ file docs/HUONG_DAN_ADMIN.md trong mã nguồn.",
 
   "Total Banners": "Tổng banner",
   "Visitors": "Lượt truy cập",
