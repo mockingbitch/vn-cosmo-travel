@@ -34,7 +34,7 @@ class MediaRepository implements MediaRepositoryInterface
         ]);
     }
 
-    public function paginateForAdmin(int $perPage = 30, ?string $search = null, ?string $type = null): LengthAwarePaginator
+    public function paginateForAdmin(int $perPage = 30, ?string $search = null): LengthAwarePaginator
     {
         $q = Media::query()
             ->withCount('usages')
@@ -44,11 +44,8 @@ class MediaRepository implements MediaRepositoryInterface
             $q->where('file_name', 'like', '%'.$search.'%');
         }
 
-        if ($type === 'image') {
-            $q->where('mime_type', 'like', 'image/%');
-        } elseif ($type === 'video') {
-            $q->where('mime_type', 'like', 'video/%');
-        }
+        // Library is image-only (no video uploads).
+        $q->where('mime_type', 'like', 'image/%');
 
         return $q->paginate($perPage)->withQueryString();
     }

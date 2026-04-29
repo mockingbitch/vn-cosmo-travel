@@ -44,6 +44,7 @@ class DestinationRepository implements DestinationRepositoryInterface
     public function adminPaginate(int $perPage = 15): LengthAwarePaginator
     {
         return Destination::query()
+            ->with(['creator', 'updatedBy'])
             ->orderBy('region')
             ->orderBy('name_en')
             ->paginate($perPage);
@@ -66,4 +67,3 @@ class DestinationRepository implements DestinationRepositoryInterface
         $destination->delete();
     }
 }
-

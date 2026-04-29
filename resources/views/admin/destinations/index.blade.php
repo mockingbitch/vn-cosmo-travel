@@ -16,6 +16,10 @@
                             <th class="px-4 py-3 sm:px-6">{{ __('Name (VI)') }}</th>
                             <th class="px-4 py-3 sm:px-6">{{ __('Region') }}</th>
                             <th class="px-4 py-3 sm:px-6">{{ __('Slug') }}</th>
+                            @if(auth()->user()->canManageUsers())
+                                <th class="px-4 py-3 sm:px-6">{{ __('audit.created_by') }}</th>
+                                <th class="px-4 py-3 sm:px-6">{{ __('audit.updated_by') }}</th>
+                            @endif
                             <th class="px-4 py-3 text-right sm:px-6">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
@@ -32,6 +36,10 @@
                                     @endif
                                 </td>
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $destination->slug }}</td>
+                                @if(auth()->user()->canManageUsers())
+                                    <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $destination->creator?->name ?? '—' }}</td>
+                                    <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $destination->updatedBy?->name ?? '—' }}</td>
+                                @endif
                                 <td class="px-4 py-3 text-right sm:px-6">
                                     <div class="flex items-center justify-end gap-2">
                                         <x-admin.action-icon

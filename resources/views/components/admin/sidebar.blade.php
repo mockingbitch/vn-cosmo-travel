@@ -4,6 +4,7 @@
             'title' => __('General'),
             'items' => [
                 ['label' => __('Dashboard'), 'route' => 'admin.dashboard', 'icon' => 'home'],
+                ['label' => __('Profile'), 'route' => 'admin.profile.edit', 'icon' => 'user'],
             ],
         ],
         [
@@ -21,7 +22,10 @@
                 ['label' => __('Media'), 'route' => 'admin.media.index', 'icon' => 'folder'],
             ],
         ],
-        [
+    ];
+
+    if (auth()->check() && auth()->user()->canManageUsers()) {
+        $sections[] = [
             'title' => null,
             'items' => [
                 [
@@ -36,12 +40,21 @@
                     ],
                 ],
             ],
-        ],
-    ];
+        ];
+
+        $sections[] = [
+            'title' => __('Team'),
+            'items' => [
+                ['label' => __('Users'), 'route' => 'admin.users.index', 'icon' => 'users'],
+            ],
+        ];
+    }
 
     $icon = function (string $name): string {
         return match ($name) {
             'home' => '<path stroke-linecap="round" stroke-linejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75V19.5a2.25 2.25 0 0 0 2.25 2.25h3.75v-6a2.25 2.25 0 0 1 2.25-2.25h.75a2.25 2.25 0 0 1 2.25 2.25v6h3.75A2.25 2.25 0 0 0 19.5 19.5V9.75"/>',
+            'user' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 0 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>',
+            'users' => '<path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"/>',
             'cog' => '<path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12a7.5 7.5 0 0 1 12.75-5.303M19.5 12a7.5 7.5 0 0 1-12.75 5.303M12 9.75A2.25 2.25 0 1 0 12 14.25 2.25 2.25 0 0 0 12 9.75Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 2.25v1.5m0 16.5v1.5M3.75 12h-1.5m18 0h1.5M5.47 5.47 4.41 4.41m15.18 15.18 1.06 1.06M18.53 5.47l1.06-1.06M4.41 19.59l1.06-1.06"/>',
             'photo' => '<path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.159 2.159M3 18.75h18A2.25 2.25 0 0 0 23.25 16.5V6A2.25 2.25 0 0 0 21 3.75H3A2.25 2.25 0 0 0 .75 6v10.5A2.25 2.25 0 0 0 3 18.75Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h.008v.008H7.5V8.25Z"/>',
             'document' => '<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5A3.375 3.375 0 0 0 10.125 2.25H8.25m0 11.25h7.5m-7.5 3h7.5m-7.5 3h4.5M6.75 2.25H10.5A2.25 2.25 0 0 1 12.75 4.5v2.25A2.25 2.25 0 0 0 15 9h2.25A2.25 2.25 0 0 1 19.5 11.25v9A2.25 2.25 0 0 1 17.25 22.5h-9A2.25 2.25 0 0 1 6 20.25V4.5A2.25 2.25 0 0 1 8.25 2.25Z"/>',
@@ -106,22 +119,7 @@
         </div>
     </div>
 
-    <div class="px-4 pb-3" x-show="!sidebarCollapsed" x-transition.opacity.duration.200ms>
-        <div class="relative">
-            <div class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
-                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
-                </svg>
-            </div>
-            <input
-                type="search"
-                placeholder="{{ __('placeholder.admin_search') }}"
-                class="w-full rounded-2xl border border-slate-200 bg-white/70 px-10 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-200/60"
-            />
-        </div>
-    </div>
-
-    <nav class="flex-1 overflow-y-auto px-3 pb-4 [scrollbar-width:thin] [scrollbar-color:rgb(203,213,225)_transparent]">
+    <nav class="flex-1 overflow-y-auto px-3 pb-4 pt-1 [scrollbar-width:thin] [scrollbar-color:rgb(203,213,225)_transparent]">
         @foreach($sections as $section)
             <div class="mt-4 first:mt-0">
                 @if(filled($section['title'] ?? null))

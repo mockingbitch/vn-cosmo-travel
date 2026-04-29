@@ -22,6 +22,12 @@ class BookingAdminService
 
     public function updateStatus(Booking $booking, string $status): Booking
     {
-        return $this->bookings->adminUpdate($booking, ['status' => $status]);
+        $payload = ['status' => $status];
+
+        if (($uid = auth()->id()) !== null) {
+            $payload['updated_by'] = $uid;
+        }
+
+        return $this->bookings->adminUpdate($booking, $payload);
     }
 }

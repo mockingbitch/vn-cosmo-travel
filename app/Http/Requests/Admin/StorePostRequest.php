@@ -19,7 +19,6 @@ class StorePostRequest extends FormRequest
         return [
             'category_id' => ['nullable', 'integer', 'exists:categories,id'],
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255'],
             'content' => ['required', 'string'],
             'thumbnail_media_id' => ['nullable', 'integer', 'exists:media,id'],
         ];

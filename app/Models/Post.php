@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'slug',
     'content',
     'category_id',
+    'created_by',
+    'updated_by',
     'thumbnail_media_id',
 ])]
 class Post extends Model
@@ -23,6 +25,16 @@ class Post extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
     public function thumbnailMedia(): BelongsTo

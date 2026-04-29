@@ -94,7 +94,6 @@
             syncUrlIndex: syncUrlIndex ?? null,
             openModal: false,
             q: '',
-            type: '',
             items: [],
             nextPageUrl: null,
             selectedIds: initialIds ?? [],
@@ -141,7 +140,6 @@
             async reload() {
                 const url = new URL(pickerUrl, window.location.origin);
                 if (this.q) url.searchParams.set('q', this.q);
-                if (this.type) url.searchParams.set('type', this.type);
                 const res = await fetch(url.toString(), { headers: { 'Accept': 'application/json' } });
                 const json = await res.json();
                 this.items = json.data ?? [];

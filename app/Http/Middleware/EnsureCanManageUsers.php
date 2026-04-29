@@ -4,10 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureAdmin
+class EnsureCanManageUsers
 {
     /**
      * @param  Closure(Request): Response  $next
@@ -16,12 +15,8 @@ class EnsureAdmin
     {
         $user = $request->user();
 
-        if (! $user || ! $user->canAccessAdmin()) {
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
-            return redirect()->route('admin.login');
+        if (! $user || ! $user->canManageUsers()) {
+            abort(403);
         }
 
         return $next($request);

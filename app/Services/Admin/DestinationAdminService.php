@@ -22,6 +22,10 @@ class DestinationAdminService
     {
         $data['slug'] = $this->uniqueSlug($data['slug'] ?? null, $data['name_en'] ?? '');
 
+        if (($uid = auth()->id()) !== null) {
+            $data['created_by'] = $uid;
+        }
+
         return $this->destinations->adminCreate($data);
     }
 
@@ -30,6 +34,10 @@ class DestinationAdminService
         $name = $data['name_en'] ?? $destination->name_en;
         $slugInput = array_key_exists('slug', $data) ? $data['slug'] : $destination->slug;
         $data['slug'] = $this->uniqueSlug($slugInput, (string) $name, $destination->id);
+
+        if (($uid = auth()->id()) !== null) {
+            $data['updated_by'] = $uid;
+        }
 
         return $this->destinations->adminUpdate($destination, $data);
     }

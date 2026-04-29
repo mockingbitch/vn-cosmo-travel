@@ -14,11 +14,7 @@ interface MediaRepositoryInterface
     /**
      * @return LengthAwarePaginator<Media>
      */
-    public function paginateForAdmin(
-        int $perPage = 30,
-        ?string $search = null,
-        ?string $type = null,
-    ): LengthAwarePaginator;
+    public function paginateForAdmin(int $perPage = 30, ?string $search = null): LengthAwarePaginator;
 
     public function findOrFail(int $id): Media;
 
@@ -29,4 +25,3 @@ interface MediaRepositoryInterface
      */
     public function usageSummary(int $mediaId): Collection;
 }
-

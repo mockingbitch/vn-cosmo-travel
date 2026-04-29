@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'is_admin'])]
+#[Fillable(['name', 'email', 'password', 'is_admin', 'can_access_panel'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -27,7 +27,24 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'is_admin' => 'boolean',
+            'can_access_panel' => 'boolean',
             'password' => 'hashed',
         ];
+    }
+
+    public function canAccessAdmin(): bool
+    {
+        return (bool) $this->can_access_panel;
+    }
+
+    /** Full administrators may manage staff accounts (create/edit/delete users). */
+    public function canManageUsers(): bool
+    {
+        return (bool) $this->is_admin;
+    }
+
+    public static function administratorsCount(): int
+    {
+        return static::query()->where('is_admin', true)->count();
     }
 }

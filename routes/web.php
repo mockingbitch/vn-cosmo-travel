@@ -7,8 +7,10 @@ use App\Http\Controllers\Admin\DestinationController as AdminDestinationControll
 use App\Http\Controllers\Admin\HeroBannerController as AdminHeroBannerController;
 use App\Http\Controllers\Admin\MediaController as AdminMediaController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\TourController as AdminTourController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\BookingController;
 use App\Http\Controllers\Frontend\DestinationController;
@@ -47,21 +49,26 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
-        Route::get('settings', function (): RedirectResponse {
-            return redirect()->route('admin.settings.general.edit');
-        })->name('settings.edit');
-        Route::get('settings/general', [AdminSettingController::class, 'editGeneral'])->name('settings.general.edit');
-        Route::put('settings/general', [AdminSettingController::class, 'updateGeneral'])->name('settings.general.update');
-        Route::get('settings/contact', [AdminSettingController::class, 'editContact'])->name('settings.contact.edit');
-        Route::put('settings/contact', [AdminSettingController::class, 'updateContact'])->name('settings.contact.update');
-        Route::get('settings/social', [AdminSettingController::class, 'editSocial'])->name('settings.social.edit');
-        Route::put('settings/social', [AdminSettingController::class, 'updateSocial'])->name('settings.social.update');
-        Route::get('settings/home-why', [AdminSettingController::class, 'editHomeWhy'])->name('settings.homeWhy.edit');
-        Route::put('settings/home-why', [AdminSettingController::class, 'updateHomeWhy'])->name('settings.homeWhy.update');
 
-        Route::get('banners', [AdminHeroBannerController::class, 'edit'])->name('banners.edit');
-        Route::put('banners', [AdminHeroBannerController::class, 'update'])->name('banners.update');
-        Route::post('banners/apply/{banner}', [AdminHeroBannerController::class, 'apply'])->name('banners.apply');
+        Route::middleware('manage.users')->group(function () {
+            Route::get('settings', function (): RedirectResponse {
+                return redirect()->route('admin.settings.general.edit');
+            })->name('settings.edit');
+            Route::get('settings/general', [AdminSettingController::class, 'editGeneral'])->name('settings.general.edit');
+            Route::put('settings/general', [AdminSettingController::class, 'updateGeneral'])->name('settings.general.update');
+            Route::get('settings/contact', [AdminSettingController::class, 'editContact'])->name('settings.contact.edit');
+            Route::put('settings/contact', [AdminSettingController::class, 'updateContact'])->name('settings.contact.update');
+            Route::get('settings/social', [AdminSettingController::class, 'editSocial'])->name('settings.social.edit');
+            Route::put('settings/social', [AdminSettingController::class, 'updateSocial'])->name('settings.social.update');
+            Route::get('settings/home-why', [AdminSettingController::class, 'editHomeWhy'])->name('settings.homeWhy.edit');
+            Route::put('settings/home-why', [AdminSettingController::class, 'updateHomeWhy'])->name('settings.homeWhy.update');
+
+            Route::get('banners', [AdminHeroBannerController::class, 'edit'])->name('banners.edit');
+            Route::put('banners', [AdminHeroBannerController::class, 'update'])->name('banners.update');
+            Route::post('banners/apply/{banner}', [AdminHeroBannerController::class, 'apply'])->name('banners.apply');
+
+            Route::resource('users', AdminUserController::class)->except(['show']);
+        });
 
         Route::get('media/picker', [AdminMediaController::class, 'picker'])->name('media.picker');
         Route::get('media/by-ids', [AdminMediaController::class, 'byIds'])->name('media.byIds');
@@ -74,6 +81,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('destinations', AdminDestinationController::class)->except(['show']);
         Route::get('bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
         Route::patch('bookings/{booking}', [AdminBookingController::class, 'update'])->name('bookings.update');
+
+        Route::get('profile', [AdminProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('profile', [AdminProfileController::class, 'update'])->name('profile.update');
     });
 });
 

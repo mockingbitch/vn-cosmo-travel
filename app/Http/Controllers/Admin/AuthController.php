@@ -24,7 +24,7 @@ class AuthController extends Controller
         $remember = (bool) ($credentials['remember'] ?? false);
         unset($credentials['remember']);
 
-        if (!Auth::attempt($credentials, $remember)) {
+        if (! Auth::attempt($credentials, $remember)) {
             throw ValidationException::withMessages([
                 'email' => __('auth.failed'),
             ]);
@@ -32,7 +32,7 @@ class AuthController extends Controller
 
         /** @var User $user */
         $user = $request->user();
-        if (!$user->is_admin) {
+        if (! $user->canAccessAdmin()) {
             Auth::logout();
 
             throw ValidationException::withMessages([
@@ -55,4 +55,3 @@ class AuthController extends Controller
         return redirect()->route('admin.login');
     }
 }
-

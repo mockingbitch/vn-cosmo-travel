@@ -5,7 +5,7 @@
         <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
                 <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('Media') }}</h1>
-                <p class="mt-1 text-sm text-slate-600">{{ __('Centralized uploads you can reuse across the site.') }}</p>
+                <p class="mt-1 text-sm text-slate-600">{{ __('admin.media.library_intro') }}</p>
             </div>
 
             <form method="GET" class="flex w-full max-w-xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
@@ -16,19 +16,11 @@
                     placeholder="{{ __('placeholder.media_filename') }}"
                     class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                 />
-                <select
-                    name="type"
-                    class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60 sm:w-40"
-                >
-                    <option value="">{{ __('All') }}</option>
-                    <option value="image" @selected(($type ?? null) === 'image')>{{ __('Images') }}</option>
-                    <option value="video" @selected(($type ?? null) === 'video')>{{ __('Videos') }}</option>
-                </select>
                 <x-admin.button type="submit" variant="secondary">{{ __('Filter') }}</x-admin.button>
             </form>
         </div>
 
-        <x-admin.card :title="__('Upload')" :subtitle="__('Drag & drop or pick files to upload')">
+        <x-admin.card :title="__('Upload')" :subtitle="__('admin.media.upload_drag_hint')">
             <form
                 method="POST"
                 action="{{ route('admin.media.store') }}"
@@ -37,7 +29,15 @@
                 x-data="{
                     dragging: false,
                     pick() { this.$refs.input.click(); },
-                    dropped(e) { this.dragging = false; this.$refs.input.files = e.dataTransfer.files; this.$refs.form.submit(); },
+                    dropped(e) {
+                        this.dragging = false;
+                        const files = [...e.dataTransfer.files].filter((f) => f.type.startsWith('image/'));
+                        if (!files.length) return;
+                        const dt = new DataTransfer();
+                        files.forEach((f) => dt.items.add(f));
+                        this.$refs.input.files = dt.files;
+                        this.$refs.form.submit();
+                    },
                 }"
                 x-ref="form"
                 @dragover.prevent="dragging = true"
@@ -61,7 +61,7 @@
                         <div class="text-sm font-semibold text-slate-900">{{ __('Drop files here') }}</div>
                         <div class="text-xs text-slate-600">{{ __('Or') }}</div>
                         <x-admin.button type="button" variant="primary" @click="pick()">{{ __('Choose files') }}</x-admin.button>
-                        <div class="text-xs text-slate-500">{{ __('Max 2MB per image. JPG/PNG/WEBP/GIF.') }}</div>
+                        <div class="text-xs text-slate-500">{{ __('admin.media.upload_formats_hint') }}</div>
                     </div>
                 </div>
 
@@ -304,9 +304,6 @@
                                 @if(request()->filled('q'))
                                     <input type="hidden" name="q" value="{{ request('q') }}">
                                 @endif
-                                @if(request()->filled('type'))
-                                    <input type="hidden" name="type" value="{{ request('type') }}">
-                                @endif
                                 @if(request()->filled('page'))
                                     <input type="hidden" name="page" value="{{ request('page') }}">
                                 @endif
@@ -354,9 +351,6 @@
                                 @method('DELETE')
                                 @if(request()->filled('q'))
                                     <input type="hidden" name="q" value="{{ request('q') }}">
-                                @endif
-                                @if(request()->filled('type'))
-                                    <input type="hidden" name="type" value="{{ request('type') }}">
                                 @endif
                                 @if(request()->filled('page'))
                                     <input type="hidden" name="page" value="{{ request('page') }}">

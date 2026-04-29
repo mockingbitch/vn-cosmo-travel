@@ -15,14 +15,9 @@
 
 <div>
     <label class="block text-sm font-medium text-slate-700">{{ __('Title') }}</label>
+    <p class="mt-0.5 text-xs text-slate-500">{{ __('admin.tour_form.slug_auto') }}</p>
     <input name="title" value="{{ old('title', $post?->title) }}" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60" required>
     @error('title')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
-</div>
-
-<div>
-    <label class="block text-sm font-medium text-slate-700">{{ __('Slug (optional)') }}</label>
-    <input name="slug" value="{{ old('slug', $post?->slug) }}" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60">
-    @error('slug')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
 </div>
 
 <div>

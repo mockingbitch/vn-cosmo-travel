@@ -16,15 +16,11 @@ class MediaController extends Controller
     public function index(Request $request, MediaAdminService $media): View
     {
         $search = $request->string('q')->toString();
-        $type = $request->string('type')->toString() ?: null;
-        $sort = $request->string('sort')->toString() ?: null;
 
         return view('admin.media.index', [
             'title' => __('Media'),
-            'media' => $media->paginate(30, $search !== '' ? $search : null, $type, $sort),
+            'media' => $media->paginate(30, $search !== '' ? $search : null),
             'q' => $search,
-            'type' => $type,
-            'sort' => $sort,
         ]);
     }
 
@@ -65,7 +61,7 @@ class MediaController extends Controller
     public function destroy(Request $request, MediaAdminService $service): RedirectResponse
     {
         $listQuery = array_filter(
-            $request->only(['q', 'type', 'page', 'sort']),
+            $request->only(['q', 'page', 'sort']),
             fn ($v) => $v !== null && $v !== '',
         );
 
@@ -85,7 +81,7 @@ class MediaController extends Controller
         $deleted = $service->bulkDelete($validated['ids']);
 
         $listQuery = array_filter(
-            $request->only(['q', 'type', 'page', 'sort']),
+            $request->only(['q', 'page', 'sort']),
             fn ($v) => $v !== null && $v !== '',
         );
 
@@ -97,10 +93,8 @@ class MediaController extends Controller
     public function picker(Request $request, MediaAdminService $media): JsonResponse
     {
         $search = $request->string('q')->toString();
-        $type = $request->string('type')->toString() ?: null;
-        $sort = $request->string('sort')->toString() ?: null;
 
-        $p = $media->paginate(24, $search !== '' ? $search : null, $type, $sort);
+        $p = $media->paginate(24, $search !== '' ? $search : null);
 
         return response()->json([
             'data' => $p->getCollection()->map(fn (Media $m) => $this->mediaPickerPayload($m))->values(),

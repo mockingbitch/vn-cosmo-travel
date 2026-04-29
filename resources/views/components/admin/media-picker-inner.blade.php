@@ -59,7 +59,7 @@
     name="openModal"
     size="xl"
     :title="__('Media library')"
-    :subtitle="__('Search and pick from your existing media library.')"
+    :subtitle="__('admin.media.picker_subtitle')"
 >
     <div x-init="load()" @keydown.window="modalKeydown($event)">
         {{-- Sticky search toolbar. Negative margins escape body padding so border-b spans full width. --}}
@@ -129,7 +129,7 @@
                     <span x-show="!q" x-cloak>{{ __('Your library is empty.') }}</span>
                 </div>
                 <p class="mt-1 max-w-sm text-xs text-slate-500">
-                    {{ __('Upload new files from the') }}
+                    {{ __('admin.media.upload_images_cta') }}
                     <a class="font-semibold text-slate-700 underline underline-offset-2 hover:text-slate-900" href="{{ route('admin.media.index') }}" target="_blank" rel="noopener noreferrer">{{ __('Media library') }}</a>.
                 </p>
             </div>

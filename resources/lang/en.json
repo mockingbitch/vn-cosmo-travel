@@ -90,6 +90,7 @@
   "Sending…": "Sending…",
   "Booking request received. We will contact you shortly.": "Booking request received. We will contact you shortly.",
   "Booking consent": "By submitting, you agree we can contact you by email/phone to confirm the booking details.",
+  "booking.people_10_plus": "10+",
   "placeholder.name": "Nguyen Thi Mai",
   "placeholder.email": "bookings@vietnamcosmotravel.com",
   "placeholder.phone": "+84 909 123 456",
@@ -371,6 +372,8 @@
   "Add post": "Add post",
   "New post": "New post",
   "Edit post": "Edit post",
+  "admin.posts.form_create_subtitle": "Category, thumbnail image, and HTML body.",
+  "admin.posts.form_edit_subtitle": "Update category, thumbnail image, and HTML body.",
   "Add destination": "Add destination",
   "New destination": "New destination",
   "Edit destination": "Edit destination",
@@ -397,6 +400,43 @@
   "flash.media.in_use": "Media is in use and cannot be deleted.",
   "flash.media.bulk_deleted": "Deleted :count media.",
 
+  "flash.profile.updated": "Profile updated.",
+  "flash.user.created": "User created.",
+  "flash.user.updated": "User updated.",
+  "flash.user.deleted": "User deleted.",
+
+  "admin.profile.subtitle": "Update your name, email, and password.",
+  "admin.profile.change_password_hint": "Leave password blank to keep your current password.",
+  "admin.users.create_subtitle": "Invite a teammate to the admin panel.",
+  "admin.users.edit_subtitle": "Change account details or permissions.",
+  "admin.users.help_is_admin": "Administrators can create and manage staff accounts. Editors can sign in but cannot manage users.",
+  "admin.users.password_optional_hint": "Leave blank to keep the current password.",
+
+  "Team": "Team",
+  "Users": "Users",
+  "Profile": "Profile",
+  "New user": "New user",
+  "Edit user": "Edit user",
+  "Add user": "Add user",
+  "Administrator account": "Administrator account",
+  "Administrator": "Administrator",
+  "Editor": "Editor",
+  "Role": "Role",
+  "New password": "New password",
+  "Password": "Password",
+  "Confirm password": "Confirm password",
+
+  "confirm.delete_user": "Delete this user account?",
+  "validation.admin_must_remain": "There must be at least one administrator.",
+  "validation.cannot_delete_self": "You cannot delete your own account.",
+  "validation.cannot_delete_last_admin": "You cannot delete the last administrator.",
+
+  "admin.media.library_intro": "Images only — reuse thumbnails and visuals anywhere on the site.",
+  "admin.media.upload_drag_hint": "Drag and drop images here or browse your files.",
+  "admin.media.upload_formats_hint": "Max 2 MB per file. JPG, PNG, GIF, WEBP, SVG, BMP.",
+  "admin.media.picker_subtitle": "Search and pick existing images from your library.",
+  "admin.media.upload_images_cta": "Upload new images from the",
+
   "Vietnamese": "Vietnamese",
   "English": "English",
   "Home why section": "Why choose us (homepage)",
@@ -406,6 +446,26 @@
   "Why card :number": "Card :number",
   "Card title": "Card title",
   "Card description": "Card description",
+
+  "Total Posts": "Total posts",
+  "Total tours": "Total tours",
+  "Total bookings": "Total bookings",
+  "dashboard.stats.posts_hint": "Published posts in the blog.",
+  "dashboard.stats.tours_hint": "Tours listed in the catalog.",
+  "dashboard.stats.bookings_hint": "Booking requests submitted by visitors.",
+
+  "Recent posts": "Recent posts",
+  "Latest content updates": "Latest content updates",
+  "Live": "Live",
+  "No posts yet": "No posts yet",
+
+  "Quick actions": "Quick actions",
+  "Shortcuts to common tasks": "Shortcuts to common tasks",
+  "Add new post": "Add new post",
+  "Update settings": "Update settings",
+
+  "audit.created_by": "Created by",
+  "audit.updated_by": "Last updated by",
 
   "Thanks": "Thanks"
 }

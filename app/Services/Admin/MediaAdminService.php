@@ -23,9 +23,9 @@ class MediaAdminService
     /**
      * @return LengthAwarePaginator<Media>
      */
-    public function paginate(int $perPage = 30, ?string $search = null, ?string $type = null, ?string $sort = null): LengthAwarePaginator
+    public function paginate(int $perPage = 30, ?string $search = null): LengthAwarePaginator
     {
-        return $this->media->paginateForAdmin($perPage, $search, $type);
+        return $this->media->paginateForAdmin($perPage, $search);
     }
 
     /**

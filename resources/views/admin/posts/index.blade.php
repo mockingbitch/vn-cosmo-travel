@@ -12,6 +12,10 @@
                 <tr>
                     <th class="px-4 py-3">{{ __('Title') }}</th>
                     <th class="px-4 py-3">{{ __('Category') }}</th>
+                    @if(auth()->user()->canManageUsers())
+                        <th class="px-4 py-3">{{ __('audit.created_by') }}</th>
+                        <th class="px-4 py-3">{{ __('audit.updated_by') }}</th>
+                    @endif
                     <th class="px-4 py-3 text-right">{{ __('Actions') }}</th>
                 </tr>
             </thead>
@@ -36,6 +40,10 @@
                             </div>
                         </td>
                         <td class="px-4 py-3 text-slate-600">{{ $post->category?->name ?? '—' }}</td>
+                        @if(auth()->user()->canManageUsers())
+                            <td class="px-4 py-3 text-slate-600">{{ $post->creator?->name ?? '—' }}</td>
+                            <td class="px-4 py-3 text-slate-600">{{ $post->updatedBy?->name ?? '—' }}</td>
+                        @endif
                         <td class="px-4 py-3 text-right">
                             <div class="flex items-center justify-end gap-2">
                                 <x-admin.action-icon

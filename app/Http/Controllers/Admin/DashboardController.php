@@ -3,17 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\HeroBanner;
+use App\Models\Booking;
 use App\Models\Post;
+use App\Models\Tour;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
 {
     public function index(): View
     {
-        $totalPosts = Post::query()->count();
-        $totalBanners = HeroBanner::query()->count();
-
         $recentPosts = Post::query()
             ->latest('id')
             ->take(6)
@@ -22,13 +20,11 @@ class DashboardController extends Controller
         return view('admin.dashboard', [
             'title' => __('Dashboard'),
             'stats' => [
-                'posts' => $totalPosts,
-                'banners' => $totalBanners,
-                'visitors' => 12450,
-                'revenue' => 86400000,
+                'posts' => Post::query()->count(),
+                'tours' => Tour::query()->count(),
+                'bookings' => Booking::query()->count(),
             ],
             'recentPosts' => $recentPosts,
         ]);
     }
 }
-

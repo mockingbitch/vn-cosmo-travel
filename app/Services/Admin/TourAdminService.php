@@ -31,6 +31,10 @@ class TourAdminService
         $data = $this->normalizeTourLists($data);
         $data['slug'] = $this->uniqueSlug(null, $data['title']);
 
+        if (($uid = auth()->id()) !== null) {
+            $data['created_by'] = $uid;
+        }
+
         $tour = $this->tours->adminCreate($data);
         $this->replaceItineraries($tour, $itineraryRows);
         $this->replaceGalleryImages($tour, $galleryPaths);
@@ -50,6 +54,10 @@ class TourAdminService
         $data = $this->normalizeTourLists($data);
         $title = $data['title'] ?? $tour->title;
         $data['slug'] = $this->uniqueSlug(null, $title, $tour->id);
+
+        if (($uid = auth()->id()) !== null) {
+            $data['updated_by'] = $uid;
+        }
 
         $this->tours->adminUpdate($tour, $data);
         $this->replaceItineraries($tour, $itineraryRows);

@@ -279,8 +279,9 @@
                                 class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                             >
                                 @for($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}" @selected(old('people_count', 2) == $i)>{{ $i }}</option>
+                                    <option value="{{ $i }}" @selected((int) old('people_count', 2) === $i)>{{ $i }}</option>
                                 @endfor
+                                <option value="11" @selected((int) old('people_count', 2) === 11)>{{ __('booking.people_10_plus') }}</option>
                             </select>
                             @error('people_count')
                                 <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>

@@ -20,7 +20,7 @@ class BookingRepository implements BookingRepositoryInterface
         $tourId = isset($filters['tour_id']) ? (int) $filters['tour_id'] : 0;
 
         return Booking::query()
-            ->with(['tour'])
+            ->with(['tour', 'creator', 'updatedBy'])
             ->when($q !== '', function ($builder) use ($q): void {
                 $like = '%'.str_replace(['%', '_'], ['\%', '\_'], $q).'%';
                 $builder->where(function ($w) use ($like): void {
@@ -41,7 +41,6 @@ class BookingRepository implements BookingRepositoryInterface
     {
         $booking->update($data);
 
-        return $booking->fresh();
+        return $booking->fresh(['tour', 'creator', 'updatedBy']);
     }
 }
-

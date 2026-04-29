@@ -15,11 +15,11 @@ class TourRepository implements TourRepositoryInterface
             ->with(['destination'])
             ->withCount(['images', 'itineraries']);
 
-        if (!empty($filters['destination'])) {
+        if (! empty($filters['destination'])) {
             $query->whereHas('destination', fn ($q) => $q->where('slug', $filters['destination']));
         }
 
-        if (!empty($filters['duration'])) {
+        if (! empty($filters['duration'])) {
             // duration: "1-3", "4-7", "8+"
             $duration = (string) $filters['duration'];
             if (preg_match('/^(\d+)\-(\d+)$/', $duration, $m)) {
@@ -29,11 +29,11 @@ class TourRepository implements TourRepositoryInterface
             }
         }
 
-        if (!empty($filters['min_price'])) {
+        if (! empty($filters['min_price'])) {
             $query->where('price', '>=', (int) $filters['min_price']);
         }
 
-        if (!empty($filters['max_price'])) {
+        if (! empty($filters['max_price'])) {
             $query->where('price', '<=', (int) $filters['max_price']);
         }
 
@@ -82,7 +82,7 @@ class TourRepository implements TourRepositoryInterface
     public function adminPaginate(int $perPage = 15): LengthAwarePaginator
     {
         return Tour::query()
-            ->with(['destination'])
+            ->with(['destination', 'creator', 'updatedBy'])
             ->latest('id')
             ->paginate($perPage);
     }
@@ -104,4 +104,3 @@ class TourRepository implements TourRepositoryInterface
         $tour->delete();
     }
 }
-

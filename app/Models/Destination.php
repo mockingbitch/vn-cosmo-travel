@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Lang;
 
@@ -13,6 +14,8 @@ use Illuminate\Support\Facades\Lang;
     'slug',
     'region',
     'description',
+    'created_by',
+    'updated_by',
 ])]
 class Destination extends Model
 {
@@ -24,6 +27,16 @@ class Destination extends Model
     public function tours(): HasMany
     {
         return $this->hasMany(Tour::class);
+    }
+
+    public function creator(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
     /**

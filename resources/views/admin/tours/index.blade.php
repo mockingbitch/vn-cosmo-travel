@@ -16,6 +16,10 @@
                             <th class="px-4 py-3 sm:px-6">{{ __('Destination') }}</th>
                             <th class="px-4 py-3 sm:px-6">{{ __('Days') }}</th>
                             <th class="px-4 py-3 sm:px-6">{{ __('Price') }}</th>
+                            @if(auth()->user()->canManageUsers())
+                                <th class="px-4 py-3 sm:px-6">{{ __('audit.created_by') }}</th>
+                                <th class="px-4 py-3 sm:px-6">{{ __('audit.updated_by') }}</th>
+                            @endif
                             <th class="px-4 py-3 text-right sm:px-6">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
@@ -40,6 +44,10 @@
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->destination?->localizedName() }}</td>
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->duration }}</td>
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ number_format((int) $tour->price) }}₫</td>
+                                @if(auth()->user()->canManageUsers())
+                                    <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->creator?->name ?? '—' }}</td>
+                                    <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->updatedBy?->name ?? '—' }}</td>
+                                @endif
                                 <td class="px-4 py-3 text-right sm:px-6">
                                     <div class="flex items-center justify-end gap-2">
                                         <x-admin.action-icon

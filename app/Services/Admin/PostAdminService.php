@@ -26,7 +26,11 @@ class PostAdminService
             $data['content'] = $this->stripFontFamily($data['content']);
         }
 
-        $data['slug'] = $this->uniqueSlug($data['slug'] ?? null, $data['title']);
+        $data['slug'] = $this->uniqueSlug(null, $data['title']);
+
+        if (($uid = auth()->id()) !== null) {
+            $data['created_by'] = $uid;
+        }
 
         $post = $this->posts->adminCreate($data);
         $this->mediaUsage->syncSingle(
@@ -45,8 +49,11 @@ class PostAdminService
         }
 
         $title = $data['title'] ?? $post->title;
-        $slugInput = array_key_exists('slug', $data) ? $data['slug'] : $post->slug;
-        $data['slug'] = $this->uniqueSlug($slugInput, $title, $post->id);
+        $data['slug'] = $this->uniqueSlug(null, $title, $post->id);
+
+        if (($uid = auth()->id()) !== null) {
+            $data['updated_by'] = $uid;
+        }
 
         $updated = $this->posts->adminUpdate($post, $data);
         if (array_key_exists('thumbnail_media_id', $data)) {
@@ -103,11 +110,12 @@ class PostAdminService
             $raw = $m[1];
             $quote = $raw[0];
             $inner = substr($raw, 1, -1);
-            $inner = preg_replace('/\\s*;\\s*;+/',';', $inner) ?? $inner;
+            $inner = preg_replace('/\\s*;\\s*;+/', ';', $inner) ?? $inner;
             $inner = trim((string) $inner, " ;\t\n\r\0\x0B");
             if ($inner === '') {
                 return '';
             }
+
             return ' style='.$quote.$inner.$quote;
         }, $html) ?? $html;
 

@@ -49,7 +49,7 @@ class PostRepository implements PostRepositoryInterface
     public function adminPaginate(int $perPage = 15): LengthAwarePaginator
     {
         return Post::query()
-            ->with(['category', 'thumbnailMedia'])
+            ->with(['category', 'thumbnailMedia', 'creator', 'updatedBy'])
             ->latest('id')
             ->paginate($perPage);
     }
@@ -71,4 +71,3 @@ class PostRepository implements PostRepositoryInterface
         $post->delete();
     }
 }
-

@@ -72,7 +72,7 @@
             <div
                 x-data="{
                     detailOpen: false,
-                    detail: { id: 0, name: '', email: '', phone: '', tour: '', tourFrontendUrl: null, travelDate: '', peopleCount: 0, status: 'pending', note: '', createdAt: '', updateUrl: '' },
+                    detail: { id: 0, name: '', email: '', phone: '', tour: '', tourFrontendUrl: null, travelDate: '', peopleCount: 0, status: 'pending', note: '', createdAt: '', createdBy: '', updatedBy: '', updateUrl: '' },
                     open(payload) { this.detail = payload; this.detailOpen = true; },
                 }"
             >
@@ -88,6 +88,10 @@
                                         <th class="px-4 py-3">{{ __('People') }}</th>
                                         <th class="px-4 py-3">{{ __('Status') }}</th>
                                         <th class="px-4 py-3">{{ __('Submitted') }}</th>
+                                        @if(auth()->user()->canManageUsers())
+                                            <th class="px-4 py-3">{{ __('audit.created_by') }}</th>
+                                            <th class="px-4 py-3">{{ __('audit.updated_by') }}</th>
+                                        @endif
                                         <th class="px-4 py-3 text-right">{{ __('Actions') }}</th>
                                     </tr>
                                 </thead>
@@ -113,6 +117,10 @@
                             'createdAt' => optional($booking->created_at)->format('d/m/Y H:i'),
                             'updateUrl' => route('admin.bookings.update', $booking),
                         ];
+                        if (auth()->user()?->canManageUsers()) {
+                            $detailPayload['createdBy'] = (string) ($booking->creator?->name ?? '');
+                            $detailPayload['updatedBy'] = (string) ($booking->updatedBy?->name ?? '');
+                        }
                     @endphp
                     <tr class="hover:bg-slate-50/60">
                         <td class="px-4 py-3 align-top">
@@ -150,6 +158,14 @@
                         <td class="px-4 py-3 align-top text-xs text-slate-500">
                             {{ optional($booking->created_at)->format('d/m/Y H:i') }}
                         </td>
+                        @if(auth()->user()->canManageUsers())
+                            <td class="px-4 py-3 align-top text-xs text-slate-600">
+                                {{ $booking->creator?->name ?? '—' }}
+                            </td>
+                            <td class="px-4 py-3 align-top text-xs text-slate-600">
+                                {{ $booking->updatedBy?->name ?? '—' }}
+                            </td>
+                        @endif
                         <td class="px-4 py-3 align-top text-right">
                             <div class="flex items-center justify-end">
                                 <x-admin.action-icon
@@ -202,6 +218,16 @@
                                 <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('Submitted') }}</div>
                                 <div class="mt-1 text-sm text-slate-700" x-text="detail.createdAt"></div>
                             </div>
+                            @if(auth()->user()->canManageUsers())
+                                <div>
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('audit.created_by') }}</div>
+                                    <div class="mt-1 text-sm text-slate-700" x-text="detail.createdBy || '—'"></div>
+                                </div>
+                                <div>
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('audit.updated_by') }}</div>
+                                    <div class="mt-1 text-sm text-slate-700" x-text="detail.updatedBy || '—'"></div>
+                                </div>
+                            @endif
                         </div>
 
                         <div class="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50/60 p-4 sm:grid-cols-2">
@@ -238,7 +264,7 @@
                             @csrf
                             @method('PATCH')
                             @if(($filters['q'] ?? '') !== '') <input type="hidden" name="q" value="{{ $filters['q'] }}"> @endif
-                            @if(($filters['status'] ?? '') !== '') <input type="hidden" name="status" value="{{ $filters['status'] }}"> @endif
+                            @if(($filters['status'] ?? '') !== '') <input type="hidden" name="filter_status" value="{{ $filters['status'] }}"> @endif
                             @if(($filters['tour_id'] ?? 0) > 0) <input type="hidden" name="tour_id" value="{{ $filters['tour_id'] }}"> @endif
                             @if(request()->filled('page')) <input type="hidden" name="page" value="{{ request('page') }}"> @endif
 

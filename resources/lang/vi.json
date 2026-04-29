@@ -90,6 +90,7 @@
   "Sending…": "Đang gửi…",
   "Booking request received. We will contact you shortly.": "Đã nhận yêu cầu đặt tour. Chúng tôi sẽ liên hệ sớm.",
   "Booking consent": "Bằng việc gửi biểu mẫu, bạn đồng ý để chúng tôi liên hệ qua email/điện thoại để xác nhận chi tiết đặt tour.",
+  "booking.people_10_plus": "Trên 10 người",
   "placeholder.name": "Nguyễn Thị Mai",
   "placeholder.email": "bookings@vietnamcosmotravel.com",
   "placeholder.phone": "+84 909 123 456",
@@ -369,6 +370,8 @@
   "Add post": "Thêm bài",
   "New post": "Bài mới",
   "Edit post": "Sửa bài",
+  "admin.posts.form_create_subtitle": "Danh mục, ảnh đại diện và nội dung HTML.",
+  "admin.posts.form_edit_subtitle": "Cập nhật danh mục, ảnh đại diện và nội dung HTML.",
   "Add destination": "Thêm điểm đến",
   "New destination": "Điểm đến mới",
   "Edit destination": "Sửa điểm đến",
@@ -433,6 +436,43 @@
   "flash.media.deleted": "Đã xoá media.",
   "flash.media.in_use": "Media đang được sử dụng nên không thể xoá.",
   "flash.media.bulk_deleted": "Đã xoá :count media.",
+
+  "flash.profile.updated": "Đã cập nhật hồ sơ.",
+  "flash.user.created": "Đã tạo người dùng.",
+  "flash.user.updated": "Đã cập nhật người dùng.",
+  "flash.user.deleted": "Đã xoá người dùng.",
+
+  "admin.profile.subtitle": "Cập nhật họ tên, email và mật khẩu.",
+  "admin.profile.change_password_hint": "Để trống mật khẩu nếu không đổi.",
+  "admin.users.create_subtitle": "Mời đồng nghiệp truy cập trang quản trị.",
+  "admin.users.edit_subtitle": "Đổi thông tin hoặc quyền tài khoản.",
+  "admin.users.help_is_admin": "Quản trị viên có thể tạo và quản lý tài khoản nhân sự. Biên tập viên đăng nhập được nhưng không quản lý người dùng.",
+  "admin.users.password_optional_hint": "Để trống để giữ mật khẩu hiện tại.",
+
+  "Team": "Nhóm",
+  "Users": "Người dùng",
+  "Profile": "Hồ sơ",
+  "New user": "Người dùng mới",
+  "Edit user": "Sửa người dùng",
+  "Add user": "Thêm người dùng",
+  "Administrator account": "Tài khoản quản trị viên",
+  "Administrator": "Quản trị viên",
+  "Editor": "Biên tập viên",
+  "Role": "Vai trò",
+  "New password": "Mật khẩu mới",
+  "Password": "Mật khẩu",
+  "Confirm password": "Xác nhận mật khẩu",
+
+  "confirm.delete_user": "Xoá tài khoản người dùng này?",
+  "validation.admin_must_remain": "Phải có ít nhất một quản trị viên.",
+  "validation.cannot_delete_self": "Bạn không thể xoá chính tài khoản của mình.",
+  "validation.cannot_delete_last_admin": "Không thể xoá quản trị viên cuối cùng.",
+
+  "admin.media.library_intro": "Chỉ tải ảnh — tái sử dụng thumbnail và hình minh hoạ khắp website.",
+  "admin.media.upload_drag_hint": "Kéo-thả ảnh vào đây hoặc chọn file.",
+  "admin.media.upload_formats_hint": "Tối đa 2 MB mỗi file. JPG, PNG, GIF, WEBP, SVG, BMP.",
+  "admin.media.picker_subtitle": "Tìm và chọn ảnh có sẵn trong thư viện.",
+  "admin.media.upload_images_cta": "Tải ảnh mới từ",
   "items selected": "mục đã chọn",
   "Select all on this page": "Chọn tất cả trên trang này",
   "Clear selection": "Bỏ chọn tất cả",
@@ -443,6 +483,12 @@
   "Select": "Chọn",
 
   "Total Posts": "Tổng bài viết",
+  "Total tours": "Tổng tour",
+  "Total bookings": "Tổng đặt tour",
+  "dashboard.stats.posts_hint": "Số bài viết đã có trong blog.",
+  "dashboard.stats.tours_hint": "Số tour trong danh mục.",
+  "dashboard.stats.bookings_hint": "Yêu cầu đặt tour do khách gửi qua website.",
+
   "Total Banners": "Tổng banner",
   "Visitors": "Lượt truy cập",
   "Revenue": "Doanh thu",
@@ -534,6 +580,9 @@
   "Card title": "Tiêu đề",
   "Card description": "Mô tả",
   "Social links": "Liên kết mạng xã hội",
+
+  "audit.created_by": "Người tạo",
+  "audit.updated_by": "Cập nhật bởi",
 
   "Thanks": "Trân trọng"
 }
