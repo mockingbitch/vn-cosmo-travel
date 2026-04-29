@@ -31,25 +31,39 @@
         <div class="grid gap-10 lg:grid-cols-12">
             <div class="lg:col-span-8">
                 <div
-                    x-data="{ active: 0, images: @js($images) }"
+                    x-data="{ active: 0, slides: @js($gallerySlides) }"
                     class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
                 >
                     <div class="relative aspect-[16/10] bg-slate-100">
-                        <template x-for="(img, idx) in images" :key="idx">
-                            <img
+                        <template x-for="(slide, idx) in slides" :key="idx">
+                            <div
                                 x-show="active === idx"
                                 x-transition.opacity.duration.200ms
-                                :src="img"
-                                alt="{{ $tour->title }}"
-                                loading="lazy"
-                                class="absolute inset-0 h-full w-full object-cover"
-                            />
+                                class="absolute inset-0"
+                            >
+                                <img
+                                    x-show="slide.type === 'image'"
+                                    :src="slide.src"
+                                    alt="{{ $tour->title }}"
+                                    loading="lazy"
+                                    class="absolute inset-0 h-full w-full object-cover"
+                                />
+                                <iframe
+                                    x-show="slide.type === 'youtube'"
+                                    :src="slide.embedUrl"
+                                    title="YouTube video"
+                                    loading="lazy"
+                                    class="absolute inset-0 h-full w-full border-0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                ></iframe>
+                            </div>
                         </template>
 
                         <button
                             type="button"
                             class="absolute left-3 top-1/2 -translate-y-1/2 rounded-xl bg-white/90 p-2 text-slate-900 shadow hover:bg-white"
-                            @click="active = (active - 1 + images.length) % images.length"
+                            @click="active = (active - 1 + slides.length) % slides.length"
                         >
                             <span class="sr-only">{{ __('Previous image') }}</span>
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -59,7 +73,7 @@
                         <button
                             type="button"
                             class="absolute right-3 top-1/2 -translate-y-1/2 rounded-xl bg-white/90 p-2 text-slate-900 shadow hover:bg-white"
-                            @click="active = (active + 1) % images.length"
+                            @click="active = (active + 1) % slides.length"
                         >
                             <span class="sr-only">{{ __('Next image') }}</span>
                             <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -69,14 +83,30 @@
                     </div>
 
                     <div class="grid grid-cols-5 gap-2 p-4 sm:grid-cols-6">
-                        <template x-for="(img, idx) in images" :key="'thumb-'+idx">
+                        <template x-for="(slide, idx) in slides" :key="'thumb-'+idx">
                             <button
                                 type="button"
                                 class="relative overflow-hidden rounded-xl border transition"
                                 :class="active === idx ? 'border-slate-900' : 'border-slate-200 hover:border-slate-300'"
                                 @click="active = idx"
                             >
-                                <img :src="img" alt="" loading="lazy" class="h-16 w-full object-cover sm:h-20" />
+                                <img
+                                    :src="slide.posterUrl || slide.src"
+                                    alt=""
+                                    loading="lazy"
+                                    class="h-16 w-full object-cover sm:h-20"
+                                />
+                                <span
+                                    x-show="slide.type === 'youtube'"
+                                    class="pointer-events-none absolute inset-0 flex items-center justify-center"
+                                    aria-hidden="true"
+                                >
+                                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-slate-900 shadow-md ring-1 ring-slate-200/80">
+                                        <svg class="ml-0.5 h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                                            <path d="M8 5v14l11-7z" />
+                                        </svg>
+                                    </span>
+                                </span>
                             </button>
                         </template>
                     </div>

@@ -11,7 +11,6 @@
             'items' => [
                 ['label' => __('Tours'), 'route' => 'admin.tours.index', 'icon' => 'tours'],
                 ['label' => __('Destinations'), 'route' => 'admin.destinations.index', 'icon' => 'map'],
-                ['label' => __('Hero Banners'), 'route' => 'admin.banners.edit', 'icon' => 'photo'],
                 ['label' => __('Blog'), 'route' => 'admin.posts.index', 'icon' => 'document'],
                 ['label' => __('Media'), 'route' => 'admin.media.index', 'icon' => 'folder'],
             ],
@@ -27,6 +26,7 @@
                         ['label' => __('Contact'), 'route' => 'admin.settings.contact.edit', 'icon' => 'phone'],
                         ['label' => __('Social links'), 'route' => 'admin.settings.social.edit', 'icon' => 'share'],
                         ['label' => __('Home why section'), 'route' => 'admin.settings.homeWhy.edit', 'icon' => 'sparkles'],
+                        ['label' => __('Hero Banners'), 'route' => 'admin.banners.edit', 'icon' => 'photo'],
                     ],
                 ],
             ],
@@ -77,10 +77,7 @@
             <button
                 type="button"
                 class="hidden items-center justify-center rounded-xl border border-slate-200 bg-white/70 p-2 text-slate-700 shadow-sm transition-all duration-200 hover:bg-slate-50 hover:shadow md:inline-flex lg:inline-flex"
-                @click="
-                    sidebarCollapsed = !sidebarCollapsed;
-                    try { localStorage.setItem('admin.sidebarCollapsed', sidebarCollapsed ? '1' : '0'); } catch (e) {}
-                "
+                @click="sidebarCollapsed = !sidebarCollapsed; localStorage.setItem('admin.sidebarCollapsed', sidebarCollapsed ? '1' : '0')"
                 :aria-pressed="sidebarCollapsed.toString()"
                 aria-label="Collapse sidebar"
             >
@@ -130,12 +127,26 @@
                     @foreach($section['items'] as $item)
                         @if(!empty($item['children']))
                             @php
-                                $settingsGroupActive = request()->routeIs('admin.settings.*');
+                                $settingsGroupActive = false;
+                                foreach ($item['children'] as $childRoute) {
+                                    $rn = (string) ($childRoute['route'] ?? '');
+                                    if ($rn === '') {
+                                        continue;
+                                    }
+                                    $pattern = \Illuminate\Support\Str::contains($rn, '.')
+                                        ? \Illuminate\Support\Str::beforeLast($rn, '.').'.*'
+                                        : $rn.'*';
+                                    if (request()->routeIs($pattern)) {
+                                        $settingsGroupActive = true;
+                                        break;
+                                    }
+                                }
+                                $firstChildRoute = $item['children'][0]['route'] ?? 'admin.dashboard';
                             @endphp
                             {{-- Collapsed: one link to first settings page --}}
                             <a
                                 x-show="sidebarCollapsed"
-                                href="{{ route('admin.settings.general.edit') }}"
+                                href="{{ route($firstChildRoute) }}"
                                 class="group relative flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-semibold transition-all duration-200 ease-in-out
                                     {{ $settingsGroupActive ? 'bg-indigo-600/10 text-indigo-700' : 'text-slate-700 hover:bg-slate-100/70 hover:shadow-sm hover:scale-[1.01]' }}"
                                 title="{{ $item['label'] }}"
@@ -152,7 +163,7 @@
 
                             <div
                                 x-show="!sidebarCollapsed"
-                                x-data="{ subOpen: {{ request()->routeIs('admin.settings.*') ? 'true' : 'false' }} }"
+                                x-data="{ subOpen: {{ $settingsGroupActive ? 'true' : 'false' }} }"
                                 class="grid gap-0.5"
                             >
                                 <button

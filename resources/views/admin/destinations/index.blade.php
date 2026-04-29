@@ -34,11 +34,14 @@
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $destination->slug }}</td>
                                 <td class="px-4 py-3 text-right sm:px-6">
                                     <a href="{{ route('admin.destinations.edit', $destination) }}" class="font-semibold text-slate-900 hover:underline">{{ __('Edit') }}</a>
-                                    <form action="{{ route('admin.destinations.destroy', $destination) }}" method="POST" class="inline" onsubmit="return confirm({{ \Illuminate\Support\Js::from(__('confirm.delete_destination')) }});">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="ml-3 font-semibold text-rose-600 hover:underline">{{ __('Delete') }}</button>
-                                    </form>
+                                    <x-admin.confirm-delete
+                                        :delete-url="route('admin.destinations.destroy', $destination)"
+                                        :message="__('confirm.delete_destination')"
+                                    >
+                                        <button type="button" class="ml-3 font-semibold text-rose-600 hover:underline">
+                                            {{ __('Delete') }}
+                                        </button>
+                                    </x-admin.confirm-delete>
                                 </td>
                             </tr>
                         @endforeach

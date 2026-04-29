@@ -38,11 +38,14 @@
                         <td class="px-4 py-3 text-slate-600">{{ $post->category?->name ?? '—' }}</td>
                         <td class="px-4 py-3 text-right">
                             <a href="{{ route('admin.posts.edit', $post) }}" class="font-semibold text-slate-900 hover:underline">{{ __('Edit') }}</a>
-                            <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="inline" onsubmit="return confirm({{ \Illuminate\Support\Js::from(__('confirm.delete_post')) }});">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="ml-3 font-semibold text-rose-600 hover:underline">{{ __('Delete') }}</button>
-                            </form>
+                            <x-admin.confirm-delete
+                                :delete-url="route('admin.posts.destroy', $post)"
+                                :message="__('confirm.delete_post')"
+                            >
+                                <button type="button" class="ml-3 font-semibold text-rose-600 hover:underline">
+                                    {{ __('Delete') }}
+                                </button>
+                            </x-admin.confirm-delete>
                         </td>
                     </tr>
                 @endforeach

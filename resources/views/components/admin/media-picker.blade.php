@@ -17,6 +17,8 @@
     'pickOnly' => false,
     // Optional row index included in sync event detail (for multi-row URL fields).
     'syncUrlIndex' => null,
+    // When false, hide selected-media thumbnails (parent already shows preview, e.g. tour gallery row).
+    'showSelectedPreviews' => true,
 ])
 
 @php
@@ -27,6 +29,7 @@
     $pickOnly = (bool) $pickOnly;
     $syncUrlEventJs = ($syncUrlEvent !== null && $syncUrlEvent !== '') ? \Illuminate\Support\Js::from((string) $syncUrlEvent) : 'null';
     $syncUrlIndexJs = $syncUrlIndex !== null ? (int) $syncUrlIndex : 'null';
+    $showSelectedPreviews = (bool) ($showSelectedPreviews ?? true);
     $initialIds = [];
     if ($isMultiple) {
         $initialIds = is_array($value) ? array_values(array_filter($value, fn ($v) => is_numeric($v))) : [];
@@ -74,7 +77,11 @@
         @endif
     @endif
 
-    <x-admin.media-picker-inner :inline-toolbar="$inlineToolbar" :show-open-library-link="$showOpenLibraryLink" />
+    <x-admin.media-picker-inner
+        :inline-toolbar="$inlineToolbar"
+        :show-open-library-link="$showOpenLibraryLink"
+        :show-selected-previews="$showSelectedPreviews"
+    />
 </div>
 
 <script>

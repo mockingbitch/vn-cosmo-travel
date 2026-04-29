@@ -13,5 +13,9 @@
     })"
     @keydown.escape.window="if (openModal) { openModal = false }"
 >
-    <x-admin.media-picker-inner :inline-toolbar="true" :show-open-library-link="false" />
+    <x-admin.media-picker-inner
+        :inline-toolbar="true"
+        :show-open-library-link="false"
+        :show-selected-previews="false"
+    />
 </div>

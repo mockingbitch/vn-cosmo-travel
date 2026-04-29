@@ -28,28 +28,70 @@ class MediaController extends Controller
         ]);
     }
 
-    public function store(Request $request, MediaAdminService $media): RedirectResponse
+    /**
+     * GET /admin/media/{id} is not a real screen — always send editors to the library list.
+     *
+     * Resource wildcard is typically `{medium}` (singular of "media"); `media/{media}/usages` uses `{media}`.
+     */
+    public function show(Request $request): RedirectResponse
+    {
+        $this->resolveMediaFromResourceRoute($request);
+
+        return redirect()->route('admin.media.index');
+    }
+
+    public function store(Request $request, MediaAdminService $media): RedirectResponse|JsonResponse
     {
         $validated = $request->validate([
-            'files' => ['required'],
-            'files.*' => ['file', 'mimes:jpg,jpeg,png,webp,gif', 'max:2048'],
+            'files' => ['required', 'array'],
+            'files.*' => ['file', 'image', 'max:2048'],
             'alt_text' => ['nullable', 'string', 'max:255'],
         ]);
 
         $files = $request->file('files', []);
-        $media->upload(is_array($files) ? $files : [$files], $validated['alt_text'] ?? null);
+        $uploaded = $media->upload(is_array($files) ? $files : [$files], $validated['alt_text'] ?? null);
+
+        if ($request->expectsJson()) {
+            $uploaded->loadCount('usages');
+
+            return response()->json([
+                'data' => $uploaded->map(fn (Media $m) => $this->mediaPickerPayload($m))->values(),
+            ]);
+        }
 
         return redirect()->route('admin.media.index')->with('status', __('flash.media.uploaded'));
     }
 
-    public function destroy(Media $media, MediaAdminService $service): RedirectResponse
+    public function destroy(Request $request, MediaAdminService $service): RedirectResponse
     {
-        try {
-            $service->delete((int) $media->id);
-            return redirect()->route('admin.media.index')->with('status', __('flash.media.deleted'));
-        } catch (\DomainException $e) {
-            return redirect()->route('admin.media.index')->with('status', __('flash.media.in_use'));
-        }
+        $listQuery = array_filter(
+            $request->only(['q', 'type', 'page', 'sort']),
+            fn ($v) => $v !== null && $v !== '',
+        );
+
+        $media = $this->resolveMediaFromResourceRoute($request);
+        $service->delete((int) $media->id);
+
+        return redirect()->route('admin.media.index', $listQuery)->with('status', __('flash.media.deleted'));
+    }
+
+    public function bulkDestroy(Request $request, MediaAdminService $service): RedirectResponse
+    {
+        $validated = $request->validate([
+            'ids' => ['required', 'array', 'min:1'],
+            'ids.*' => ['integer', 'min:1'],
+        ]);
+
+        $deleted = $service->bulkDelete($validated['ids']);
+
+        $listQuery = array_filter(
+            $request->only(['q', 'type', 'page', 'sort']),
+            fn ($v) => $v !== null && $v !== '',
+        );
+
+        return redirect()
+            ->route('admin.media.index', $listQuery)
+            ->with('status', __('flash.media.bulk_deleted', ['count' => $deleted]));
     }
 
     public function picker(Request $request, MediaAdminService $media): JsonResponse
@@ -61,15 +103,7 @@ class MediaController extends Controller
         $p = $media->paginate(24, $search !== '' ? $search : null, $type, $sort);
 
         return response()->json([
-            'data' => $p->getCollection()->map(fn (Media $m) => [
-                'id' => (int) $m->id,
-                'file_name' => $m->displayName(),
-                'mime_type' => (string) $m->mime_type,
-                'size' => (int) $m->size,
-                'alt_text' => $m->alt_text,
-                'url' => $m->url(),
-                'used_count' => (int) ($m->usages_count ?? 0),
-            ])->values(),
+            'data' => $p->getCollection()->map(fn (Media $m) => $this->mediaPickerPayload($m))->values(),
             'next_page_url' => $p->nextPageUrl(),
         ]);
     }
@@ -87,15 +121,7 @@ class MediaController extends Controller
             ->withCount('usages')
             ->whereIn('id', $ids)
             ->get()
-            ->map(fn (Media $m) => [
-                'id' => (int) $m->id,
-                'file_name' => $m->displayName(),
-                'mime_type' => (string) $m->mime_type,
-                'size' => (int) $m->size,
-                'alt_text' => $m->alt_text,
-                'url' => $m->url(),
-                'used_count' => (int) ($m->usages_count ?? 0),
-            ])
+            ->map(fn (Media $m) => $this->mediaPickerPayload($m))
             ->values();
 
         return response()->json(['data' => $items]);
@@ -108,5 +134,37 @@ class MediaController extends Controller
             'items' => $repo->usageSummary((int) $media->id),
         ]);
     }
-}
 
+    /**
+     * Laravel names the resource route parameter `medium` (singular of "media"), not `media`.
+     */
+    private function resolveMediaFromResourceRoute(Request $request): Media
+    {
+        $raw = $request->route('medium') ?? $request->route('media');
+
+        if ($raw instanceof Media) {
+            return $raw;
+        }
+
+        $id = (int) $raw;
+        abort_if($id < 1, 404);
+
+        return Media::query()->findOrFail($id);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function mediaPickerPayload(Media $m): array
+    {
+        return [
+            'id' => (int) $m->id,
+            'file_name' => $m->displayName(),
+            'mime_type' => (string) $m->mime_type,
+            'size' => (int) $m->size,
+            'alt_text' => $m->alt_text,
+            'url' => $m->url(),
+            'used_count' => (int) ($m->usages_count ?? 0),
+        ];
+    }
+}

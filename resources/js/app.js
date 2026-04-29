@@ -2,6 +2,27 @@ import Alpine from 'alpinejs';
 import { mainSiteNav } from './siteNav';
 
 window.Alpine = Alpine;
+
+document.addEventListener('alpine:init', () => {
+    Alpine.store('scrollLock', {
+        count: 0,
+        lock() {
+            this.count++;
+            if (this.count === 1) {
+                document.documentElement.classList.add('overflow-hidden');
+            }
+        },
+        unlock() {
+            if (this.count > 0) {
+                this.count--;
+            }
+            if (this.count === 0) {
+                document.documentElement.classList.remove('overflow-hidden');
+            }
+        },
+    });
+});
+
 Alpine.data('mainSiteNav', mainSiteNav);
 Alpine.data('vndPriceInput', (initial) => ({
     raw:

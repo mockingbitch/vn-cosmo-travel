@@ -36,6 +36,13 @@ class HeroBanner extends Model
         return $this->belongsTo(Media::class, 'media_id');
     }
 
+    public function imageUrl(): ?string
+    {
+        $url = $this->media?->url();
+
+        return is_string($url) && $url !== '' ? $url : null;
+    }
+
     public function getTitleForLocale(string $locale): string
     {
         $t = (array) ($this->title_translations ?? []);

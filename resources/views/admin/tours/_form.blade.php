@@ -174,6 +174,19 @@
                 this.rows[i].url = u;
             }
         },
+        youtubeVideoId(url) {
+            if (! url || typeof url !== 'string') return null;
+            const s = url.trim();
+            let m = s.match(/(?:youtube\.com\/watch\?(?:[^#]*&)?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
+            if (m) return m[1];
+            m = s.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+            return m ? m[1] : null;
+        },
+        galleryPreviewSrc(url) {
+            const id = this.youtubeVideoId(url);
+            if (id) return 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+            return (url || '').trim();
+        },
     }"
     @gallery-url-sync.window="syncGalleryUrl($event)"
 >
@@ -202,7 +215,7 @@
                         x-show="row.url && row.url.trim() !== ''"
                     >
                         <img
-                            :src="row.url.trim()"
+                            :src="galleryPreviewSrc(row.url)"
                             alt=""
                             class="h-20 w-28 max-w-full object-cover"
                             loading="lazy"
@@ -215,7 +228,7 @@
                             class="min-w-0 flex-1 rounded-xl border border-slate-200 px-3 py-2 font-mono text-xs shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                             :name="`gallery[${idx}]`"
                             x-model="row.url"
-                            placeholder="{{ __('placeholder.thumbnail_url') }}"
+                            placeholder="{{ __('placeholder.gallery_item') }}"
                             autocomplete="off"
                         />
                         <x-admin.tour-gallery-row-picker />

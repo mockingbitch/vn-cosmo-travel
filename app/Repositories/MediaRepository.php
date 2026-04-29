@@ -9,23 +9,19 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class MediaRepository implements MediaRepositoryInterface
 {
     public function storeUploadedFile(UploadedFile $file, ?string $altText = null): Media
     {
-        $original = (string) ($file->getClientOriginalName() ?? 'upload');
-        $name = $this->sanitizeFileName(pathinfo($original, PATHINFO_FILENAME));
         $ext = strtolower((string) ($file->getClientOriginalExtension() ?: $file->extension() ?: ''));
         $ext = $ext !== '' ? $ext : 'bin';
 
-        // Filename must match storage and be user-friendly: day_month_year_string_random10.ext
-        $date = now()->format('d_m_Y');
-        $rand = Str::lower(Str::random(10));
-        $base = Str::limit($name, 60, '');
-        $safeFileName = $date.'_'.$base.'_'.$rand.'.'.$ext;
+        // ddmmyy (ngày tháng năm 2 chữ số) + 10 ký tự ngẫu nhiên, ví dụ 290426_abcxyzdefg.jpg
+        $stamp = now()->format('dmy');
+        $suffix = Str::lower(Str::random(10));
+        $safeFileName = $stamp.'_'.$suffix.'.'.$ext;
         $path = $file->storePubliclyAs('media', $safeFileName, ['disk' => 'public']);
 
         return Media::query()->create([
@@ -83,15 +79,4 @@ class MediaRepository implements MediaRepositoryInterface
                 'count' => (int) $r->count,
             ]);
     }
-
-    private function sanitizeFileName(string $base): string
-    {
-        $base = trim($base);
-        $base = Str::of($base)->ascii()->toString();
-        $base = preg_replace('/[^a-zA-Z0-9\\-_]+/', '-', $base) ?? $base;
-        $base = trim($base, '-_');
-
-        return $base !== '' ? Str::lower($base) : 'file';
-    }
 }
-

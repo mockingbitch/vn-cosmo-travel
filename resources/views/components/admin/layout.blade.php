@@ -22,11 +22,7 @@
             profileOpen: false,
             toast: {{ session()->has('status') ? 'true' : 'false' }},
         }"
-        x-init="
-            try {
-                sidebarCollapsed = localStorage.getItem('admin.sidebarCollapsed') === '1';
-            } catch (e) {}
-        "
+        x-init="sidebarCollapsed = localStorage.getItem('admin.sidebarCollapsed') === '1'"
         @keydown.escape.window="sidebarOpen = false; profileOpen = false"
         class="min-h-screen lg:flex"
     >

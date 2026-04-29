@@ -56,11 +56,15 @@
                         <td class="px-4 py-4">
                             <div class="flex items-center justify-end gap-2">
                                 <a class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50" href="{{ route('admin.banners.edit', $banner) }}">{{ __('Edit') }}</a>
-                                <form method="POST" action="{{ route('admin.banners.destroy', $banner) }}" onsubmit="return confirm('{{ __('Are you sure?') }}')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="rounded-lg px-3 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-50" type="submit">{{ __('Delete') }}</button>
-                                </form>
+                                <x-admin.confirm-delete
+                                    :delete-url="route('admin.banners.destroy', $banner)"
+                                    :message="__('Are you sure?')"
+                                >
+                                    <button
+                                        type="button"
+                                        class="rounded-lg px-3 py-2 text-sm font-semibold text-rose-700 hover:bg-rose-50"
+                                    >{{ __('Delete') }}</button>
+                                </x-admin.confirm-delete>
                             </div>
                         </td>
                     </tr>

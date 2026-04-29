@@ -6,17 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Tour;
 use App\Services\DestinationService;
 use App\Services\TourService;
+use App\Support\TourGallerySlide;
 use App\ViewModels\SeoViewModel;
 use App\ViewModels\TourCardViewModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class TourController extends Controller
 {
     public function __construct(
         private readonly TourService $tourService,
         private readonly DestinationService $destinationService,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request)
     {
@@ -42,23 +43,35 @@ class TourController extends Controller
         $tour = $this->tourService->detail($tour->slug);
         $related = $this->tourService->related($tour, 4)->map(fn ($t) => new TourCardViewModel($t));
 
-        $images = collect([$tour->thumbnail])
+        $urls = collect([$tour->thumbnail])
             ->merge($tour->images->pluck('path'))
+            ->map(fn ($u) => is_string($u) ? trim($u) : '')
             ->filter()
             ->values();
 
-        if ($images->isEmpty()) {
-            $images = collect(['https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1400&q=80']);
+        $gallerySlides = $urls
+            ->map(fn (string $url) => TourGallerySlide::fromUrl($url)->toArray())
+            ->values();
+
+        if ($gallerySlides->isEmpty()) {
+            $gallerySlides = collect([
+                TourGallerySlide::fromUrl('https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1400&q=80')->toArray(),
+            ]);
         }
+
+        $first = $gallerySlides->first();
+        $seoImage = ($first['type'] ?? 'image') === 'youtube'
+            ? ($first['posterUrl'] ?? $first['src'])
+            : $first['src'];
 
         return view('pages.tours.show', [
             'seo' => new SeoViewModel(
                 title: $tour->title.' — '.__('Vietnam Tour'),
-                description: \Illuminate\Support\Str::limit(strip_tags((string) $tour->description), 155),
-                image: $images->first(),
+                description: Str::limit(strip_tags((string) $tour->description), 155),
+                image: $seoImage,
             ),
             'tour' => $tour,
-            'images' => $images,
+            'gallerySlides' => $gallerySlides,
             'relatedTours' => $related,
         ]);
     }

@@ -4,7 +4,7 @@
     <section class="relative overflow-hidden">
         <div class="absolute inset-0">
             <img
-                src="https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2400&q=80"
+                src="{{ $hero->imageUrl() }}"
                 alt="{{ __('Hero image alt') }}"
                 class="h-full w-full object-cover"
                 loading="lazy"
@@ -20,15 +20,15 @@
                 </div>
 
                 <h1 class="mt-5 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
-                    {{ __('Hero title') }}
+                    {{ $hero->title() }}
                 </h1>
                 <p class="mt-4 text-base leading-7 text-white/90 sm:text-lg">
-                    {{ __('Hero subtitle') }}
+                    {{ $hero->subtitle() }}
                 </p>
 
                 <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-                    <x-button href="{{ route('tours.index') }}" variant="secondary" class="justify-center bg-white hover:bg-white/90 focus:ring-white/50">
-                        {{ __('Explore Tours') }}
+                    <x-button href="{{ $hero->ctaLink() }}" variant="secondary" class="justify-center bg-white hover:bg-white/90 focus:ring-white/50">
+                        {{ $hero->ctaText() }}
                         <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>

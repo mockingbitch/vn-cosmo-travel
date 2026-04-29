@@ -1,22 +1,22 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Frontend\BlogController;
-use App\Http\Controllers\Frontend\DestinationController;
-use App\Http\Controllers\Frontend\HomeController;
-use App\Http\Controllers\Frontend\TourController;
-use App\Http\Controllers\Frontend\BookingController;
-use App\Http\Controllers\Admin\BookingController as AdminBookingController;
-use App\Http\Controllers\Admin\DestinationController as AdminDestinationController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\DestinationController as AdminDestinationController;
+use App\Http\Controllers\Admin\HeroBannerController as AdminHeroBannerController;
+use App\Http\Controllers\Admin\MediaController as AdminMediaController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\TourController as AdminTourController;
-use App\Http\Controllers\Admin\HeroBannerController as AdminHeroBannerController;
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Admin\MediaController as AdminMediaController;
+use App\Http\Controllers\Frontend\BlogController;
+use App\Http\Controllers\Frontend\BookingController;
+use App\Http\Controllers\Frontend\DestinationController;
+use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\TourController;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 
 // Default Laravel auth views may expect a `login` route name.
 // This project uses an admin-only login screen, so we alias `login` to `admin.login`.
@@ -26,7 +26,7 @@ Route::get('/login', function (): RedirectResponse {
 
 Route::get('/language/{locale}', function (Request $request, string $locale): RedirectResponse {
     $supported = array_keys((array) config('locales.supported', []));
-    if (!in_array($locale, $supported, true)) {
+    if (! in_array($locale, $supported, true)) {
         $locale = (string) config('locales.default', config('app.locale'));
     }
 
@@ -63,8 +63,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::get('media/picker', [AdminMediaController::class, 'picker'])->name('media.picker');
         Route::get('media/by-ids', [AdminMediaController::class, 'byIds'])->name('media.byIds');
+        Route::delete('media/bulk', [AdminMediaController::class, 'bulkDestroy'])->name('media.bulkDestroy');
         Route::get('media/{media}/usages', [AdminMediaController::class, 'usages'])->name('media.usages');
-        Route::resource('media', AdminMediaController::class)->only(['index', 'store', 'destroy']);
+        Route::resource('media', AdminMediaController::class)->only(['index', 'store', 'destroy', 'show']);
 
         Route::resource('tours', AdminTourController::class)->except(['show']);
         Route::resource('posts', AdminPostController::class)->except(['show']);
