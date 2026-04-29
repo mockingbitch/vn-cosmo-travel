@@ -307,6 +307,8 @@
   "Guest": "Khách",
   "Date": "Ngày",
   "Status": "Trạng thái",
+  "status.active": "Đang hoạt động",
+  "status.disabled": "Đã tắt",
   "Save": "Lưu",
   "Edit": "Sửa",
   "Delete": "Xoá",
@@ -464,7 +466,10 @@
   "Confirm password": "Xác nhận mật khẩu",
 
   "confirm.delete_user": "Xoá tài khoản người dùng này?",
+  "auth.failed": "Thông tin đăng nhập không đúng.",
+  "auth.disabled": "Tài khoản này đã bị vô hiệu hoá.",
   "validation.admin_must_remain": "Phải có ít nhất một quản trị viên.",
+  "validation.admin_must_remain_active": "Phải có ít nhất một quản trị viên đang hoạt động.",
   "validation.cannot_delete_self": "Bạn không thể xoá chính tài khoản của mình.",
   "validation.cannot_delete_last_admin": "Không thể xoá quản trị viên cuối cùng.",
 

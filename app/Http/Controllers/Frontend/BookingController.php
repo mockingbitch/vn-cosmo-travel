@@ -15,11 +15,12 @@ class BookingController extends Controller
 {
     public function __construct(
         private readonly BookingService $bookingService,
-    ) {
-    }
+    ) {}
 
     public function store(StoreBookingRequest $request, Tour $tour): JsonResponse|RedirectResponse
     {
+        abort_if($tour->status !== Tour::STATUS_ACTIVE, 404);
+
         $booking = $this->bookingService->create([
             ...$request->validated(),
             'tour_id' => $tour->id,

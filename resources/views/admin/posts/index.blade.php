@@ -12,6 +12,7 @@
                 <tr>
                     <th class="px-4 py-3">{{ __('Title') }}</th>
                     <th class="px-4 py-3">{{ __('Category') }}</th>
+                    <th class="px-4 py-3">{{ __('Status') }}</th>
                     @if(auth()->user()->canManageUsers())
                         <th class="px-4 py-3">{{ __('audit.created_by') }}</th>
                         <th class="px-4 py-3">{{ __('audit.updated_by') }}</th>
@@ -40,6 +41,13 @@
                             </div>
                         </td>
                         <td class="px-4 py-3 text-slate-600">{{ $post->category?->name ?? '—' }}</td>
+                        <td class="px-4 py-3">
+                            @if($post->status === \App\Models\Post::STATUS_ACTIVE)
+                                <span class="inline-flex rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">{{ __('status.active') }}</span>
+                            @else
+                                <span class="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-600">{{ __('status.disabled') }}</span>
+                            @endif
+                        </td>
                         @if(auth()->user()->canManageUsers())
                             <td class="px-4 py-3 text-slate-600">{{ $post->creator?->name ?? '—' }}</td>
                             <td class="px-4 py-3 text-slate-600">{{ $post->updatedBy?->name ?? '—' }}</td>

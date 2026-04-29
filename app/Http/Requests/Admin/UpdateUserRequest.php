@@ -28,6 +28,7 @@ class UpdateUserRequest extends FormRequest
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($targetId)],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'is_admin' => ['sometimes', 'boolean'],
+            'status' => ['required', 'string', Rule::in([User::STATUS_ACTIVE, User::STATUS_DISABLED])],
         ];
     }
 
@@ -45,6 +46,14 @@ class UpdateUserRequest extends FormRequest
                 $validator->errors()->add(
                     'is_admin',
                     __('validation.admin_must_remain'),
+                );
+            }
+
+            $willBeDisabled = $this->input('status') === User::STATUS_DISABLED;
+            if ($target->is_admin && $willBeDisabled && $target->isActive() && User::administratorsCount() <= 1) {
+                $validator->errors()->add(
+                    'status',
+                    __('validation.admin_must_remain_active'),
                 );
             }
         });

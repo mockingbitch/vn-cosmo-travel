@@ -16,7 +16,15 @@ class EnsureAdmin
     {
         $user = $request->user();
 
-        if (! $user || ! $user->canAccessAdmin()) {
+        if (! $user || ! $user->isActive()) {
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('admin.login');
+        }
+
+        if (! $user->canAccessAdmin()) {
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();

@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 #[Fillable([
     'title',
     'slug',
+    'status',
     'content',
     'category_id',
     'created_by',
@@ -17,9 +19,18 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 ])]
 class Post extends Model
 {
+    public const STATUS_ACTIVE = 'active';
+
+    public const STATUS_DISABLED = 'disabled';
+
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_ACTIVE);
     }
 
     public function category(): BelongsTo

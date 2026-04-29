@@ -308,6 +308,8 @@
   "Guest": "Guest",
   "Date": "Date",
   "Status": "Status",
+  "status.active": "Active",
+  "status.disabled": "Disabled",
   "Save": "Save",
   "Edit": "Edit",
   "Delete": "Delete",
@@ -427,7 +429,10 @@
   "Confirm password": "Confirm password",
 
   "confirm.delete_user": "Delete this user account?",
+  "auth.failed": "These credentials do not match our records.",
+  "auth.disabled": "This account has been disabled.",
   "validation.admin_must_remain": "There must be at least one administrator.",
+  "validation.admin_must_remain_active": "There must be at least one active administrator.",
   "validation.cannot_delete_self": "You cannot delete your own account.",
   "validation.cannot_delete_last_admin": "You cannot delete the last administrator.",
 

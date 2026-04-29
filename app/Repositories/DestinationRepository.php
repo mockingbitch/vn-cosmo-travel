@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Contracts\Interfaces\DestinationRepositoryInterface;
 use App\Models\Destination;
+use App\Models\Tour;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -26,9 +27,11 @@ class DestinationRepository implements DestinationRepositoryInterface
     public function mostPopularByTourCount(int $limit = 4): Collection
     {
         return Destination::query()
-            ->withCount('tours')
-            ->whereHas('tours')
-            ->orderByDesc('tours_count')
+            ->withCount([
+                'tours as active_tours_count' => fn ($q) => $q->where('status', Tour::STATUS_ACTIVE),
+            ])
+            ->having('active_tours_count', '>', 0)
+            ->orderByDesc('active_tours_count')
             ->orderBy('name_en')
             ->limit($limit)
             ->get();

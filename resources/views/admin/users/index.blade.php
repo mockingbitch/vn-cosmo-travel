@@ -21,6 +21,7 @@
                             <th class="px-4 py-3 sm:px-6">{{ __('Name') }}</th>
                             <th class="px-4 py-3 sm:px-6">{{ __('Email') }}</th>
                             <th class="px-4 py-3 sm:px-6">{{ __('Role') }}</th>
+                            <th class="px-4 py-3 sm:px-6">{{ __('Status') }}</th>
                             <th class="px-4 py-3 text-right sm:px-6">{{ __('Actions') }}</th>
                         </tr>
                     </thead>
@@ -34,6 +35,13 @@
                                         <span class="inline-flex rounded-full bg-indigo-50 px-2.5 py-0.5 text-xs font-semibold text-indigo-800">{{ __('Administrator') }}</span>
                                     @else
                                         <span class="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700">{{ __('Editor') }}</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3 sm:px-6">
+                                    @if($user->status === \App\Models\User::STATUS_ACTIVE)
+                                        <span class="inline-flex rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">{{ __('status.active') }}</span>
+                                    @else
+                                        <span class="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-600">{{ __('status.disabled') }}</span>
                                     @endif
                                 </td>
                                 <td class="px-4 py-3 text-right sm:px-6">

@@ -90,7 +90,7 @@ class TourSeeder extends Seeder
         ];
 
         foreach ($items as $item) {
-            if (!$item['destination_id']) {
+            if (! $item['destination_id']) {
                 continue;
             }
 
@@ -103,6 +103,7 @@ class TourSeeder extends Seeder
                     'duration' => $item['duration'],
                     'price' => $item['price'],
                     'thumbnail' => $item['thumbnail'],
+                    'status' => Tour::STATUS_ACTIVE,
                 ],
             );
 

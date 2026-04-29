@@ -12,6 +12,7 @@ class TourRepository implements TourRepositoryInterface
     public function paginateFiltered(array $filters, int $perPage = 12): LengthAwarePaginator
     {
         $query = Tour::query()
+            ->active()
             ->with(['destination'])
             ->withCount(['images', 'itineraries']);
 
@@ -54,6 +55,7 @@ class TourRepository implements TourRepositoryInterface
     public function getFeatured(int $limit = 4): Collection
     {
         return Tour::query()
+            ->active()
             ->with(['destination'])
             ->latest('id')
             ->limit($limit)
@@ -63,6 +65,7 @@ class TourRepository implements TourRepositoryInterface
     public function findBySlugOrFail(string $slug): Tour
     {
         return Tour::query()
+            ->active()
             ->with(['destination', 'images', 'itineraries'])
             ->where('slug', $slug)
             ->firstOrFail();
@@ -71,6 +74,7 @@ class TourRepository implements TourRepositoryInterface
     public function getRelated(int $tourId, int $destinationId, int $limit = 4): Collection
     {
         return Tour::query()
+            ->active()
             ->with(['destination'])
             ->where('destination_id', $destinationId)
             ->where('id', '!=', $tourId)

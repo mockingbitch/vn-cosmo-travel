@@ -32,6 +32,15 @@ class AuthController extends Controller
 
         /** @var User $user */
         $user = $request->user();
+
+        if (! $user->isActive()) {
+            Auth::logout();
+
+            throw ValidationException::withMessages([
+                'email' => __('auth.disabled'),
+            ]);
+        }
+
         if (! $user->canAccessAdmin()) {
             Auth::logout();
 

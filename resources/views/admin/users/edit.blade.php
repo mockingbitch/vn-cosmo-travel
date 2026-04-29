@@ -36,6 +36,17 @@
                     <p class="text-xs text-rose-600">{{ $message }}</p>
                 @enderror
 
+                <div>
+                    <label class="block text-sm font-medium text-slate-700">{{ __('Status') }}</label>
+                    <select name="status" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60">
+                        <option value="{{ \App\Models\User::STATUS_ACTIVE }}" @selected(old('status', $editUser->status) === \App\Models\User::STATUS_ACTIVE)>{{ __('status.active') }}</option>
+                        <option value="{{ \App\Models\User::STATUS_DISABLED }}" @selected(old('status', $editUser->status) === \App\Models\User::STATUS_DISABLED)>{{ __('status.disabled') }}</option>
+                    </select>
+                    @error('status')
+                        <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <div class="flex flex-wrap gap-3 pt-2">
                     <x-admin.button type="submit" variant="primary">{{ __('Save') }}</x-admin.button>
                     <x-admin.button :href="route('admin.users.index')" variant="secondary">{{ __('Cancel') }}</x-admin.button>

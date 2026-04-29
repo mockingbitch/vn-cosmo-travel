@@ -10,12 +10,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-#[Fillable(['name', 'email', 'password', 'is_admin', 'can_access_panel'])]
+#[Fillable(['name', 'email', 'password', 'is_admin', 'can_access_panel', 'status'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
+    public const STATUS_ACTIVE = 'active';
+
+    public const STATUS_DISABLED = 'disabled';
+
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
+
+    public function isActive(): bool
+    {
+        return $this->status === self::STATUS_ACTIVE;
+    }
 
     /**
      * Get the attributes that should be cast.
@@ -45,6 +54,6 @@ class User extends Authenticatable
 
     public static function administratorsCount(): int
     {
-        return static::query()->where('is_admin', true)->count();
+        return static::query()->where('is_admin', true)->where('status', self::STATUS_ACTIVE)->count();
     }
 }

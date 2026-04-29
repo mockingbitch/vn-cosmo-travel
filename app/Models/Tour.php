@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 #[Fillable([
     'title',
     'slug',
+    'status',
     'description',
     'services',
     'amenities',
@@ -23,6 +25,10 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 ])]
 class Tour extends Model
 {
+    public const STATUS_ACTIVE = 'active';
+
+    public const STATUS_DISABLED = 'disabled';
+
     protected function casts(): array
     {
         return [
@@ -36,6 +42,11 @@ class Tour extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('status', self::STATUS_ACTIVE);
     }
 
     public function destination(): BelongsTo

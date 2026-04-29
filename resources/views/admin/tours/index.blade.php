@@ -14,6 +14,7 @@
                         <tr>
                             <th class="px-4 py-3 sm:px-6">{{ __('Title') }}</th>
                             <th class="px-4 py-3 sm:px-6">{{ __('Destination') }}</th>
+                            <th class="px-4 py-3 sm:px-6">{{ __('Status') }}</th>
                             <th class="px-4 py-3 sm:px-6">{{ __('Days') }}</th>
                             <th class="px-4 py-3 sm:px-6">{{ __('Price') }}</th>
                             @if(auth()->user()->canManageUsers())
@@ -42,6 +43,13 @@
                                     </a>
                                 </td>
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->destination?->localizedName() }}</td>
+                                <td class="px-4 py-3 sm:px-6">
+                                    @if($tour->status === \App\Models\Tour::STATUS_ACTIVE)
+                                        <span class="inline-flex rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">{{ __('status.active') }}</span>
+                                    @else
+                                        <span class="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-600">{{ __('status.disabled') }}</span>
+                                    @endif
+                                </td>
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->duration }}</td>
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ number_format((int) $tour->price) }}₫</td>
                                 @if(auth()->user()->canManageUsers())

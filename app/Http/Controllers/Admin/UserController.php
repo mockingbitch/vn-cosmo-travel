@@ -34,6 +34,7 @@ class UserController extends Controller
             'password' => $request->validated('password'),
             'is_admin' => $request->boolean('is_admin'),
             'can_access_panel' => true,
+            'status' => $request->validated('status'),
         ]);
 
         return redirect()
@@ -77,7 +78,7 @@ class UserController extends Controller
                 ->withErrors(['delete' => __('validation.cannot_delete_self')]);
         }
 
-        if ($user->is_admin && User::administratorsCount() <= 1) {
+        if ($user->is_admin && $user->isActive() && User::administratorsCount() <= 1) {
             return redirect()
                 ->route('admin.users.index')
                 ->withErrors(['delete' => __('validation.cannot_delete_last_admin')]);

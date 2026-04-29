@@ -42,6 +42,7 @@ class PostSeeder extends Seeder
                     'title' => $item['title'],
                     'content' => $item['content'],
                     'thumbnail_media_id' => null,
+                    'status' => Post::STATUS_ACTIVE,
                 ],
             );
         }
