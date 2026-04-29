@@ -13,7 +13,7 @@
                     type="search"
                     name="q"
                     value="{{ $q ?? '' }}"
-                    placeholder="{{ __('Search by filename') }}"
+                    placeholder="{{ __('placeholder.media_filename') }}"
                     class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                 />
                 <select

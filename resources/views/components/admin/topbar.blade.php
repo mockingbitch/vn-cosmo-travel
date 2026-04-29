@@ -31,7 +31,7 @@
                 </div>
                 <input
                     type="search"
-                    placeholder="{{ __('Search') }}"
+                    placeholder="{{ __('placeholder.admin_search') }}"
                     class="w-full rounded-2xl border border-slate-200 bg-white px-10 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                 />
             </div>

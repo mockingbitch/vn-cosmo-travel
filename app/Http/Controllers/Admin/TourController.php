@@ -36,6 +36,11 @@ class TourController extends Controller
 
     public function edit(Tour $tour, DestinationService $destinations): View
     {
+        $tour->load([
+            'itineraries' => fn ($q) => $q->orderBy('day'),
+            'images' => fn ($q) => $q->orderBy('sort_order'),
+        ]);
+
         return view('admin.tours.edit', [
             'tour' => $tour,
             'destinations' => $destinations->all(),

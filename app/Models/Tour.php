@@ -11,10 +11,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'title',
     'slug',
     'description',
+    'services',
+    'amenities',
     'price',
     'duration',
     'destination_id',
     'thumbnail',
+    'thumbnail_media_id',
 ])]
 class Tour extends Model
 {
@@ -23,6 +26,8 @@ class Tour extends Model
         return [
             'price' => 'integer',
             'duration' => 'integer',
+            'services' => 'array',
+            'amenities' => 'array',
         ];
     }
 
@@ -34,6 +39,11 @@ class Tour extends Model
     public function destination(): BelongsTo
     {
         return $this->belongsTo(Destination::class);
+    }
+
+    public function thumbnailMedia(): BelongsTo
+    {
+        return $this->belongsTo(Media::class, 'thumbnail_media_id');
     }
 
     public function itineraries(): HasMany

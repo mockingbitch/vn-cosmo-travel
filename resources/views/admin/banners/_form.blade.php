@@ -119,7 +119,7 @@
             type="text"
             name="cta_link"
             value="{{ old('cta_link', $banner?->cta_link ?? '') }}"
-            placeholder="/tours"
+            placeholder="{{ __('placeholder.cta_link') }}"
             onfocus="setTimeout(() => { this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth; }, 0)"
             onclick="this.setSelectionRange(this.value.length, this.value.length); this.scrollLeft = this.scrollWidth;"
             onmouseup="return false;"

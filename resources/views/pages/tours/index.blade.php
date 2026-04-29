@@ -53,21 +53,27 @@
                             </select>
                         </label>
 
-                        <div class="grid grid-cols-2 gap-3">
-                            <x-input
-                                label="{{ __('Min price (VND)') }}"
-                                name="min_price"
-                                placeholder="0"
-                                :value="$filters['min_price'] ?? null"
-                                inputmode="numeric"
-                            />
-                            <x-input
-                                label="{{ __('Max price (VND)') }}"
-                                name="max_price"
-                                placeholder="20000000"
-                                :value="$filters['max_price'] ?? null"
-                                inputmode="numeric"
-                            />
+                        <div class="grid grid-cols-2 items-end gap-x-3 gap-y-2">
+                            <div class="min-w-0">
+                                <x-input
+                                    compact
+                                    label="{{ __('Min price (VND)') }}"
+                                    name="min_price"
+                                    :placeholder="__('placeholder.min_price')"
+                                    :value="$filters['min_price'] ?? null"
+                                    inputmode="numeric"
+                                />
+                            </div>
+                            <div class="min-w-0">
+                                <x-input
+                                    compact
+                                    label="{{ __('Max price (VND)') }}"
+                                    name="max_price"
+                                    :placeholder="__('placeholder.max_price')"
+                                    :value="$filters['max_price'] ?? null"
+                                    inputmode="numeric"
+                                />
+                            </div>
                         </div>
 
                         <label class="block">

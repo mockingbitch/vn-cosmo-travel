@@ -89,6 +89,50 @@
                     </div>
                 </div>
 
+                @php
+                    $serviceItems = is_array($tour->services) ? $tour->services : [];
+                    $amenityItems = is_array($tour->amenities) ? $tour->amenities : [];
+                @endphp
+                @if($serviceItems !== [] || $amenityItems !== [])
+                    <div class="mt-10 rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
+                        <h2 class="text-xl font-semibold tracking-tight text-slate-900">{{ __('tour.services_and_amenities') }}</h2>
+                        <div class="mt-6 grid gap-8 sm:grid-cols-2">
+                            @if($serviceItems !== [])
+                                <div>
+                                    <h3 class="text-sm font-semibold text-slate-900">{{ __('tour.services') }}</h3>
+                                    <ul class="mt-3 grid gap-2 text-sm text-slate-700">
+                                        @foreach($serviceItems as $item)
+                                            @php
+                                                $allowedSvc = config('tour_catalog.services', []);
+                                                $label = is_string($item) && in_array($item, $allowedSvc, true)
+                                                    ? __('tour.catalog.service.'.$item)
+                                                    : $item;
+                                            @endphp
+                                            <li class="flex gap-2"><span class="text-slate-400" aria-hidden="true">•</span> {{ $label }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            @if($amenityItems !== [])
+                                <div>
+                                    <h3 class="text-sm font-semibold text-slate-900">{{ __('tour.amenities') }}</h3>
+                                    <ul class="mt-3 grid gap-2 text-sm text-slate-700">
+                                        @foreach($amenityItems as $item)
+                                            @php
+                                                $allowedAmn = config('tour_catalog.amenities', []);
+                                                $label = is_string($item) && in_array($item, $allowedAmn, true)
+                                                    ? __('tour.catalog.amenity.'.$item)
+                                                    : $item;
+                                            @endphp
+                                            <li class="flex gap-2"><span class="text-slate-400" aria-hidden="true">•</span> {{ $label }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                @endif
+
                 <div class="mt-10 rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
                     <h2 class="text-xl font-semibold tracking-tight text-slate-900">{{ __('tour.itinerary') }}</h2>
                     <div class="mt-5 grid gap-4">
@@ -106,25 +150,6 @@
                                 {{ __('tour.itinerary_empty') }}
                             </div>
                         @endforelse
-                    </div>
-                </div>
-
-                <div class="mt-10 grid gap-6 lg:grid-cols-2">
-                    <div class="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
-                        <h2 class="text-xl font-semibold tracking-tight text-slate-900">{{ __('tour.included') }}</h2>
-                        <ul class="mt-4 grid gap-2 text-sm text-slate-700">
-                            <li class="flex gap-2"><span class="text-emerald-600">✓</span> {{ __('tour.included.guide') }}</li>
-                            <li class="flex gap-2"><span class="text-emerald-600">✓</span> {{ __('tour.included.transport') }}</li>
-                            <li class="flex gap-2"><span class="text-emerald-600">✓</span> {{ __('tour.included.experiences') }}</li>
-                        </ul>
-                    </div>
-                    <div class="rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
-                        <h2 class="text-xl font-semibold tracking-tight text-slate-900">{{ __('tour.excluded') }}</h2>
-                        <ul class="mt-4 grid gap-2 text-sm text-slate-700">
-                            <li class="flex gap-2"><span class="text-rose-600">–</span> {{ __('tour.excluded.flights') }}</li>
-                            <li class="flex gap-2"><span class="text-rose-600">–</span> {{ __('tour.excluded.insurance') }}</li>
-                            <li class="flex gap-2"><span class="text-rose-600">–</span> {{ __('tour.excluded.personal') }}</li>
-                        </ul>
                     </div>
                 </div>
 
