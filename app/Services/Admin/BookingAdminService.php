@@ -12,9 +12,12 @@ class BookingAdminService
         private readonly BookingRepositoryInterface $bookings,
     ) {}
 
-    public function paginate(int $perPage = 20): LengthAwarePaginator
+    /**
+     * @param  array{q?: string|null, status?: string|null, tour_id?: int|null}  $filters
+     */
+    public function paginate(int $perPage = 20, array $filters = []): LengthAwarePaginator
     {
-        return $this->bookings->adminPaginate($perPage);
+        return $this->bookings->adminPaginate($perPage, $filters);
     }
 
     public function updateStatus(Booking $booking, string $status): Booking

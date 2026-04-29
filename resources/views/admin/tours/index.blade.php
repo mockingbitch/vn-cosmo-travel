@@ -41,15 +41,19 @@
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->duration }}</td>
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ number_format((int) $tour->price) }}₫</td>
                                 <td class="px-4 py-3 text-right sm:px-6">
-                                    <a href="{{ route('admin.tours.edit', $tour) }}" class="font-semibold text-slate-900 hover:underline">{{ __('Edit') }}</a>
-                                    <x-admin.confirm-delete
-                                        :delete-url="route('admin.tours.destroy', $tour)"
-                                        :message="__('confirm.delete_tour')"
-                                    >
-                                        <button type="button" class="ml-3 font-semibold text-rose-600 hover:underline">
-                                            {{ __('Delete') }}
-                                        </button>
-                                    </x-admin.confirm-delete>
+                                    <div class="flex items-center justify-end gap-2">
+                                        <x-admin.action-icon
+                                            :href="route('admin.tours.edit', $tour)"
+                                            icon="pencil"
+                                            :title="__('Edit')"
+                                        />
+                                        <x-admin.confirm-delete
+                                            :delete-url="route('admin.tours.destroy', $tour)"
+                                            :message="__('confirm.delete_tour')"
+                                        >
+                                            <x-admin.action-icon icon="trash" variant="danger" :title="__('Delete')" />
+                                        </x-admin.confirm-delete>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

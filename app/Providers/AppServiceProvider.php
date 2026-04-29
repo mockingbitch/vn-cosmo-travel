@@ -20,6 +20,11 @@ use App\Repositories\SettingRepository;
 use App\Repositories\TourRepository;
 use App\Services\DestinationService;
 use App\Services\MainNavigationService;
+use App\Services\SettingsService;
+use App\ViewModels\SiteContactViewModel;
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -50,6 +55,40 @@ class AppServiceProvider extends ServiceProvider
             $view->with('navDestinations', $destinations->all());
             $view->with('navDestinationGroups', $destinations->groupedByRegionForNav());
             $view->with('mainNav', app(MainNavigationService::class)->build(request()));
+            $view->with('siteContact', new SiteContactViewModel(app(SettingsService::class)));
+        });
+
+        View::composer('pages.home', function ($view): void {
+            $view->with('siteContact', new SiteContactViewModel(app(SettingsService::class)));
+        });
+
+        $this->configureRateLimiters();
+    }
+
+    /**
+     * Define throttle limiters used by public-facing forms to deter spam.
+     */
+    protected function configureRateLimiters(): void
+    {
+        // Public booking form: 5 submissions / minute and 20 / hour per IP,
+        // and 3 / hour per (IP + email) to block aggressive resends.
+        RateLimiter::for('bookings', function (Request $request): array {
+            $ip = (string) $request->ip();
+            $email = strtolower((string) $request->input('email', ''));
+            $emailKey = $email !== '' ? sha1($ip.'|'.$email) : $ip;
+
+            return [
+                Limit::perMinute(5)->by('booking:ip:'.$ip),
+                Limit::perHour(20)->by('booking:ip:hour:'.$ip),
+                Limit::perHour(3)->by('booking:email:'.$emailKey),
+            ];
+        });
+
+        // Admin login: 5 attempts per minute per (email + IP) to slow brute force.
+        RateLimiter::for('admin-login', function (Request $request): Limit {
+            $email = strtolower((string) $request->input('email', ''));
+
+            return Limit::perMinute(5)->by($email.'|'.$request->ip());
         });
     }
 }

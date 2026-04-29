@@ -7,9 +7,22 @@
         $homeWhyLocales = ['vi' => __('Vietnamese'), 'en' => __('English')];
     @endphp
 
-    <div>
-        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('Settings') }}</h1>
-        <p class="mt-1 text-sm text-slate-600">{{ __('Manage website configuration') }}</p>
+    <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('Settings') }}</h1>
+            <p class="mt-1 text-sm text-slate-600">{{ __('Manage website configuration') }}</p>
+        </div>
+        <a
+            href="{{ route('home') }}#why-us"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700"
+        >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+            </svg>
+            {{ __('Preview on site') }}
+        </a>
     </div>
 
     <form method="POST" action="{{ route('admin.settings.homeWhy.update') }}" class="mt-6">
@@ -19,6 +32,7 @@
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <div class="text-sm font-semibold text-slate-900">{{ __('Home why section') }}</div>
             <p class="mt-1 text-xs text-slate-500">{{ __('Home why section help') }}</p>
+            <p class="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800 ring-1 ring-amber-200">{{ __('Leave a field empty to use the default text from translations.') }}</p>
 
             @foreach($homeWhyLocales as $loc => $label)
                 @php

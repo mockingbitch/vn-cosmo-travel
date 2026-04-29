@@ -54,17 +54,16 @@
                                     </td>
                                     <td class="px-4 py-4">
                                         <div class="flex items-center justify-end gap-2">
-                                            <x-admin.button size="sm" variant="secondary" :href="route('admin.posts.edit', $post)">{{ __('Edit') }}</x-admin.button>
+                                            <x-admin.action-icon
+                                                :href="route('admin.posts.edit', $post)"
+                                                icon="pencil"
+                                                :title="__('Edit')"
+                                            />
                                             <x-admin.confirm-delete
                                                 :delete-url="route('admin.posts.destroy', $post)"
                                                 :message="__('Are you sure?')"
                                             >
-                                                <x-admin.button
-                                                    size="sm"
-                                                    variant="ghost"
-                                                    type="button"
-                                                    class="text-rose-700 hover:bg-rose-50"
-                                                >{{ __('Delete') }}</x-admin.button>
+                                                <x-admin.action-icon icon="trash" variant="danger" :title="__('Delete')" />
                                             </x-admin.confirm-delete>
                                         </div>
                                     </td>

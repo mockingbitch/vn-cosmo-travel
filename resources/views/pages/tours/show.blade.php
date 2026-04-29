@@ -236,15 +236,21 @@
                         class="mt-5 grid gap-4"
                         method="POST"
                         action="{{ route('tours.book', $tour) }}"
-                        x-data="{ loading: false, message: null }"
+                        x-data="{ loading: false, message: null, errorMessage: null }"
                         @submit.prevent="
                             loading = true;
                             message = null;
+                            errorMessage = null;
+                            $el.querySelectorAll('p.text-rose-600').forEach(p => p.remove());
                             fetch($el.action, {
                                 method: 'POST',
                                 headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
                                 body: new FormData($el)
                             }).then(async (res) => {
+                                if (res.status === 429) {
+                                    const data = await res.json().catch(() => ({}));
+                                    throw { rateLimited: true, message: (data && data.message) ? data.message : '{{ __('Too many requests. Please slow down and try again later.') }}' };
+                                }
                                 if (!res.ok) {
                                     const data = await res.json().catch(() => ({}));
                                     throw data;
@@ -253,7 +259,8 @@
                             }).then((data) => {
                                 message = data.message;
                                 $el.reset();
-                            }).catch(() => {
+                            }).catch((err) => {
+                                if (err && err.rateLimited) { errorMessage = err.message; return; }
                                 $el.submit();
                             }).finally(() => loading = false);
                         "
@@ -300,6 +307,10 @@
 
                         <template x-if="message">
                             <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800" x-text="message"></div>
+                        </template>
+
+                        <template x-if="errorMessage">
+                            <div class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800" x-text="errorMessage"></div>
                         </template>
 
                         <p class="text-xs leading-5 text-slate-500">

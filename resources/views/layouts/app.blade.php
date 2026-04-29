@@ -27,6 +27,8 @@
     <meta name="twitter:description" content="{{ $pageDescription }}">
     <meta name="twitter:image" content="{{ $ogImage }}">
 
+    <x-favicon />
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-white text-slate-900 antialiased">
@@ -114,12 +116,26 @@
                     <div>
                         <div class="text-sm font-semibold">{{ __('Contact') }}</div>
                         <div class="mt-3 grid gap-2 text-sm text-slate-600">
-                            <div>{{ __('Email') }}: <span class="font-medium text-slate-900">hello@vietnamcosmotravel.com</span></div>
-                            <div>{{ __('Phone') }}: <span class="font-medium text-slate-900">+84 000 000 000</span></div>
-                            <div class="flex gap-3 pt-1">
-                                <a class="hover:text-slate-900" href="#" aria-label="{{ __('Facebook') }}">{{ __('Facebook') }}</a>
-                                <a class="hover:text-slate-900" href="#" aria-label="{{ __('Instagram') }}">{{ __('Instagram') }}</a>
-                            </div>
+                            @if($siteContact->email())
+                                <div>{{ __('Email') }}:
+                                    <a class="font-medium text-slate-900 hover:underline" href="mailto:{{ $siteContact->email() }}">{{ $siteContact->email() }}</a>
+                                </div>
+                            @endif
+                            @if($siteContact->phone())
+                                <div>{{ __('Phone') }}:
+                                    <a class="font-medium text-slate-900 hover:underline" href="tel:{{ preg_replace('/\\s+/', '', $siteContact->phone()) }}">{{ $siteContact->phone() }}</a>
+                                </div>
+                            @endif
+                            @if($siteContact->address())
+                                <div>{{ __('Address') }}: <span class="font-medium text-slate-900">{{ $siteContact->address() }}</span></div>
+                            @endif
+                            @if(count($siteContact->socialLinks()) > 0)
+                                <div class="flex flex-wrap gap-3 pt-1">
+                                    @foreach($siteContact->socialLinks() as $link)
+                                        <a class="hover:text-slate-900" href="{{ $link['url'] }}" target="_blank" rel="noopener" aria-label="{{ $link['label'] }}">{{ $link['label'] }}</a>
+                                    @endforeach
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </div>

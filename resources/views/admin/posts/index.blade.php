@@ -37,15 +37,19 @@
                         </td>
                         <td class="px-4 py-3 text-slate-600">{{ $post->category?->name ?? '—' }}</td>
                         <td class="px-4 py-3 text-right">
-                            <a href="{{ route('admin.posts.edit', $post) }}" class="font-semibold text-slate-900 hover:underline">{{ __('Edit') }}</a>
-                            <x-admin.confirm-delete
-                                :delete-url="route('admin.posts.destroy', $post)"
-                                :message="__('confirm.delete_post')"
-                            >
-                                <button type="button" class="ml-3 font-semibold text-rose-600 hover:underline">
-                                    {{ __('Delete') }}
-                                </button>
-                            </x-admin.confirm-delete>
+                            <div class="flex items-center justify-end gap-2">
+                                <x-admin.action-icon
+                                    :href="route('admin.posts.edit', $post)"
+                                    icon="pencil"
+                                    :title="__('Edit')"
+                                />
+                                <x-admin.confirm-delete
+                                    :delete-url="route('admin.posts.destroy', $post)"
+                                    :message="__('confirm.delete_post')"
+                                >
+                                    <x-admin.action-icon icon="trash" variant="danger" :title="__('Delete')" />
+                                </x-admin.confirm-delete>
+                            </div>
                         </td>
                     </tr>
                 @endforeach

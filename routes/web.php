@@ -38,7 +38,9 @@ Route::get('/language/{locale}', function (Request $request, string $locale): Re
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('guest')->group(function () {
         Route::get('login', [AdminAuthController::class, 'create'])->name('login');
-        Route::post('login', [AdminAuthController::class, 'store'])->name('login.store');
+        Route::post('login', [AdminAuthController::class, 'store'])
+            ->middleware('throttle:admin-login')
+            ->name('login.store');
     });
 
     Route::post('logout', [AdminAuthController::class, 'destroy'])->middleware('auth')->name('logout');
@@ -81,7 +83,9 @@ Route::name('')->group(function () {
     Route::prefix('tours')->name('tours.')->group(function () {
         Route::get('/', [TourController::class, 'index'])->name('index');
         Route::get('/{tour:slug}', [TourController::class, 'show'])->name('show');
-        Route::post('/{tour:slug}/book', [BookingController::class, 'store'])->name('book');
+        Route::post('/{tour:slug}/book', [BookingController::class, 'store'])
+            ->middleware('throttle:bookings')
+            ->name('book');
     });
 
     Route::prefix('blog')->name('blog.')->group(function () {
