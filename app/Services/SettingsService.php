@@ -44,7 +44,7 @@ class SettingsService
         $locale = $locale ?? app()->getLocale();
         $supported = array_keys((array) config('locales.supported', []));
         if (!in_array($locale, $supported, true)) {
-            $locale = (string) config('locales.default', 'vi');
+            $locale = (string) config('locales.default', 'en');
         }
 
         /** @var array<string, mixed> $stored */

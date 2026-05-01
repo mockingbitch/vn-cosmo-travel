@@ -20,6 +20,34 @@ class SiteContactViewModel
         return $this->stringOrNull('contact.phone');
     }
 
+    /**
+     * Link for the phone row: WhatsApp (wa.me) when digits can be parsed; otherwise tel: with spaces stripped.
+     */
+    public function phoneChatHref(): string
+    {
+        $phone = $this->phone();
+        if ($phone === null) {
+            return '#';
+        }
+
+        $digits = preg_replace('/\D+/', '', $phone) ?? '';
+        if ($digits !== '') {
+            if (str_starts_with($digits, '84')) {
+                $normalized = $digits;
+            } elseif (str_starts_with($digits, '0')) {
+                $normalized = '84'.substr($digits, 1);
+            } elseif (strlen($digits) === 9 && str_starts_with($digits, '9')) {
+                $normalized = '84'.$digits;
+            } else {
+                $normalized = $digits;
+            }
+
+            return 'https://wa.me/'.$normalized;
+        }
+
+        return 'tel:'.preg_replace('/\s+/', '', $phone);
+    }
+
     public function address(): ?string
     {
         return $this->stringOrNull('contact.address');

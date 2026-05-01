@@ -122,8 +122,11 @@
                                 </div>
                             @endif
                             @if($siteContact->phone())
+                                @php
+                                    $footerPhoneHref = $siteContact->phoneChatHref();
+                                @endphp
                                 <div>{{ __('Phone') }}:
-                                    <a class="font-medium text-slate-900 hover:underline" href="tel:{{ preg_replace('/\\s+/', '', $siteContact->phone()) }}">{{ $siteContact->phone() }}</a>
+                                    <a class="font-medium text-slate-900 hover:underline" href="{{ $footerPhoneHref }}" @if(str_starts_with($footerPhoneHref, 'http')) target="_blank" rel="noopener noreferrer" @endif>{{ $siteContact->phone() }}</a>
                                 </div>
                             @endif
                             @if($siteContact->address())

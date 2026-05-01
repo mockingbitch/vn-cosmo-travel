@@ -14,7 +14,7 @@ class SettingsSeeder extends Seeder
      */
     public function run(): void
     {
-        $defaultLocale = (string) config('app.locale', 'vi');
+        $defaultLocale = (string) config('app.locale', 'en');
         $settings = app(SettingRepositoryInterface::class);
 
         $settings->set('site.name', 'Vietnam Cosmo Travel');

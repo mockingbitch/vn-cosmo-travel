@@ -265,8 +265,12 @@
                         @endif
 
                         @if($siteContact->phone())
+                            @php
+                                $phoneChatHref = $siteContact->phoneChatHref();
+                            @endphp
                             <a
-                                href="tel:{{ preg_replace('/\\s+/', '', $siteContact->phone()) }}"
+                                href="{{ $phoneChatHref }}"
+                                @if(str_starts_with($phoneChatHref, 'http')) target="_blank" rel="noopener noreferrer" @endif
                                 class="group flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
                             >
                                 <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-slate-900 text-white">
