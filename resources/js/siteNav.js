@@ -7,8 +7,8 @@ export function mainSiteNav() {
         panel: null,
         /** mobile drawer (hamburger) */
         mobileOpen: false,
-        mDaily: false,
-        mCruise: false,
+        /** expanded accordion section key on mobile (mega-daily | dropdown panel id) */
+        mobileSection: null,
         /** @type {ReturnType<typeof setTimeout>|null} */
         tOpen: null,
         /** @type {ReturnType<typeof setTimeout>|null} */
@@ -79,6 +79,9 @@ export function mainSiteNav() {
         toggle(id) {
             this.panel = this.panel === id ? null : id;
         },
+        toggleMobileSection(key) {
+            this.mobileSection = this.mobileSection === key ? null : key;
+        },
         close() {
             this.clearTimers();
             this.panel = null;
@@ -87,6 +90,7 @@ export function mainSiteNav() {
             this.clearTimers();
             this.panel = null;
             this.mobileOpen = false;
+            this.mobileSection = null;
         },
     };
 }

@@ -3,145 +3,93 @@
 return [
     /*
     | Primary links (order = top bar left to right). Types: link, mega, dropdown.
-    | "mega" / "dropdown" use panels defined below.
+    | Dropdown panels are listed under `dropdown_panels` keyed by `panel`.
     */
     'primary' => [
         [
-            'id' => 'hanoi_day',
-            'label_key' => 'nav.primary.hanoi_day',
-            'type' => 'link',
-            'tour_params' => ['destination' => 'hanoi', 'duration' => '1-3'],
+            'id' => 'halong_bay',
+            'label_key' => 'nav.primary.halong_bay',
+            'type' => 'dropdown',
+            'panel' => 'halong',
         ],
         [
-            'id' => 'daily',
-            'label_key' => 'nav.primary.daily',
-            'type' => 'mega',
-            'panel' => 'daily',
+            'id' => 'northern_trip',
+            'label_key' => 'nav.primary.northern_trip',
+            'type' => 'dropdown',
+            'panel' => 'northern',
+        ],
+        [
+            'id' => 'central_southern',
+            'label_key' => 'nav.primary.central_southern',
+            'type' => 'dropdown',
+            'panel' => 'central_south',
         ],
         [
             'id' => 'package',
-            'label_key' => 'nav.primary.package',
+            'label_key' => 'nav.primary.package_tour',
             'type' => 'link',
             'tour_params' => ['duration' => '4-7'],
         ],
         [
-            'id' => 'cruise',
-            'label_key' => 'nav.primary.cruise',
+            'id' => 'other_service',
+            'label_key' => 'nav.primary.other_service',
             'type' => 'dropdown',
-            'panel' => 'cruise',
+            'panel' => 'other_service',
         ],
         [
             'id' => 'about',
-            'label_key' => 'nav.primary.about',
+            'label_key' => 'nav.primary.about_us',
             'type' => 'link',
-            'route' => 'home',
+            'route' => 'about',
             'params' => [],
-            'hash' => 'contact',
         ],
     ],
 
     /*
-    | Mega "Điểm đến" — cột nhóm; mỗi cột: title_key + thứ tự slug tham chiếu bảng `destinations`.
-    | Tên hiển thị: `Destination::localizedName()` (lang destinations.name.{slug}, fallback tên DB).
+    | Simple dropdown menus (desktop hover panel + mobile accordion).
+    | Each row: label_key + tour_params and/or route/hash/external_url (same rules as primary links).
     */
-    'mega_rows' => [
-        [
-            [
-                'title_key' => 'nav.mega.hanoi_north',
-                'slugs' => [
-                    'hanoi',
-                    'ninh-binh',
-                    'mai-chau',
-                    'pu-luong',
-                    'cat-ba',
-                ],
-            ],
-            [
-                'title_key' => 'nav.mega.sapa_nw',
-                'slugs' => [
-                    'sapa',
-                    'dien-bien-phu',
-                    'mu-cang-chai',
-                    'bac-ha',
-                    'moc-chau',
-                ],
-            ],
-            [
-                'title_key' => 'nav.mega.ha_giang_ne',
-                'slugs' => [
-                    'ha-giang',
-                    'cao-bang',
-                    'ba-be',
-                    'lao-cai',
-                ],
-            ],
-            [
-                'title_key' => 'nav.mega.central',
-                'slugs' => [
-                    'da-nang',
-                    'hue',
-                    'hoi-an',
-                    'phong-nha-ke-bang',
-                    'my-son',
-                    'quang-tri',
-                ],
-            ],
+    'dropdown_panels' => [
+        'halong' => [
+            ['label_key' => 'nav.sub.halong_day1', 'tour_params' => ['destination' => 'ha-long-bay', 'duration' => '1-3']],
+            ['label_key' => 'nav.sub.halong_2d1n', 'tour_params' => ['destination' => 'ha-long-bay', 'duration' => '1-3']],
+            ['label_key' => 'nav.sub.halong_3d2n', 'tour_params' => ['destination' => 'ha-long-bay', 'duration' => '4-7']],
+            ['label_key' => 'nav.sub.lan_ha_bay', 'tour_params' => ['destination' => 'cat-ba']],
+            ['label_key' => 'nav.sub.bai_tu_long', 'tour_params' => ['destination' => 'ha-long-bay']],
         ],
-        [
-            [
-                'title_key' => 'nav.mega.dalat_highlands',
-                'slugs' => [
-                    'da-lat',
-                    'buon-ma-thuot',
-                    'kon-tum',
-                    'pleiku',
-                ],
-            ],
-            [
-                'title_key' => 'nav.mega.hcm_south',
-                'slugs' => [
-                    'ho-chi-minh-city',
-                    'an-giang',
-                    'ben-tre',
-                    'can-tho',
-                    'tra-vinh',
-                    'tien-giang',
-                ],
-            ],
-            [
-                'title_key' => 'nav.mega.beaches',
-                'slugs' => [
-                    'con-dao',
-                    'nha-trang',
-                    'mui-ne',
-                    'vung-tau',
-                    'quy-nhon',
-                ],
-            ],
+        'northern' => [
+            ['label_key' => 'nav.sub.sapa', 'tour_params' => ['destination' => 'sapa']],
+            ['label_key' => 'nav.sub.ha_giang_loop', 'tour_params' => ['destination' => 'ha-giang']],
+            ['label_key' => 'nav.sub.mai_chau', 'tour_params' => ['destination' => 'mai-chau']],
+            ['label_key' => 'nav.sub.mu_cang_chai', 'tour_params' => ['destination' => 'mu-cang-chai']],
+            ['label_key' => 'nav.sub.ba_be_bac_kan', 'tour_params' => ['destination' => 'ba-be']],
+            ['label_key' => 'nav.sub.ban_gioc', 'tour_params' => ['destination' => 'cao-bang']],
+        ],
+        'central_south' => [
+            ['label_key' => 'nav.sub.da_nang', 'tour_params' => ['destination' => 'da-nang']],
+            ['label_key' => 'nav.sub.hue', 'tour_params' => ['destination' => 'hue']],
+            ['label_key' => 'nav.sub.hoi_an', 'tour_params' => ['destination' => 'hoi-an']],
+            ['label_key' => 'nav.sub.ho_chi_minh', 'tour_params' => ['destination' => 'ho-chi-minh-city']],
+            ['label_key' => 'nav.sub.mekong_delta', 'tour_params' => ['destination' => 'can-tho']],
+            ['label_key' => 'nav.sub.nha_trang', 'tour_params' => ['destination' => 'nha-trang']],
+            ['label_key' => 'nav.sub.da_lat', 'tour_params' => ['destination' => 'da-lat']],
+            ['label_key' => 'nav.sub.mui_ne', 'tour_params' => ['destination' => 'mui-ne']],
+            ['label_key' => 'nav.sub.phu_quoc', 'tour_params' => ['destination' => 'phu-quoc']],
+        ],
+        'other_service' => [
+            ['label_key' => 'nav.sub.airport_taxi', 'route' => 'airport-taxi', 'params' => []],
+            ['label_key' => 'nav.sub.visa_service', 'route' => 'visa-service', 'params' => []],
+            ['label_key' => 'nav.sub.bus_flight_train', 'route' => 'bus-flight-train-ticket', 'params' => []],
+            ['label_key' => 'nav.sub.sim_card', 'route' => 'sim-card', 'params' => []],
         ],
     ],
 
-    'cruise' => [
-        [
-            'label_key' => 'nav.cruise_halong',
-            'tour_params' => ['destination' => 'ha-long-bay'],
-        ],
-        [
-            'label_key' => 'nav.cruise_hanoi_short',
-            'tour_params' => ['destination' => 'hanoi', 'duration' => '1-3'],
-        ],
-        [
-            'label_key' => 'nav.cruise_mekong',
-            'tour_params' => ['destination' => 'ho-chi-minh-city'],
-        ],
-    ],
+    /*
+    | Legacy mega menu (optional). Leave empty when not used.
+    */
+    'mega_rows' => [],
 
-    'mega_featured' => [
-        'image' => 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=900&q=80',
-        'image_alt_key' => 'nav.mega.featured_alt',
-        'title_key' => 'nav.mega.featured_title',
-        'subtitle_key' => 'nav.mega.featured_sub',
-        'route' => 'tours.index',
-        'params' => ['destination' => 'ha-long-bay'],
-    ],
+    'cruise' => [],
+
+    'mega_featured' => [],
 ];

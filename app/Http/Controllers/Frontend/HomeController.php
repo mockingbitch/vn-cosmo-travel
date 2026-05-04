@@ -52,6 +52,7 @@ class HomeController extends Controller
             'destinations' => $destinations,
             'popularDestinations' => $popularDestinations,
             'homeWhy' => $this->settingsService->getHomeWhyForLocale(),
+            'testimonials' => $this->settingsService->getTestimonials(),
         ]);
     }
 }

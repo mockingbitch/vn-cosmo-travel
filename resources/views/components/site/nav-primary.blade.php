@@ -1,7 +1,11 @@
-@props([ 'primary' => [], 'cruise' => [] ])
+@props([
+    'primary' => [],
+    'dropdownPanels' => [],
+])
 
 @php
-    $cruiseItems = is_array($cruise) ? $cruise : [];
+    /** @var array<string, list<array{label: string, href: string}>> $dropdownPanels */
+    $dropdownPanels = is_array($dropdownPanels) ? $dropdownPanels : [];
     $items = is_array($primary) ? $primary : [];
 @endphp
 
@@ -11,7 +15,7 @@
     aria-label="{{ __('Main navigation') }}"
 >
     @foreach($items as $entry)
-        @if(($entry['type'] ?? '') === 'link' && $entry['href'] !== '#')
+        @if(($entry['type'] ?? '') === 'link' && ($entry['href'] ?? '#') !== '#')
             <a
                 href="{{ $entry['href'] }}"
                 @class([
@@ -46,25 +50,31 @@
                     </svg>
                 </button>
             </div>
-        @elseif(($entry['type'] ?? '') === 'dropdown' && ($entry['panel'] ?? '') === 'cruise')
+        @elseif(($entry['type'] ?? '') === 'dropdown')
+            @php
+                $panelKey = (string) ($entry['panel'] ?? '');
+                $panelItems = $panelKey !== '' ? ($dropdownPanels[$panelKey] ?? []) : [];
+                $panelDomId = $panelKey !== '' ? 'dropdown-panel-'.preg_replace('/[^a-zA-Z0-9_-]/', '', str_replace('_', '-', $panelKey)) : 'dropdown-panel';
+            @endphp
+            @continue($panelKey === '' || $panelItems === [])
             <div
                 class="relative flex items-center"
-                @mouseenter="onTriggerEnter('cruise')"
+                @mouseenter="onTriggerEnter(@js($panelKey))"
                 @mouseleave="onTriggerLeave()"
             >
                 <button
                     type="button"
                     class="inline-flex items-center gap-1 rounded-lg px-2.5 py-2 transition"
-                    :class="panel === 'cruise' ? 'bg-slate-100/95 text-slate-900' : ($entry['active'] ?? false ? 'bg-slate-100/95' : 'text-slate-800 hover:text-slate-900')"
-                    @click="isDesktop ? (clearTimers(), (panel = panel === 'cruise' ? null : 'cruise')) : toggle('cruise')"
-                    :aria-expanded="(panel === 'cruise').toString()"
+                    :class="panel === @js($panelKey) ? 'bg-slate-100/95 text-slate-900' : ($entry['active'] ?? false ? 'bg-slate-100/95' : 'text-slate-800 hover:text-slate-900')"
+                    @click="isDesktop ? (clearTimers(), (panel = panel === @js($panelKey) ? null : @js($panelKey))) : toggle(@js($panelKey))"
+                    :aria-expanded="(panel === @js($panelKey)).toString()"
                     aria-haspopup="true"
-                    aria-controls="dropdown-cruise"
+                    aria-controls="{{ $panelDomId }}"
                 >
                     <span class="whitespace-nowrap">{{ $entry['label'] ?? '' }}</span>
                     <svg
                         class="h-3.5 w-3.5 shrink-0 text-slate-500 transition"
-                        :class="panel==='cruise' && 'rotate-180'"
+                        :class="panel===@js($panelKey) && 'rotate-180'"
                         viewBox="0 0 20 20"
                         fill="currentColor"
                         aria-hidden="true"
@@ -74,7 +84,7 @@
                 </button>
                 <div
                     x-cloak
-                    x-show="panel==='cruise' && isDesktop"
+                    x-show="panel===@js($panelKey) && isDesktop"
                     @mouseenter="onPanelEnter()"
                     @mouseleave="onPanelLeave()"
                     x-transition:enter="transition ease-out duration-200"
@@ -83,16 +93,16 @@
                     x-transition:leave="transition ease-in duration-200"
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0"
-                    id="dropdown-cruise"
+                    id="{{ $panelDomId }}"
                     class="max-lg:hidden absolute left-0 top-full z-50 mt-1.5 min-w-[19rem] rounded-2xl border border-slate-200/80 bg-white py-2.5 text-sm shadow-2xl"
                     role="menu"
                 >
-                    @foreach($cruiseItems as $c)
+                    @foreach($panelItems as $item)
                         <a
-                            href="{{ $c['href'] }}"
+                            href="{{ $item['href'] }}"
                             class="block px-4 py-2.5 text-slate-800 transition hover:bg-slate-50/95 hover:text-emerald-800"
                             role="menuitem"
-                        >{{ $c['label'] }}</a>
+                        >{{ $item['label'] }}</a>
                     @endforeach
                 </div>
             </div>

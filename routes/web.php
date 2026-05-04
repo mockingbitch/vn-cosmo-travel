@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AboutPageController as AdminAboutPageController;
 use App\Http\Controllers\Admin\AuthController as AdminAuthController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
@@ -9,14 +10,18 @@ use App\Http\Controllers\Admin\HeroBannerController as AdminHeroBannerController
 use App\Http\Controllers\Admin\MediaController as AdminMediaController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
+use App\Http\Controllers\Admin\ServicePageController as AdminServicePageController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\TourController as AdminTourController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Frontend\AboutController;
 use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\BookingController;
 use App\Http\Controllers\Frontend\DestinationController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\ServicePageController as FrontendServicePageController;
 use App\Http\Controllers\Frontend\TourController;
+use App\Models\ServicePage;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -65,10 +70,22 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('settings/social', [AdminSettingController::class, 'updateSocial'])->name('settings.social.update');
             Route::get('settings/home-why', [AdminSettingController::class, 'editHomeWhy'])->name('settings.homeWhy.edit');
             Route::put('settings/home-why', [AdminSettingController::class, 'updateHomeWhy'])->name('settings.homeWhy.update');
+            Route::get('settings/testimonials', [AdminSettingController::class, 'editTestimonials'])->name('settings.testimonials.edit');
+            Route::put('settings/testimonials', [AdminSettingController::class, 'updateTestimonials'])->name('settings.testimonials.update');
 
             Route::get('banners', [AdminHeroBannerController::class, 'edit'])->name('banners.edit');
             Route::put('banners', [AdminHeroBannerController::class, 'update'])->name('banners.update');
             Route::post('banners/apply/{banner}', [AdminHeroBannerController::class, 'apply'])->name('banners.apply');
+
+            Route::get('about-page', [AdminAboutPageController::class, 'edit'])->name('about.edit');
+            Route::put('about-page', [AdminAboutPageController::class, 'update'])->name('about.update');
+
+            Route::get('service-pages/{type}/edit', [AdminServicePageController::class, 'edit'])
+                ->where('type', ServicePage::allowedTypesRoutePattern())
+                ->name('service-pages.edit');
+            Route::put('service-pages/{type}', [AdminServicePageController::class, 'update'])
+                ->where('type', ServicePage::allowedTypesRoutePattern())
+                ->name('service-pages.update');
 
             Route::resource('users', AdminUserController::class)->except(['show']);
         });
@@ -81,6 +98,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         Route::resource('tours', AdminTourController::class)->except(['show']);
         Route::resource('posts', AdminPostController::class)->except(['show']);
+
         Route::resource('destinations', AdminDestinationController::class)->except(['show']);
         Route::get('bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
         Route::patch('bookings/{booking}', [AdminBookingController::class, 'update'])->name('bookings.update');
@@ -92,6 +110,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
 Route::name('')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
+
+    Route::get('/about', [AboutController::class, 'show'])->name('about');
+
+    Route::get('/airport-taxi', [FrontendServicePageController::class, 'airportTaxi'])->name('airport-taxi');
+
+    Route::get('/visa-service', [FrontendServicePageController::class, 'visaService'])->name('visa-service');
+    Route::get('/bus-flight-train-ticket', [FrontendServicePageController::class, 'busFlightTrainTicket'])->name('bus-flight-train-ticket');
+    Route::get('/sim-card', [FrontendServicePageController::class, 'simCard'])->name('sim-card');
 
     Route::prefix('tours')->name('tours.')->group(function () {
         Route::get('/', [TourController::class, 'index'])->name('index');

@@ -5,7 +5,6 @@ namespace App\Services\Admin;
 use App\Contracts\Interfaces\SettingRepositoryInterface;
 use App\Services\SettingsService;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 
 class SettingAdminService
 {
@@ -15,19 +14,19 @@ class SettingAdminService
     ) {}
 
     /**
-     * @param array<string, mixed> $data
-     * @param array<string, UploadedFile|null> $files
+     * @param  array<string, mixed>  $data
+     * @param  array<string, UploadedFile|null>  $files
      */
     public function updateGeneral(array $data, array $files = []): void
     {
         $this->settings->set('site.name', $data['site_name'] ?? null);
 
-        if (!empty($files['logo']) && $files['logo'] instanceof UploadedFile) {
+        if (! empty($files['logo']) && $files['logo'] instanceof UploadedFile) {
             $path = $files['logo']->storePublicly('settings', ['disk' => 'public']);
             $this->settings->set('site.logo_path', $path);
         }
 
-        if (!empty($files['favicon']) && $files['favicon'] instanceof UploadedFile) {
+        if (! empty($files['favicon']) && $files['favicon'] instanceof UploadedFile) {
             $path = $files['favicon']->storePublicly('settings', ['disk' => 'public']);
             $this->settings->set('site.favicon_path', $path);
         }
@@ -68,7 +67,7 @@ class SettingAdminService
     }
 
     /**
-     * @param array<string, mixed> $input
+     * @param  array<string, mixed>  $input
      * @return array<string, array{title: string, subtitle: string, items: list<array{title: string, desc: string}>}>
      */
     private function normalizeHomeWhy(array $input): array
@@ -95,5 +94,42 @@ class SettingAdminService
 
         return $out;
     }
-}
 
+    /** @param array<string, mixed> $data */
+    public function updateTestimonials(array $data): void
+    {
+        $block = $data['testimonials'] ?? [];
+        $block = is_array($block) ? $block : [];
+
+        $this->settings->set('content.testimonials', $this->normalizeTestimonials($block));
+
+        $this->settingsService->forgetCache();
+    }
+
+    /**
+     * @param  array<string, mixed>  $input
+     * @return array{title: string, subtitle: string, items: list<array{quote: string, author: string, meta: string, image_url: string, scene_alt: string}>}
+     */
+    private function normalizeTestimonials(array $input): array
+    {
+        $itemsIn = is_array($input['items'] ?? null) ? $input['items'] : [];
+        $items = [];
+        for ($i = 0; $i < 3; $i++) {
+            /** @var array<string, mixed> $row */
+            $row = is_array($itemsIn[$i] ?? null) ? $itemsIn[$i] : [];
+            $items[] = [
+                'quote' => isset($row['quote']) ? trim((string) $row['quote']) : '',
+                'author' => isset($row['author']) ? trim((string) $row['author']) : '',
+                'meta' => isset($row['meta']) ? trim((string) $row['meta']) : '',
+                'image_url' => isset($row['image_url']) ? trim((string) $row['image_url']) : '',
+                'scene_alt' => isset($row['scene_alt']) ? trim((string) $row['scene_alt']) : '',
+            ];
+        }
+
+        return [
+            'title' => isset($input['title']) ? trim((string) $input['title']) : '',
+            'subtitle' => isset($input['subtitle']) ? trim((string) $input['subtitle']) : '',
+            'items' => $items,
+        ];
+    }
+}

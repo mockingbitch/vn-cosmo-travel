@@ -19,7 +19,7 @@ class MainNavigationService
         return [
             'primary' => $this->buildPrimary($request),
             'dailyMega' => $this->buildDailyMega($bySlug),
-            'cruise' => $this->buildCruise(),
+            'dropdownPanels' => $this->buildDropdownPanels(),
         ];
     }
 
@@ -30,24 +30,79 @@ class MainNavigationService
     {
         $out = [];
         foreach (config('navigation.primary', []) as $row) {
-            $id = (string) $row['id'];
-            $type = (string) $row['type'];
-            $label = __((string) $row['label_key']);
+            $id = (string) ($row['id'] ?? '');
+            $type = (string) ($row['type'] ?? '');
+            $label = __((string) ($row['label_key'] ?? ''));
             $href = '#';
             if ($type === 'link') {
-                if (isset($row['tour_params'])) {
-                    $href = route('tours.index', array_filter((array) $row['tour_params']));
-                } elseif (isset($row['route'])) {
-                    $base = route((string) $row['route'], (array) ($row['params'] ?? []));
-                    $hash = isset($row['hash']) ? '#'.ltrim((string) $row['hash'], '#') : '';
-                    $href = $base.$hash;
-                }
+                $href = $this->resolvePrimaryLinkHref($row);
             }
             $out[] = array_merge($row, [
                 'label' => $label,
                 'href' => $href,
                 'active' => $this->isPrimaryActive($request, $row, $id),
             ]);
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param  array<string, mixed>  $row
+     */
+    private function resolvePrimaryLinkHref(array $row): string
+    {
+        if (! empty($row['external_url'])) {
+            return (string) $row['external_url'];
+        }
+        if (isset($row['tour_params'])) {
+            return route('tours.index', array_filter((array) $row['tour_params']));
+        }
+        if (isset($row['route'])) {
+            $base = route((string) $row['route'], (array) ($row['params'] ?? []));
+            $hash = isset($row['hash']) ? '#'.ltrim((string) $row['hash'], '#') : '';
+
+            return $base.$hash;
+        }
+
+        return '#';
+    }
+
+    /**
+     * @param  array<string, mixed>  $row
+     */
+    private function resolveDropdownLineHref(array $row): string
+    {
+        return $this->resolvePrimaryLinkHref($row);
+    }
+
+    /**
+     * @return array<string, list<array{label: string, href: string}>>
+     */
+    private function buildDropdownPanels(): array
+    {
+        $panels = config('navigation.dropdown_panels', []);
+        if (! is_array($panels)) {
+            return [];
+        }
+
+        $out = [];
+        foreach ($panels as $key => $rows) {
+            if (! is_array($rows)) {
+                continue;
+            }
+            $items = [];
+            foreach ($rows as $line) {
+                if (! is_array($line)) {
+                    continue;
+                }
+                $lk = (string) ($line['label_key'] ?? '');
+                $items[] = [
+                    'label' => $lk !== '' ? __($lk) : '',
+                    'href' => $this->resolveDropdownLineHref($line),
+                ];
+            }
+            $out[(string) $key] = $items;
         }
 
         return $out;
@@ -67,17 +122,8 @@ class MainNavigationService
             return $d === '' || $d === '1-3';
         }
 
-        if (($row['type'] ?? '') === 'dropdown' && ($row['panel'] ?? '') === 'cruise') {
-            if (! $request->routeIs('tours.index')) {
-                return false;
-            }
-            $dest = (string) $request->query('destination', '');
-
-            return in_array($dest, ['ha-long-bay', 'hanoi', 'ho-chi-minh-city'], true);
-        }
-
-        if ($id === 'hanoi_day') {
-            return $request->routeIs('tours.index') && $request->query('destination') === 'hanoi';
+        if (($row['type'] ?? '') === 'dropdown') {
+            return $this->isDropdownTriggerActive($request, (string) ($row['panel'] ?? ''));
         }
 
         if ($id === 'package') {
@@ -86,8 +132,88 @@ class MainNavigationService
         }
 
         if ($id === 'about') {
-            // In-page #hash is not sent to the server; keep off unless you add a dedicated route.
+            return $request->routeIs('about');
+        }
+
+        if (($row['type'] ?? '') === 'link' && ! empty($row['tour_params']) && is_array($row['tour_params'])) {
+            if (! $request->routeIs('tours.index')) {
+                return false;
+            }
+            $params = array_filter($row['tour_params'], fn ($v) => $v !== null && $v !== '');
+            foreach ($params as $k => $v) {
+                if ((string) $request->query($k, '') !== (string) $v) {
+                    return false;
+                }
+            }
+
+            return $params !== [];
+        }
+
+        return false;
+    }
+
+    private function isDropdownTriggerActive(Request $request, string $panel): bool
+    {
+        if ($panel === 'other_service') {
+            return $this->isOtherServiceDropdownActive($request);
+        }
+
+        if ($panel === '' || ! $request->routeIs('tours.index')) {
             return false;
+        }
+
+        $lines = config('navigation.dropdown_panels.'.$panel, []);
+
+        return is_array($lines)
+            && $this->someTourLineMatchesRequest($request, $lines);
+    }
+
+    private function isOtherServiceDropdownActive(Request $request): bool
+    {
+        $lines = config('navigation.dropdown_panels.other_service', []);
+        if (! is_array($lines)) {
+            return false;
+        }
+
+        foreach ($lines as $line) {
+            if (! is_array($line)) {
+                continue;
+            }
+            $routeName = $line['route'] ?? null;
+            if (! is_string($routeName) || $routeName === '') {
+                continue;
+            }
+            if ($request->routeIs($routeName)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param  list<mixed>  $lines
+     */
+    private function someTourLineMatchesRequest(Request $request, array $lines): bool
+    {
+        foreach ($lines as $line) {
+            if (! is_array($line)) {
+                continue;
+            }
+            $tp = array_filter((array) ($line['tour_params'] ?? []));
+            if ($tp === []) {
+                continue;
+            }
+            $ok = true;
+            foreach ($tp as $k => $v) {
+                if ((string) $request->query($k, '') !== (string) $v) {
+                    $ok = false;
+                    break;
+                }
+            }
+            if ($ok) {
+                return true;
+            }
         }
 
         return false;
@@ -98,8 +224,14 @@ class MainNavigationService
         $rows = config('navigation.mega_rows', []);
         $resolved = [];
         foreach ($rows as $rowSet) {
+            if (! is_array($rowSet)) {
+                continue;
+            }
             $resolvedRow = [];
             foreach ($rowSet as $section) {
+                if (! is_array($section)) {
+                    continue;
+                }
                 $slugs = (array) ($section['slugs'] ?? []);
                 $items = [];
                 foreach ($slugs as $slug) {
@@ -117,7 +249,7 @@ class MainNavigationService
                     continue;
                 }
                 $resolvedRow[] = [
-                    'title' => __((string) $section['title_key']),
+                    'title' => __((string) ($section['title_key'] ?? '')),
                     'items' => $items,
                 ];
             }
@@ -147,30 +279,35 @@ class MainNavigationService
         ];
     }
 
-    /**
-     * @return list<array{label: string, href: string}>
-     */
-    private function buildCruise(): array
-    {
-        $out = [];
-        foreach (config('navigation.cruise', []) as $row) {
-            $out[] = [
-                'label' => __((string) $row['label_key']),
-                'href' => route('tours.index', (array) ($row['tour_params'] ?? [])),
-            ];
-        }
-
-        return $out;
-    }
-
     private function collectSlugsFromConfig(): Collection
     {
         $slugs = collect();
 
         foreach (config('navigation.mega_rows', []) as $rowSet) {
+            if (! is_array($rowSet)) {
+                continue;
+            }
             foreach ($rowSet as $section) {
+                if (! is_array($section)) {
+                    continue;
+                }
                 foreach ((array) ($section['slugs'] ?? []) as $slug) {
                     $slugs->push((string) $slug);
+                }
+            }
+        }
+
+        foreach (config('navigation.dropdown_panels', []) as $rows) {
+            if (! is_array($rows)) {
+                continue;
+            }
+            foreach ($rows as $line) {
+                if (! is_array($line)) {
+                    continue;
+                }
+                $d = data_get($line, 'tour_params.destination');
+                if ($d !== null && $d !== '') {
+                    $slugs->push((string) $d);
                 }
             }
         }

@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\UpdateContactSettingsRequest;
 use App\Http\Requests\Admin\UpdateGeneralSettingsRequest;
 use App\Http\Requests\Admin\UpdateHomeWhySettingsRequest;
 use App\Http\Requests\Admin\UpdateSocialSettingsRequest;
+use App\Http\Requests\Admin\UpdateTestimonialsSettingsRequest;
 use App\Services\Admin\SettingAdminService;
 use App\Services\SettingsService;
 use Illuminate\Http\RedirectResponse;
@@ -42,6 +43,13 @@ class SettingController extends Controller
         ]);
     }
 
+    public function editTestimonials(SettingsService $settings): View
+    {
+        return view('admin.settings.testimonials', [
+            'settings' => $settings->all(),
+        ]);
+    }
+
     public function updateGeneral(UpdateGeneralSettingsRequest $request, SettingAdminService $settings): RedirectResponse
     {
         $settings->updateGeneral($request->validated(), [
@@ -71,5 +79,12 @@ class SettingController extends Controller
         $settings->updateHomeWhy($request->validated());
 
         return redirect()->route('admin.settings.homeWhy.edit')->with('status', __('flash.settings.updated'));
+    }
+
+    public function updateTestimonials(UpdateTestimonialsSettingsRequest $request, SettingAdminService $settings): RedirectResponse
+    {
+        $settings->updateTestimonials($request->validated());
+
+        return redirect()->route('admin.settings.testimonials.edit')->with('status', __('flash.settings.updated'));
     }
 }

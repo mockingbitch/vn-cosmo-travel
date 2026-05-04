@@ -1,9 +1,9 @@
 @props(['mainNav' => null])
 
 @php
-    $nav = is_array($mainNav) ? $mainNav : ['primary' => [], 'cruise' => [], 'dailyMega' => []];
+    $nav = is_array($mainNav) ? $mainNav : ['primary' => [], 'dailyMega' => [], 'dropdownPanels' => []];
     $items = $nav['primary'] ?? [];
-    $cruise = $nav['cruise'] ?? [];
+    $dropdownPanels = is_array($nav['dropdownPanels'] ?? null) ? $nav['dropdownPanels'] : [];
     $dm = $nav['dailyMega'] ?? [];
     $row1 = $dm['rows'][0] ?? [];
     $row2 = $dm['rows'][1] ?? [];
@@ -12,7 +12,7 @@
 <nav class="w-full" aria-label="{{ __('Main navigation') }}">
     <div class="space-y-1.5 text-sm font-medium text-slate-800">
         @foreach($items as $entry)
-            @if(($entry['type'] ?? '') === 'link' && $entry['href'] !== '#')
+            @if(($entry['type'] ?? '') === 'link' && ($entry['href'] ?? '#') !== '#')
                 <a
                     href="{{ $entry['href'] }}"
                     @click="closeAll()"
@@ -23,14 +23,14 @@
                     <button
                         type="button"
                         class="flex w-full items-center justify-between px-3.5 py-2.5 text-left font-semibold"
-                        :class="mDaily ? 'text-slate-900' : 'text-slate-800'"
-                        @click="mDaily = !mDaily"
-                        :aria-expanded="mDaily.toString()"
+                        :class="mobileSection === 'mega-daily' ? 'text-slate-900' : 'text-slate-800'"
+                        @click="toggleMobileSection('mega-daily')"
+                        :aria-expanded="(mobileSection === 'mega-daily').toString()"
                     >
                         {{ $entry['label'] ?? '' }}
-                        <span class="text-slate-400" x-text="mDaily ? '−' : '+'"></span>
+                        <span class="text-slate-400" x-text="mobileSection === 'mega-daily' ? '−' : '+'"></span>
                     </button>
-                    <div x-cloak x-show="mDaily" x-transition class="border-t border-slate-100/90 px-3.5 py-3">
+                    <div x-cloak x-show="mobileSection === 'mega-daily'" x-transition class="border-t border-slate-100/90 px-3.5 py-3">
                         <div class="max-h-[60vh] overflow-y-auto [scrollbar-gutter:stable]">
                             <x-site.mega-daily-lists
                                 :row1="$row1"
@@ -46,25 +46,30 @@
                         >{{ __('nav.see_all_destinations') }} →</a>
                     </div>
                 </div>
-            @elseif(($entry['type'] ?? '') === 'dropdown' && ($entry['panel'] ?? '') === 'cruise')
+            @elseif(($entry['type'] ?? '') === 'dropdown')
+                @php
+                    $panelKey = (string) ($entry['panel'] ?? '');
+                    $panelItems = $panelKey !== '' ? ($dropdownPanels[$panelKey] ?? []) : [];
+                @endphp
+                @continue($panelKey === '' || $panelItems === [])
                 <div class="overflow-hidden rounded-xl border border-slate-200/90 bg-white">
                     <button
                         type="button"
                         class="flex w-full items-center justify-between px-3.5 py-2.5 text-left font-semibold"
-                        :class="mCruise ? 'text-slate-900' : 'text-slate-800'"
-                        @click="mCruise = !mCruise"
-                        :aria-expanded="mCruise.toString()"
+                        :class="mobileSection === @js($panelKey) ? 'text-slate-900' : 'text-slate-800'"
+                        @click="toggleMobileSection(@js($panelKey))"
+                        :aria-expanded="(mobileSection === @js($panelKey)).toString()"
                     >
                         {{ $entry['label'] ?? '' }}
-                        <span class="text-slate-400" x-text="mCruise ? '−' : '+'"></span>
+                        <span class="text-slate-400" x-text="mobileSection === @js($panelKey) ? '−' : '+'"></span>
                     </button>
-                    <div x-cloak x-show="mCruise" x-transition class="space-y-0.5 border-t border-slate-100/90 px-1.5 py-1.5">
-                        @foreach($cruise as $c)
+                    <div x-cloak x-show="mobileSection === @js($panelKey)" x-transition class="space-y-0.5 border-t border-slate-100/90 px-1.5 py-1.5">
+                        @foreach($panelItems as $item)
                             <a
-                                href="{{ $c['href'] }}"
+                                href="{{ $item['href'] }}"
                                 @click="closeAll()"
                                 class="block rounded-lg px-2.5 py-1.5 text-slate-700 transition hover:bg-slate-50"
-                            >{{ $c['label'] }}</a>
+                            >{{ $item['label'] }}</a>
                         @endforeach
                     </div>
                 </div>

@@ -144,26 +144,45 @@
         </div>
     </section>
 
-    <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+    <section id="testimonials" class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <x-section-title
-            :title="__('home.testimonials.title')"
-            :subtitle="__('home.testimonials.subtitle')"
+            :title="$testimonials['title']"
+            :subtitle="$testimonials['subtitle']"
             class="max-w-2xl"
         />
 
         <div class="mt-8 grid gap-6 lg:grid-cols-3">
-            @foreach([1, 2, 3] as $i)
-                <figure class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                    <blockquote class="text-sm leading-7 text-slate-700">
-                        “{{ __('home.testimonials.quote_' . $i) }}”
-                    </blockquote>
-                    <figcaption class="mt-4 flex items-center justify-between">
-                        <div>
-                            <div class="text-sm font-semibold text-slate-900">{{ __('home.testimonials.author_' . $i) }}</div>
-                            <div class="text-xs text-slate-500">{{ __('home.testimonials.meta_' . $i) }}</div>
-                        </div>
-                        <div class="text-xs font-semibold text-amber-600">★★★★★</div>
-                    </figcaption>
+            @foreach($testimonials['items'] as $card)
+                @php
+                    $sceneUrl = $card['image_url'] ?? '';
+                @endphp
+                <figure class="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                    <div class="aspect-[16/10] w-full shrink-0 overflow-hidden bg-slate-100">
+                        @if($sceneUrl !== '')
+                            <img
+                                src="{{ $sceneUrl }}"
+                                alt="{{ $card['scene_alt'] ?? '' }}"
+                                width="960"
+                                height="600"
+                                loading="lazy"
+                                decoding="async"
+                                referrerpolicy="no-referrer-when-downgrade"
+                                class="h-full w-full object-cover object-center transition duration-300 hover:scale-[1.02]"
+                            />
+                        @endif
+                    </div>
+                    <div class="flex flex-1 flex-col p-6">
+                        <blockquote class="flex-1 text-sm leading-7 text-slate-700">
+                            “{{ $card['quote'] }}”
+                        </blockquote>
+                        <figcaption class="mt-6 flex items-center gap-3 border-t border-slate-100 pt-5">
+                            <div class="min-w-0 flex-1">
+                                <div class="text-sm font-semibold text-slate-900">{{ $card['author'] }}</div>
+                                <div class="text-xs text-slate-500">{{ $card['meta'] }}</div>
+                            </div>
+                            <div class="shrink-0 text-xs font-semibold tracking-tight text-amber-600" aria-hidden="true">★★★★★</div>
+                        </figcaption>
+                    </div>
                 </figure>
             @endforeach
         </div>

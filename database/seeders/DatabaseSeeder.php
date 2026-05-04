@@ -16,11 +16,13 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             AdminUserSeeder::class,
+            SettingsSeeder::class,
             DestinationSeeder::class,
             TourSeeder::class,
             PostSeeder::class,
+            AboutPageSeeder::class,
+            ServicePagesSeeder::class,
             HeroBannerSeeder::class,
-            SettingsSeeder::class,
         ]);
     }
 }

@@ -9,8 +9,8 @@ use Illuminate\Database\Seeder;
 class SettingsSeeder extends Seeder
 {
     /**
-     * Fills `settings` with values that mirror the public homepage / layout copy:
-     * brand, footer contact, and the “Vì sao chọn chúng tôi” block (from lang files per locale).
+     * Fills `settings` with brand, footer contact, “home why”, and homepage testimonials (English).
+     * Run early in DatabaseSeeder so site.name / contact exist before content seeds.
      */
     public function run(): void
     {
@@ -20,8 +20,8 @@ class SettingsSeeder extends Seeder
         $settings->set('site.name', 'Vietnam Cosmo Travel');
 
         $settings->set('contact.email', 'hello@vietnamcosmotravel.com');
-        $settings->set('contact.phone', '+84 000 000 000');
-        $settings->set('contact.address', '');
+        $settings->set('contact.phone', '+84 90 123 4567');
+        $settings->set('contact.address', 'District 1, Ho Chi Minh City, Vietnam');
         $settings->set('contact.map_iframe', '');
 
         $settings->set('social.facebook', null);
@@ -30,6 +30,8 @@ class SettingsSeeder extends Seeder
         $settings->set('social.tiktok', null);
 
         $settings->set('content.home_why', $this->homeWhyFromLang());
+
+        $settings->set('content.testimonials', app(SettingsService::class)->testimonialsBaseline());
 
         app(SettingsService::class)->forgetCache();
 
