@@ -18,7 +18,10 @@
                 </div>
 
                 <div class="flex flex-wrap gap-3 pt-2">
-                    <x-admin.button type="submit" variant="primary">{{ __('Save') }}</x-admin.button>
+                    <x-admin.button type="submit" variant="primary">
+                        <x-icon name="save" size="sm" />
+                        {{ __('Save') }}
+                    </x-admin.button>
                 </div>
             </form>
         </x-admin.card>

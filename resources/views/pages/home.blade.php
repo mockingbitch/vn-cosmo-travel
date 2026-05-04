@@ -29,11 +29,10 @@
                 <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
                     <x-button href="{{ $hero->ctaLink() }}" variant="secondary" class="justify-center bg-white hover:bg-white/90 focus:ring-white/50">
                         {{ $hero->ctaText() }}
-                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                        </svg>
+                        <x-icon name="chevron-right" size="sm" />
                     </x-button>
                     <x-button href="#booking" variant="ghost" class="justify-center text-white hover:bg-white/10 focus:ring-white/50">
+                        <x-icon name="chevron-down" size="sm" />
                         {{ __('Plan with us') }}
                     </x-button>
                 </div>
@@ -71,9 +70,7 @@
                         <div class="flex items-end">
                             <x-button type="submit" variant="primary" class="w-full justify-center">
                                 {{ __('Find tours') }}
-                                <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
-                                </svg>
+                                <x-icon name="search" size="sm" />
                             </x-button>
                         </div>
                     </div>
@@ -89,7 +86,10 @@
                 :subtitle="__('home.featured.subtitle')"
             />
             <div class="hidden sm:block">
-                <x-button href="{{ route('tours.index') }}" variant="secondary">{{ __('View all') }}</x-button>
+                <x-button href="{{ route('tours.index') }}" variant="secondary">
+                    {{ __('View all') }}
+                    <x-icon name="chevron-right" size="sm" />
+                </x-button>
             </div>
         </div>
 
@@ -100,7 +100,10 @@
         </div>
 
         <div class="mt-8 sm:hidden">
-            <x-button href="{{ route('tours.index') }}" variant="secondary" class="w-full justify-center">{{ __('View all tours') }}</x-button>
+            <x-button href="{{ route('tours.index') }}" variant="secondary" class="w-full justify-center">
+                {{ __('View all tours') }}
+                <x-icon name="chevron-right" size="sm" />
+            </x-button>
         </div>
     </section>
 
@@ -113,17 +116,7 @@
             />
 
             @php
-                // Icon paths cycle through the 4 cards by index for visual variety.
-                $whyIcons = [
-                    // bolt — Fast response
-                    '<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5 13.5 3l-1.5 7.5h6.75L8.25 21l1.5-7.5H3.75Z" />',
-                    // tag — Clear pricing
-                    '<path stroke-linecap="round" stroke-linejoin="round" d="M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M6 6h.008v.008H6V6Z" />',
-                    // sparkles — Curated itineraries
-                    '<path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" />',
-                    // shield-check — Secure booking
-                    '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12c0 5.25-4.5 9-9 9s-9-3.75-9-9c0-1.5.5-3 1-4 1.5-3 5-5 8-5s6.5 2 8 5c.5 1 1 2.5 1 4Z" />',
-                ];
+                $whyIconNames = ['bolt', 'tag', 'sparkles', 'shield-check'];
             @endphp
 
             <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -131,9 +124,7 @@
                     <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
                         <div class="flex items-center gap-3">
                             <div class="grid h-10 w-10 place-items-center rounded-xl bg-slate-900 text-white">
-                                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                                    {!! $whyIcons[$idx % count($whyIcons)] !!}
-                                </svg>
+                                <x-icon :name="$whyIconNames[$idx % count($whyIconNames)]" size="md" />
                             </div>
                             <div class="text-sm font-semibold text-slate-900">{{ $item['title'] }}</div>
                         </div>
@@ -196,7 +187,10 @@
                     :subtitle="__('home.blog.subtitle')"
                 />
                 <div class="hidden sm:block">
-                    <x-button href="{{ route('blog.index') }}" variant="secondary">{{ __('View all') }}</x-button>
+                    <x-button href="{{ route('blog.index') }}" variant="secondary">
+                        {{ __('View all') }}
+                        <x-icon name="chevron-right" size="sm" />
+                    </x-button>
                 </div>
             </div>
 
@@ -245,6 +239,7 @@
                     <p class="mt-1 text-sm text-slate-600">{{ __('home.booking.card_text') }}</p>
                     <div class="mt-4">
                         <x-button href="{{ route('tours.index') }}" variant="primary" class="w-full justify-center">
+                            <x-icon name="tours" size="sm" />
                             {{ __('Browse tours') }}
                         </x-button>
                     </div>
@@ -272,9 +267,7 @@
                                 class="group flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
                             >
                                 <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-slate-900 text-white">
-                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-                                    </svg>
+                                    <x-icon name="envelope" size="md" />
                                 </span>
                                 <div class="min-w-0">
                                     <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('Email') }}</div>
@@ -293,9 +286,7 @@
                                 class="group flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-slate-300 hover:shadow-md"
                             >
                                 <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-slate-900 text-white">
-                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25z" />
-                                    </svg>
+                                    <x-icon name="phone" size="md" />
                                 </span>
                                 <div class="min-w-0">
                                     <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('Phone') }}</div>
@@ -307,10 +298,7 @@
                         @if($siteContact->address())
                             <div class="flex items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
                                 <span class="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-slate-900 text-white">
-                                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                                    </svg>
+                                    <x-icon name="map" size="md" />
                                 </span>
                                 <div class="min-w-0">
                                     <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('Address') }}</div>

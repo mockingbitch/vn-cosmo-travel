@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
+use App\Http\Requests\Admin\UpdateUserStatusRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class UserController extends Controller
@@ -68,6 +70,33 @@ class UserController extends Controller
         return redirect()
             ->route('admin.users.index')
             ->with('status', __('flash.user.updated'));
+    }
+
+    public function updateStatus(UpdateUserStatusRequest $request, User $user): RedirectResponse
+    {
+        $user->status = $request->validated('status');
+        $user->save();
+
+        return redirect()
+            ->route('admin.users.index', $this->userListQueryFromRequest($request))
+            ->with('status', __('flash.user.updated'));
+    }
+
+    /**
+     * @return array<string, int|string>
+     */
+    private function userListQueryFromRequest(Request $request): array
+    {
+        $query = [];
+
+        if ($request->filled('page')) {
+            $page = (int) $request->input('page');
+            if ($page > 0) {
+                $query['page'] = $page;
+            }
+        }
+
+        return $query;
     }
 
     public function destroy(User $user): RedirectResponse

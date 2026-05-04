@@ -42,6 +42,17 @@ class TourAdminService
         return $tour->fresh(['itineraries', 'images']);
     }
 
+    public function updateStatus(Tour $tour, string $status): void
+    {
+        $data = ['status' => $status];
+
+        if (($uid = auth()->id()) !== null) {
+            $data['updated_by'] = $uid;
+        }
+
+        $this->tours->adminUpdate($tour, $data);
+    }
+
     public function update(Tour $tour, array $data): Tour
     {
         $itineraryRows = $this->extractItineraryRows($data);

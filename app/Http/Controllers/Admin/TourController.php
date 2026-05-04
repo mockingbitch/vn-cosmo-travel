@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreTourRequest;
 use App\Http\Requests\Admin\UpdateTourRequest;
+use App\Http\Requests\Admin\UpdateTourStatusRequest;
 use App\Models\Tour;
 use App\Services\Admin\TourAdminService;
 use App\Services\DestinationService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class TourController extends Controller
@@ -52,6 +54,34 @@ class TourController extends Controller
         $tours->update($tour, $request->validated());
 
         return redirect()->route('admin.tours.index')->with('status', __('flash.tour.updated'));
+    }
+
+    public function updateStatus(UpdateTourStatusRequest $request, Tour $tour, TourAdminService $tours): RedirectResponse
+    {
+        $tours->updateStatus($tour, $request->validated('status'));
+
+        return redirect()
+            ->route('admin.tours.index', $this->tourListQueryFromRequest($request))
+            ->with('status', __('flash.tour.updated'));
+    }
+
+    /**
+     * Preserve pagination when updating status from the list row forms.
+     *
+     * @return array<string, int>
+     */
+    private function tourListQueryFromRequest(Request $request): array
+    {
+        $query = [];
+
+        if ($request->filled('page')) {
+            $page = (int) $request->input('page');
+            if ($page > 0) {
+                $query['page'] = $page;
+            }
+        }
+
+        return $query;
     }
 
     public function destroy(Tour $tour, TourAdminService $tours): RedirectResponse

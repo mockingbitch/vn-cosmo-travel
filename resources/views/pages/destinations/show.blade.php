@@ -19,6 +19,7 @@
                 </p>
                 <div class="mt-7">
                     <x-button href="{{ route('tours.index', ['destination' => $destination->slug]) }}" variant="primary" class="bg-white text-slate-900 hover:bg-white/90">
+                        <x-icon name="tours" size="sm" />
                         {{ __('destinations.view_tours', ['name' => $destination->localizedName()]) }}
                     </x-button>
                 </div>

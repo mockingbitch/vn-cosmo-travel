@@ -5,7 +5,7 @@
 ])
 
 @php
-    $base = 'inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition focus:outline-none focus:ring-2 focus:ring-slate-400/60 focus:ring-offset-2';
+    $base = 'inline-flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/60 focus-visible:ring-offset-2';
 
     $variants = [
         'primary' => 'bg-slate-900 text-white hover:bg-slate-800 shadow-sm',

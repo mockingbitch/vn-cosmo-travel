@@ -1,9 +1,17 @@
 @extends('admin.layouts.app')
 
 @section('content')
+    @if($errors->has('status'))
+        <div class="mb-4 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-800">
+            {{ $errors->first('status') }}
+        </div>
+    @endif
     <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 class="text-2xl font-semibold tracking-tight">{{ __('Blog posts') }}</h1>
-        <a href="{{ route('admin.posts.create') }}" class="inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">{{ __('Add post') }}</a>
+        <a href="{{ route('admin.posts.create') }}" class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">
+            <x-icon name="add" size="sm" />
+            {{ __('Add post') }}
+        </a>
     </div>
 
     <div class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -41,12 +49,24 @@
                             </div>
                         </td>
                         <td class="px-4 py-3 text-slate-600">{{ $post->category?->name ?? '—' }}</td>
-                        <td class="px-4 py-3">
-                            @if($post->status === \App\Models\Post::STATUS_ACTIVE)
-                                <span class="inline-flex rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">{{ __('status.active') }}</span>
-                            @else
-                                <span class="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-600">{{ __('status.disabled') }}</span>
-                            @endif
+                        <td class="px-4 py-3 align-middle">
+                            <form method="post" action="{{ route('admin.posts.update-status', $post) }}" class="inline-block min-w-[9rem]">
+                                @csrf
+                                @method('PATCH')
+                                @if($posts->currentPage() > 1)
+                                    <input type="hidden" name="page" value="{{ $posts->currentPage() }}">
+                                @endif
+                                <label class="sr-only" for="post-status-{{ $post->id }}">{{ __('Status') }}</label>
+                                <select
+                                    id="post-status-{{ $post->id }}"
+                                    name="status"
+                                    class="w-full rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-800 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
+                                    onchange="this.form.requestSubmit()"
+                                >
+                                    <option value="{{ \App\Models\Post::STATUS_ACTIVE }}" @selected($post->status === \App\Models\Post::STATUS_ACTIVE)>{{ __('status.active') }}</option>
+                                    <option value="{{ \App\Models\Post::STATUS_DISABLED }}" @selected($post->status === \App\Models\Post::STATUS_DISABLED)>{{ __('status.disabled') }}</option>
+                                </select>
+                            </form>
                         </td>
                         @if(auth()->user()->canManageUsers())
                             <td class="px-4 py-3 text-slate-600">{{ $post->creator?->name ?? '—' }}</td>

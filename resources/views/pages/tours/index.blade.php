@@ -89,7 +89,10 @@
                             </select>
                         </label>
 
-                        <x-button type="submit" variant="primary" class="w-full justify-center">{{ __('Apply') }}</x-button>
+                        <x-button type="submit" variant="primary" class="w-full justify-center">
+                            <x-icon name="check" size="sm" />
+                            {{ __('Apply') }}
+                        </x-button>
                     </div>
                 </form>
             </aside>
@@ -100,7 +103,10 @@
                         <div class="text-base font-semibold text-slate-900">{{ __('No tours found') }}</div>
                         <p class="mt-2 text-sm text-slate-600">{{ __('Try relaxing filters') }}</p>
                         <div class="mt-5">
-                            <x-button href="{{ route('tours.index') }}" variant="secondary">{{ __('Reset filters') }}</x-button>
+                            <x-button href="{{ route('tours.index') }}" variant="secondary">
+                                <x-icon name="arrow-left" size="sm" />
+                                {{ __('Reset filters') }}
+                            </x-button>
                         </div>
                     </div>
                 @else

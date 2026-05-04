@@ -11,9 +11,7 @@
                 @click="sidebarOpen = true"
                 aria-label="Open sidebar"
             >
-                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
+                <x-icon name="menu" size="md" />
             </button>
 
             <div>
@@ -25,9 +23,7 @@
         <div class="hidden w-full max-w-md items-center gap-3 md:flex">
             <div class="relative w-full">
                 <div class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
-                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
-                    </svg>
+                    <x-icon name="search" size="md" />
                 </div>
                 <input
                     type="search"
@@ -46,9 +42,7 @@
                 aria-label="{{ __('Back to homepage') }}"
                 title="{{ __('Back to homepage') }}"
             >
-                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12 11.204 3.045a1.125 1.125 0 0 1 1.591 0L21.75 12M4.5 9.75V19.5A2.25 2.25 0 0 0 6.75 21.75H10.5v-6a2.25 2.25 0 0 1 2.25-2.25h.75A2.25 2.25 0 0 1 15.75 15.75v6h3.75A2.25 2.25 0 0 0 21.75 19.5V9.75" />
-                </svg>
+                <x-icon name="home" size="md" />
             </a>
 
             <div class="relative" x-data="{ langOpen: false }" @click.outside="langOpen = false">
@@ -65,15 +59,11 @@
                     :aria-expanded="langOpen.toString()"
                     aria-label="{{ __('Language') }}"
                 >
-                    <svg class="h-4 w-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.6 9h16.8M3.6 15h16.8" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.6 2.4 4.1 5.5 4.1 9S14.6 18.6 12 21c-2.6-2.4-4.1-5.5-4.1-9S9.4 5.4 12 3Z" />
-                    </svg>
+                    <x-icon name="globe-alt" size="sm" class="text-slate-500" />
                     <span>{{ $currentLocaleLabel }}</span>
-                    <svg class="h-4 w-4 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd"/>
-                    </svg>
+                    <span class="inline-flex text-slate-400">
+                        <x-icon name="chevron-down" size="sm" />
+                    </span>
                 </button>
 
                 <div
@@ -98,9 +88,7 @@
                 class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white p-2 text-slate-700 shadow-sm transition hover:bg-slate-50"
                 aria-label="Notifications"
             >
-                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
-                </svg>
+                <x-icon name="bell" size="md" />
             </button>
 
             <div class="relative" @click.outside="profileOpen = false">
@@ -114,9 +102,9 @@
                         {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
                     </span>
                     <span class="hidden max-w-[10rem] truncate sm:block">{{ auth()->user()->name ?? __('Account') }}</span>
-                    <svg class="h-4 w-4 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd"/>
-                    </svg>
+                    <span class="inline-flex text-slate-400">
+                        <x-icon name="chevron-down" size="sm" />
+                    </span>
                 </button>
 
                 <div
@@ -135,7 +123,10 @@
                     @endif
                     <form method="POST" action="{{ route('admin.logout') }}">
                         @csrf
-                        <button type="submit" class="block w-full px-4 py-3 text-left text-sm font-semibold text-rose-700 hover:bg-rose-50">{{ __('Sign out') }}</button>
+                        <button type="submit" class="inline-flex w-full items-center gap-2 px-4 py-3 text-sm font-semibold text-rose-700 hover:bg-rose-50">
+                            <x-icon name="arrow-left" size="sm" />
+                            {{ __('Sign out') }}
+                        </button>
                     </form>
                 </div>
             </div>

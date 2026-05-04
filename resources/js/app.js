@@ -1,7 +1,9 @@
 import Alpine from 'alpinejs';
+import focus from '@alpinejs/focus';
 import { mainSiteNav } from './siteNav';
 
 window.Alpine = Alpine;
+Alpine.plugin(focus);
 
 document.addEventListener('alpine:init', () => {
     Alpine.store('scrollLock', {

@@ -5,7 +5,10 @@
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div class="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                 <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('Destinations') }}</h1>
-                <a href="{{ route('admin.destinations.create') }}" class="inline-flex shrink-0 items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">{{ __('Add destination') }}</a>
+                <a href="{{ route('admin.destinations.create') }}" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">
+                    <x-icon name="add" size="sm" />
+                    {{ __('Add destination') }}
+                </a>
             </div>
 
             <div class="overflow-x-auto">

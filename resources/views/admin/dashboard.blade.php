@@ -6,9 +6,7 @@
         <div class="grid gap-4 sm:grid-cols-3">
             <div class="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm ring-1 ring-slate-100">
                 <div class="absolute right-4 top-4 rounded-xl bg-indigo-50 p-2 text-indigo-600 ring-1 ring-indigo-100">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 11.25h7.5m-7.5 3h7.5m-7.5 3h4.5M6.75 2.25H10.5A2.25 2.25 0 0 1 12.75 4.5v2.25A2.25 2.25 0 0 0 15 9h2.25A2.25 2.25 0 0 1 19.5 11.25v9A2.25 2.25 0 0 1 17.25 22.5h-9A2.25 2.25 0 0 1 6 20.25V4.5A2.25 2.25 0 0 1 8.25 2.25Z" />
-                    </svg>
+                    <x-icon name="document" size="md" />
                 </div>
                 <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('Total Posts') }}</div>
                 <div class="mt-3 text-3xl font-semibold tracking-tight text-slate-900 tabular-nums">{{ number_format($stats['posts'] ?? 0) }}</div>
@@ -17,10 +15,7 @@
 
             <div class="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm ring-1 ring-slate-100">
                 <div class="absolute right-4 top-4 rounded-xl bg-emerald-50 p-2 text-emerald-600 ring-1 ring-emerald-100">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                    </svg>
+                    <x-icon name="map" size="md" />
                 </div>
                 <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('Total tours') }}</div>
                 <div class="mt-3 text-3xl font-semibold tracking-tight text-slate-900 tabular-nums">{{ number_format($stats['tours'] ?? 0) }}</div>
@@ -29,9 +24,7 @@
 
             <div class="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm ring-1 ring-slate-100">
                 <div class="absolute right-4 top-4 rounded-xl bg-violet-50 p-2 text-violet-600 ring-1 ring-violet-100">
-                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z" />
-                    </svg>
+                    <x-icon name="inbox" size="md" />
                 </div>
                 <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('Total bookings') }}</div>
                 <div class="mt-3 text-3xl font-semibold tracking-tight text-slate-900 tabular-nums">{{ number_format($stats['bookings'] ?? 0) }}</div>
@@ -95,11 +88,23 @@
             <div>
                 <x-admin.card :title="__('Quick actions')" :subtitle="__('Shortcuts to common tasks')">
                     <div class="grid gap-3">
-                        <x-admin.button :href="route('admin.posts.create')" variant="primary">{{ __('Add new post') }}</x-admin.button>
-                        <x-admin.button :href="route('admin.tours.create')" variant="secondary">{{ __('Add tour') }}</x-admin.button>
-                        <x-admin.button :href="route('admin.bookings.index')" variant="secondary">{{ __('Bookings') }}</x-admin.button>
+                        <x-admin.button :href="route('admin.posts.create')" variant="primary">
+                            <x-icon name="add" size="sm" />
+                            {{ __('Add new post') }}
+                        </x-admin.button>
+                        <x-admin.button :href="route('admin.tours.create')" variant="secondary">
+                            <x-icon name="add" size="sm" />
+                            {{ __('Add tour') }}
+                        </x-admin.button>
+                        <x-admin.button :href="route('admin.bookings.index')" variant="secondary">
+                            <x-icon name="book" size="sm" />
+                            {{ __('Bookings') }}
+                        </x-admin.button>
                         @if(auth()->user()->canManageUsers())
-                            <x-admin.button :href="route('admin.settings.edit')" variant="secondary">{{ __('Update settings') }}</x-admin.button>
+                            <x-admin.button :href="route('admin.settings.edit')" variant="secondary">
+                                <x-icon name="cog" size="sm" />
+                                {{ __('Update settings') }}
+                            </x-admin.button>
                         @endif
                     </div>
                 </x-admin.card>

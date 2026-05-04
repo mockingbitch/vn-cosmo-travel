@@ -9,15 +9,13 @@
     <div class="relative" x-data="{ open: false }" @click.outside="open = false">
         <button
             type="button"
-            class="inline-flex items-center gap-0.5 rounded-lg px-2.5 py-1.5 hover:text-slate-900"
+            class="inline-flex items-center gap-2 rounded-lg px-2.5 py-1.5 hover:text-slate-900"
             :class="open ? 'text-slate-900' : ''"
             @click="open = !open"
             :aria-expanded="open.toString()"
         >
             {{ __('nav.tours_menu') }}
-            <svg class="h-4 w-4 text-slate-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd"/>
-            </svg>
+            <x-icon name="chevron-down" size="sm" class="text-slate-500" />
         </button>
         <div
             x-show="open"
@@ -40,15 +38,13 @@
     <div class="relative" x-data="{ open: false }" @click.outside="open = false">
         <button
             type="button"
-            class="inline-flex items-center gap-0.5 rounded-lg px-2.5 py-1.5 hover:text-slate-900"
+            class="inline-flex items-center gap-2 rounded-lg px-2.5 py-1.5 hover:text-slate-900"
             :class="open ? 'text-slate-900' : ''"
             @click="open = !open"
             :aria-expanded="open.toString()"
         >
             {{ __('nav.cruises_menu') }}
-            <svg class="h-4 w-4 text-slate-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd"/>
-            </svg>
+            <x-icon name="chevron-down" size="sm" class="text-slate-500" />
         </button>
         <div
             x-show="open"
@@ -74,15 +70,13 @@
     <div class="relative" x-data="{ open: false }" @click.outside="open = false">
         <button
             type="button"
-            class="inline-flex items-center gap-0.5 rounded-lg px-2.5 py-1.5 hover:text-slate-900"
+            class="inline-flex items-center gap-2 rounded-lg px-2.5 py-1.5 hover:text-slate-900"
             :class="open ? 'text-slate-900' : ''"
             @click="open = !open"
             :aria-expanded="open.toString()"
         >
             {{ __('nav.destinations_menu') }}
-            <svg class="h-4 w-4 text-slate-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd"/>
-            </svg>
+            <x-icon name="chevron-down" size="sm" class="text-slate-500" />
         </button>
         <div
             x-show="open"

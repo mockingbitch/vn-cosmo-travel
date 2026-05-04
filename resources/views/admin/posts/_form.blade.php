@@ -13,14 +13,16 @@
     @error('category_id')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
 </div>
 
+@unless(isset($post) && $post)
 <div>
     <label class="block text-sm font-medium text-slate-700">{{ __('Status') }}</label>
     <select name="status" class="mt-1 w-full max-w-md rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60">
-        <option value="{{ \App\Models\Post::STATUS_ACTIVE }}" @selected(old('status', $post?->status ?? \App\Models\Post::STATUS_ACTIVE) === \App\Models\Post::STATUS_ACTIVE)>{{ __('status.active') }}</option>
-        <option value="{{ \App\Models\Post::STATUS_DISABLED }}" @selected(old('status', $post?->status ?? \App\Models\Post::STATUS_ACTIVE) === \App\Models\Post::STATUS_DISABLED)>{{ __('status.disabled') }}</option>
+        <option value="{{ \App\Models\Post::STATUS_ACTIVE }}" @selected(old('status', \App\Models\Post::STATUS_ACTIVE) === \App\Models\Post::STATUS_ACTIVE)>{{ __('status.active') }}</option>
+        <option value="{{ \App\Models\Post::STATUS_DISABLED }}" @selected(old('status', \App\Models\Post::STATUS_ACTIVE) === \App\Models\Post::STATUS_DISABLED)>{{ __('status.disabled') }}</option>
     </select>
     @error('status')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
 </div>
+@endunless
 
 <div>
     <label class="block text-sm font-medium text-slate-700">{{ __('Title') }}</label>

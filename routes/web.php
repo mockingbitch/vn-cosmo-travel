@@ -87,6 +87,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
                 ->where('type', ServicePage::allowedTypesRoutePattern())
                 ->name('service-pages.update');
 
+            Route::patch('users/{user}/status', [AdminUserController::class, 'updateStatus'])->name('users.update-status');
             Route::resource('users', AdminUserController::class)->except(['show']);
         });
 
@@ -96,7 +97,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('media/{media}/usages', [AdminMediaController::class, 'usages'])->name('media.usages');
         Route::resource('media', AdminMediaController::class)->only(['index', 'store', 'destroy', 'show']);
 
+        Route::patch('tours/{tour}/status', [AdminTourController::class, 'updateStatus'])->name('tours.update-status');
         Route::resource('tours', AdminTourController::class)->except(['show']);
+        Route::patch('posts/{post}/status', [AdminPostController::class, 'updateStatus'])->name('posts.update-status');
         Route::resource('posts', AdminPostController::class)->except(['show']);
 
         Route::resource('destinations', AdminDestinationController::class)->except(['show']);

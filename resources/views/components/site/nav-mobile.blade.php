@@ -16,21 +16,22 @@
                 <a
                     href="{{ $entry['href'] }}"
                     @click="closeAll()"
-                    class="block rounded-xl px-3.5 py-2.5 transition @if($entry['active'] ?? false) bg-slate-100 @else hover:bg-slate-50/95 @endif"
+                    class="block rounded-xl px-3.5 py-2.5 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 @if($entry['active'] ?? false) bg-slate-100 @else hover:bg-slate-50/95 @endif"
                 >{{ $entry['label'] ?? '' }}</a>
             @elseif(($entry['type'] ?? '') === 'mega' && ($entry['panel'] ?? '') === 'daily')
                 <div class="overflow-hidden rounded-xl border border-slate-200/90 bg-white">
                     <button
                         type="button"
-                        class="flex w-full items-center justify-between px-3.5 py-2.5 text-left font-semibold"
+                        class="flex w-full items-center justify-between px-3.5 py-2.5 text-left font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-slate-400"
                         :class="mobileSection === 'mega-daily' ? 'text-slate-900' : 'text-slate-800'"
                         @click="toggleMobileSection('mega-daily')"
                         :aria-expanded="(mobileSection === 'mega-daily').toString()"
+                        aria-controls="mobile-panel-mega-daily"
                     >
                         {{ $entry['label'] ?? '' }}
-                        <span class="text-slate-400" x-text="mobileSection === 'mega-daily' ? '−' : '+'"></span>
+                        <span class="text-slate-400" aria-hidden="true" x-text="mobileSection === 'mega-daily' ? '−' : '+'"></span>
                     </button>
-                    <div x-cloak x-show="mobileSection === 'mega-daily'" x-transition class="border-t border-slate-100/90 px-3.5 py-3">
+                    <div id="mobile-panel-mega-daily" x-cloak x-show="mobileSection === 'mega-daily'" x-transition class="border-t border-slate-100/90 px-3.5 py-3">
                         <div class="max-h-[60vh] overflow-y-auto [scrollbar-gutter:stable]">
                             <x-site.mega-daily-lists
                                 :row1="$row1"
@@ -50,20 +51,22 @@
                 @php
                     $panelKey = (string) ($entry['panel'] ?? '');
                     $panelItems = $panelKey !== '' ? ($dropdownPanels[$panelKey] ?? []) : [];
+                    $mobilePanelDomId = 'mobile-panel-'.preg_replace('/[^a-zA-Z0-9_-]/', '', str_replace('_', '-', $panelKey));
                 @endphp
                 @continue($panelKey === '' || $panelItems === [])
                 <div class="overflow-hidden rounded-xl border border-slate-200/90 bg-white">
                     <button
                         type="button"
-                        class="flex w-full items-center justify-between px-3.5 py-2.5 text-left font-semibold"
+                        class="flex w-full items-center justify-between px-3.5 py-2.5 text-left font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-slate-400"
                         :class="mobileSection === @js($panelKey) ? 'text-slate-900' : 'text-slate-800'"
                         @click="toggleMobileSection(@js($panelKey))"
                         :aria-expanded="(mobileSection === @js($panelKey)).toString()"
+                        aria-controls="{{ $mobilePanelDomId }}"
                     >
                         {{ $entry['label'] ?? '' }}
-                        <span class="text-slate-400" x-text="mobileSection === @js($panelKey) ? '−' : '+'"></span>
+                        <span class="text-slate-400" aria-hidden="true" x-text="mobileSection === @js($panelKey) ? '−' : '+'"></span>
                     </button>
-                    <div x-cloak x-show="mobileSection === @js($panelKey)" x-transition class="space-y-0.5 border-t border-slate-100/90 px-1.5 py-1.5">
+                    <div id="{{ $mobilePanelDomId }}" x-cloak x-show="mobileSection === @js($panelKey)" x-transition class="space-y-0.5 border-t border-slate-100/90 px-1.5 py-1.5">
                         @foreach($panelItems as $item)
                             <a
                                 href="{{ $item['href'] }}"

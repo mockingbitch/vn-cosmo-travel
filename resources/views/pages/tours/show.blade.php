@@ -66,9 +66,7 @@
                             @click="active = (active - 1 + slides.length) % slides.length"
                         >
                             <span class="sr-only">{{ __('Previous image') }}</span>
-                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                            </svg>
+                            <x-icon name="chevron-left" size="md" />
                         </button>
                         <button
                             type="button"
@@ -76,9 +74,7 @@
                             @click="active = (active + 1) % slides.length"
                         >
                             <span class="sr-only">{{ __('Next image') }}</span>
-                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                            </svg>
+                            <x-icon name="chevron-right" size="md" />
                         </button>
                     </div>
 
@@ -102,9 +98,7 @@
                                     aria-hidden="true"
                                 >
                                     <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-slate-900 shadow-md ring-1 ring-slate-200/80">
-                                        <svg class="ml-0.5 h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                                            <path d="M8 5v14l11-7z" />
-                                        </svg>
+                                        <x-icon name="play" size="sm" class="ml-0.5 text-slate-900" />
                                     </span>
                                 </span>
                             </button>
@@ -302,6 +296,7 @@
                         </label>
 
                         <x-button type="submit" variant="primary" class="w-full justify-center" x-bind:class="loading ? 'opacity-70 cursor-not-allowed' : ''">
+                            <x-icon name="envelope" size="sm" />
                             <span x-show="!loading">{{ __('Request booking') }}</span>
                             <span x-show="loading">{{ __('Sending…') }}</span>
                         </x-button>

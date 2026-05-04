@@ -5,7 +5,10 @@
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div class="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                 <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('Tours') }}</h1>
-                <a href="{{ route('admin.tours.create') }}" class="inline-flex shrink-0 items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">{{ __('Add tour') }}</a>
+                <a href="{{ route('admin.tours.create') }}" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">
+                    <x-icon name="add" size="sm" />
+                    {{ __('Add tour') }}
+                </a>
             </div>
 
             <div class="overflow-x-auto">
@@ -43,12 +46,24 @@
                                     </a>
                                 </td>
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->destination?->localizedName() }}</td>
-                                <td class="px-4 py-3 sm:px-6">
-                                    @if($tour->status === \App\Models\Tour::STATUS_ACTIVE)
-                                        <span class="inline-flex rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">{{ __('status.active') }}</span>
-                                    @else
-                                        <span class="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-600">{{ __('status.disabled') }}</span>
-                                    @endif
+                                <td class="px-4 py-3 align-middle sm:px-6">
+                                    <form method="post" action="{{ route('admin.tours.update-status', $tour) }}" class="inline-block min-w-[9rem]">
+                                        @csrf
+                                        @method('PATCH')
+                                        @if($tours->currentPage() > 1)
+                                            <input type="hidden" name="page" value="{{ $tours->currentPage() }}">
+                                        @endif
+                                        <label class="sr-only" for="tour-status-{{ $tour->id }}">{{ __('Status') }}</label>
+                                        <select
+                                            id="tour-status-{{ $tour->id }}"
+                                            name="status"
+                                            class="w-full rounded-lg border border-slate-200 bg-white px-2 py-1 text-xs font-medium text-slate-800 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
+                                            onchange="this.form.requestSubmit()"
+                                        >
+                                            <option value="{{ \App\Models\Tour::STATUS_ACTIVE }}" @selected($tour->status === \App\Models\Tour::STATUS_ACTIVE)>{{ __('status.active') }}</option>
+                                            <option value="{{ \App\Models\Tour::STATUS_DISABLED }}" @selected($tour->status === \App\Models\Tour::STATUS_DISABLED)>{{ __('status.disabled') }}</option>
+                                        </select>
+                                    </form>
                                 </td>
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->duration }}</td>
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ number_format((int) $tour->price) }}₫</td>

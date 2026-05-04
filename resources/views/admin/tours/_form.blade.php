@@ -88,14 +88,16 @@
     @error('destination_id')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
 </div>
 
+@unless(isset($tour) && $tour)
 <div>
     <label class="block text-sm font-medium text-slate-700">{{ __('Status') }}</label>
     <select name="status" class="mt-1 w-full max-w-md rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60">
-        <option value="{{ \App\Models\Tour::STATUS_ACTIVE }}" @selected(old('status', $tour?->status ?? \App\Models\Tour::STATUS_ACTIVE) === \App\Models\Tour::STATUS_ACTIVE)>{{ __('status.active') }}</option>
-        <option value="{{ \App\Models\Tour::STATUS_DISABLED }}" @selected(old('status', $tour?->status ?? \App\Models\Tour::STATUS_ACTIVE) === \App\Models\Tour::STATUS_DISABLED)>{{ __('status.disabled') }}</option>
+        <option value="{{ \App\Models\Tour::STATUS_ACTIVE }}" @selected(old('status', \App\Models\Tour::STATUS_ACTIVE) === \App\Models\Tour::STATUS_ACTIVE)>{{ __('status.active') }}</option>
+        <option value="{{ \App\Models\Tour::STATUS_DISABLED }}" @selected(old('status', \App\Models\Tour::STATUS_ACTIVE) === \App\Models\Tour::STATUS_DISABLED)>{{ __('status.disabled') }}</option>
     </select>
     @error('status')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
 </div>
+@endunless
 
 <div>
     <label class="block text-sm font-medium text-slate-700">{{ __('Title') }}</label>
@@ -336,7 +338,8 @@
             </template>
         </div>
         <div class="mt-4 flex justify-end border-t border-slate-100 pt-4">
-            <button type="button" class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800" @click="openServicesModal = false">
+            <button type="button" class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800" @click="openServicesModal = false">
+                <x-icon name="check" size="sm" />
                 {{ __('admin.tour_form.catalog_modal_done') }}
             </button>
         </div>
@@ -352,7 +355,8 @@
             </template>
         </div>
         <div class="mt-4 flex justify-end border-t border-slate-100 pt-4">
-            <button type="button" class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800" @click="openAmenitiesModal = false">
+            <button type="button" class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800" @click="openAmenitiesModal = false">
+                <x-icon name="check" size="sm" />
                 {{ __('admin.tour_form.catalog_modal_done') }}
             </button>
         </div>

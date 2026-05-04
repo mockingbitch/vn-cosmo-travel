@@ -67,6 +67,17 @@ class PostAdminService
         return $updated;
     }
 
+    public function updateStatus(Post $post, string $status): void
+    {
+        $data = ['status' => $status];
+
+        if (($uid = auth()->id()) !== null) {
+            $data['updated_by'] = $uid;
+        }
+
+        $this->posts->adminUpdate($post, $data);
+    }
+
     public function delete(Post $post): void
     {
         $this->posts->adminDelete($post);

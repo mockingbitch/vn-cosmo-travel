@@ -3,6 +3,16 @@
 @section('content')
     <div class="mx-auto w-full max-w-xl">
         <x-admin.card :title="__('Edit user')" :subtitle="__('admin.users.edit_subtitle')">
+            <div class="mb-4 flex flex-wrap items-center gap-2 text-sm text-slate-600">
+                <span>{{ __('Status') }}:</span>
+                @if($editUser->status === \App\Models\User::STATUS_ACTIVE)
+                    <span class="inline-flex rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-semibold text-emerald-800">{{ __('status.active') }}</span>
+                @else
+                    <span class="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-600">{{ __('status.disabled') }}</span>
+                @endif
+                <span class="text-xs text-slate-500">{{ __('admin.users.status_hint_list') }}</span>
+            </div>
+
             <form method="POST" action="{{ route('admin.users.update', $editUser) }}" class="space-y-4">
                 @csrf
                 @method('PUT')
@@ -36,20 +46,15 @@
                     <p class="text-xs text-rose-600">{{ $message }}</p>
                 @enderror
 
-                <div>
-                    <label class="block text-sm font-medium text-slate-700">{{ __('Status') }}</label>
-                    <select name="status" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60">
-                        <option value="{{ \App\Models\User::STATUS_ACTIVE }}" @selected(old('status', $editUser->status) === \App\Models\User::STATUS_ACTIVE)>{{ __('status.active') }}</option>
-                        <option value="{{ \App\Models\User::STATUS_DISABLED }}" @selected(old('status', $editUser->status) === \App\Models\User::STATUS_DISABLED)>{{ __('status.disabled') }}</option>
-                    </select>
-                    @error('status')
-                        <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 <div class="flex flex-wrap gap-3 pt-2">
-                    <x-admin.button type="submit" variant="primary">{{ __('Save') }}</x-admin.button>
-                    <x-admin.button :href="route('admin.users.index')" variant="secondary">{{ __('Cancel') }}</x-admin.button>
+                    <x-admin.button type="submit" variant="primary">
+                        <x-icon name="save" size="sm" />
+                        {{ __('Save') }}
+                    </x-admin.button>
+                    <x-admin.button :href="route('admin.users.index')" variant="secondary">
+                        <x-icon name="arrow-left" size="sm" />
+                        {{ __('Cancel') }}
+                    </x-admin.button>
                 </div>
             </form>
         </x-admin.card>

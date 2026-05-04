@@ -7,7 +7,7 @@ use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class UpdateUserRequest extends FormRequest
+class UpdateUserStatusRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,15 +19,8 @@ class UpdateUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        /** @var User $target */
-        $target = $this->route('user');
-        $targetId = $target instanceof User ? $target->id : 0;
-
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users', 'email')->ignore($targetId)],
-            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-            'is_admin' => ['sometimes', 'boolean'],
+            'status' => ['required', 'string', Rule::in([User::STATUS_ACTIVE, User::STATUS_DISABLED])],
         ];
     }
 
@@ -40,14 +33,21 @@ class UpdateUserRequest extends FormRequest
                 return;
             }
 
-            $willBeAdmin = $this->boolean('is_admin');
-            if ($target->is_admin && ! $willBeAdmin && User::administratorsCount() <= 1) {
+            $willBeDisabled = $this->input('status') === User::STATUS_DISABLED;
+
+            if ($willBeDisabled && $target->id === auth()->id()) {
                 $validator->errors()->add(
-                    'is_admin',
-                    __('validation.admin_must_remain'),
+                    'status',
+                    __('validation.cannot_disable_self'),
                 );
             }
 
+            if ($willBeDisabled && $target->is_admin && $target->isActive() && User::administratorsCount() <= 1) {
+                $validator->errors()->add(
+                    'status',
+                    __('validation.admin_must_remain_active'),
+                );
+            }
         });
     }
 }

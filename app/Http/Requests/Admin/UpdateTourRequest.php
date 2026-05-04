@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Admin;
 
-use App\Models\Tour;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -55,7 +54,6 @@ class UpdateTourRequest extends FormRequest
             'itinerary.*.description' => ['nullable', 'string', 'max:10000'],
             'gallery' => ['present', 'array'],
             'gallery.*' => ['nullable', 'string', 'max:2048'],
-            'status' => ['required', 'string', Rule::in([Tour::STATUS_ACTIVE, Tour::STATUS_DISABLED])],
         ];
     }
 }

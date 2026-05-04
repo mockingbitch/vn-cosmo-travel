@@ -31,8 +31,14 @@
                 </div>
 
                 <div class="flex flex-wrap gap-3 pt-2">
-                    <x-admin.button type="submit" variant="primary">{{ __('Create') }}</x-admin.button>
-                    <x-admin.button :href="route('admin.users.index')" variant="secondary">{{ __('Cancel') }}</x-admin.button>
+                    <x-admin.button type="submit" variant="primary">
+                        <x-icon name="add" size="sm" />
+                        {{ __('Create') }}
+                    </x-admin.button>
+                    <x-admin.button :href="route('admin.users.index')" variant="secondary">
+                        <x-icon name="arrow-left" size="sm" />
+                        {{ __('Cancel') }}
+                    </x-admin.button>
                 </div>
             </form>
         </x-admin.card>

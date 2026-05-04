@@ -15,7 +15,10 @@
                 @include('admin.banners._form', ['banner' => $banner])
 
                 <div class="mt-6 flex items-center justify-end gap-3">
-                    <x-admin.button type="submit" variant="primary">{{ __('Save changes') }}</x-admin.button>
+                    <x-admin.button type="submit" variant="primary">
+                        <x-icon name="save" size="sm" />
+                        {{ __('Save changes') }}
+                    </x-admin.button>
                 </div>
             </form>
         </div>
@@ -160,11 +163,17 @@
                             </template>
 
                             <div class="flex items-center justify-end gap-2">
-                                <x-admin.button variant="ghost" type="button" @click="previewOpen = false">{{ __('Close') }}</x-admin.button>
+                                <x-admin.button variant="ghost" type="button" @click="previewOpen = false">
+                                    <x-icon name="close" size="sm" />
+                                    {{ __('Close') }}
+                                </x-admin.button>
 
                                 <form method="POST" :action="'{{ url('/admin/banners/apply') }}/' + preview.id" onsubmit="return confirm('{{ __('Apply this version?') }}')">
                                     @csrf
-                                    <x-admin.button variant="primary" type="submit">{{ __('Apply') }}</x-admin.button>
+                                    <x-admin.button variant="primary" type="submit">
+                                        <x-icon name="check" size="sm" />
+                                        {{ __('Apply') }}
+                                    </x-admin.button>
                                 </form>
                             </div>
                         </div>

@@ -19,7 +19,7 @@
             <a
                 href="{{ $entry['href'] }}"
                 @class([
-                    'rounded-lg px-2.5 py-2 transition',
+                    'rounded-lg px-2.5 py-2 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2',
                     'bg-slate-100/95 text-slate-900' => $entry['active'] ?? false,
                     'text-slate-800 hover:text-slate-900' => !($entry['active'] ?? false),
                 ])
@@ -32,22 +32,20 @@
             >
                 <button
                     type="button"
-                    class="inline-flex items-center gap-1 rounded-lg px-2.5 py-2 transition"
+                    class="inline-flex items-center gap-1 rounded-lg px-2.5 py-2 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
                     :class="panel === 'daily' ? 'bg-slate-100/95 text-slate-900' : 'text-slate-800 hover:text-slate-900'"
                     @click="isDesktop ? (clearTimers(), (panel = panel === 'daily' ? null : 'daily')) : toggle('daily')"
                     :aria-expanded="(panel === 'daily').toString()"
+                    aria-haspopup="true"
                     aria-controls="mega-daily-trips"
                 >
                     <span class="whitespace-nowrap">{{ $entry['label'] ?? '' }}</span>
-                    <svg
-                        class="h-3.5 w-3.5 shrink-0 text-slate-500 transition"
+                    <span
+                        class="inline-flex shrink-0 text-slate-500 transition"
                         :class="panel==='daily' && 'rotate-180'"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
                     >
-                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd"/>
-                    </svg>
+                        <x-icon name="chevron-down" size="sm" class="!h-3.5 !w-3.5" />
+                    </span>
                 </button>
             </div>
         @elseif(($entry['type'] ?? '') === 'dropdown')
@@ -64,7 +62,7 @@
             >
                 <button
                     type="button"
-                    class="inline-flex items-center gap-1 rounded-lg px-2.5 py-2 transition"
+                    class="inline-flex items-center gap-1 rounded-lg px-2.5 py-2 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
                     :class="panel === @js($panelKey) ? 'bg-slate-100/95 text-slate-900' : ($entry['active'] ?? false ? 'bg-slate-100/95' : 'text-slate-800 hover:text-slate-900')"
                     @click="isDesktop ? (clearTimers(), (panel = panel === @js($panelKey) ? null : @js($panelKey))) : toggle(@js($panelKey))"
                     :aria-expanded="(panel === @js($panelKey)).toString()"
@@ -72,15 +70,12 @@
                     aria-controls="{{ $panelDomId }}"
                 >
                     <span class="whitespace-nowrap">{{ $entry['label'] ?? '' }}</span>
-                    <svg
-                        class="h-3.5 w-3.5 shrink-0 text-slate-500 transition"
+                    <span
+                        class="inline-flex shrink-0 text-slate-500 transition"
                         :class="panel===@js($panelKey) && 'rotate-180'"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
                     >
-                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd"/>
-                    </svg>
+                        <x-icon name="chevron-down" size="sm" class="!h-3.5 !w-3.5" />
+                    </span>
                 </button>
                 <div
                     x-cloak
@@ -100,7 +95,7 @@
                     @foreach($panelItems as $item)
                         <a
                             href="{{ $item['href'] }}"
-                            class="block px-4 py-2.5 text-slate-800 transition hover:bg-slate-50/95 hover:text-emerald-800"
+                            class="block px-4 py-2.5 text-slate-800 transition hover:bg-slate-50/95 hover:text-emerald-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-slate-400"
                             role="menuitem"
                         >{{ $item['label'] }}</a>
                     @endforeach

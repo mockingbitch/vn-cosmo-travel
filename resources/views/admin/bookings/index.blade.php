@@ -63,7 +63,10 @@
                 </label>
 
                 <div class="flex items-end gap-2 sm:col-span-1">
-                    <x-admin.button type="submit" variant="primary" class="w-full justify-center">{{ __('Filter') }}</x-admin.button>
+                    <x-admin.button type="submit" variant="primary" class="w-full justify-center">
+                        <x-icon name="search" size="sm" />
+                        {{ __('Filter') }}
+                    </x-admin.button>
                 </div>
             </form>
         </x-admin.card>
@@ -129,13 +132,11 @@
                                     href="{{ $tourFrontendUrl }}"
                                     target="_blank"
                                     rel="noopener"
-                                    class="inline-flex items-center gap-1.5 font-medium text-slate-900 hover:text-indigo-700 hover:underline"
+                                    class="inline-flex items-center gap-2 font-medium text-slate-900 hover:text-indigo-700 hover:underline"
                                     title="{{ __('View on site') }}"
                                 >
                                     <span class="line-clamp-2">{{ $booking->tour->title }}</span>
-                                    <svg class="h-3.5 w-3.5 shrink-0 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                                    </svg>
+                                    <x-icon name="external-link" size="sm" class="!h-3.5 !w-3.5 shrink-0 text-slate-400" />
                                 </a>
                             @else
                                 <div class="font-medium text-slate-500">—</div>
@@ -185,9 +186,7 @@
                 @empty
                     <div class="grid place-items-center px-6 py-16 text-center">
                         <div class="grid h-12 w-12 place-items-center rounded-2xl bg-slate-100 text-slate-400">
-                            <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
-                            </svg>
+                            <x-icon name="envelope" size="lg" />
                         </div>
                         <div class="mt-3 text-sm font-semibold text-slate-900">{{ __('No bookings yet') }}</div>
                         <p class="mt-1 max-w-md text-xs text-slate-500">{{ __('When customers submit a booking from a tour page, it will appear here.') }}</p>
@@ -206,10 +205,8 @@
                                 <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('Tour') }}</div>
                                 <div class="mt-1 text-sm font-semibold text-slate-900" x-text="detail.tour"></div>
                                 <template x-if="detail.tourFrontendUrl">
-                                    <a :href="detail.tourFrontendUrl" target="_blank" rel="noopener" class="mt-1.5 inline-flex items-center gap-1 text-xs font-semibold text-indigo-700 hover:underline">
-                                        <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                                        </svg>
+                                    <a :href="detail.tourFrontendUrl" target="_blank" rel="noopener" class="mt-1.5 inline-flex items-center gap-2 text-xs font-semibold text-indigo-700 hover:underline">
+                                        <x-icon name="external-link" size="sm" class="!h-3.5 !w-3.5" />
                                         {{ __('View on site') }}
                                     </a>
                                 </template>
@@ -280,7 +277,10 @@
                                     @endforeach
                                 </select>
                             </label>
-                            <x-admin.button type="submit" variant="primary">{{ __('Save') }}</x-admin.button>
+                            <x-admin.button type="submit" variant="primary">
+                                <x-icon name="save" size="sm" />
+                                {{ __('Save') }}
+                            </x-admin.button>
                         </form>
                     </div>
                 </x-admin.modal>

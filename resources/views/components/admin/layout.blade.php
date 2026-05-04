@@ -37,18 +37,18 @@
                     <div
                         x-show="toast"
                         x-transition.opacity
+                        role="status"
+                        aria-live="polite"
                         class="mb-6 flex items-start justify-between gap-4 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800 shadow-sm"
                     >
                         <div class="font-medium">{{ session('status') }}</div>
                         <button
                             type="button"
-                            class="rounded-lg p-1 text-emerald-900/70 hover:bg-emerald-100"
+                            class="rounded-lg p-1 text-emerald-900/70 hover:bg-emerald-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2"
                             @click="toast = false"
-                            aria-label="Dismiss"
+                            aria-label="{{ __('a11y.dismiss_notification') }}"
                         >
-                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z"/>
-                            </svg>
+                            <x-icon name="close" size="md" />
                         </button>
                     </div>
                 @endif
