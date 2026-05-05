@@ -11,11 +11,11 @@
         @method('PUT')
 
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div class="text-sm font-semibold text-slate-900">{{ __('Contact') }}</div>
+            <div class="text-sm font-semibold text-slate-900">{{ __('contact') }}</div>
 
             <div class="mt-4 grid gap-4 sm:grid-cols-2">
                 <label class="grid gap-1">
-                    <span class="text-xs font-semibold text-slate-700">{{ __('Email') }}</span>
+                    <span class="text-xs font-semibold text-slate-700">{{ __('email') }}</span>
                     <input
                         type="email"
                         name="contact_email"
@@ -28,7 +28,7 @@
                 </label>
 
                 <label class="grid gap-1">
-                    <span class="text-xs font-semibold text-slate-700">{{ __('Phone') }}</span>
+                    <span class="text-xs font-semibold text-slate-700">{{ __('phone') }}</span>
                     <input
                         type="text"
                         name="contact_phone"
@@ -43,7 +43,7 @@
 
             <div class="mt-4 grid gap-4">
                 <label class="grid gap-1">
-                    <span class="text-xs font-semibold text-slate-700">{{ __('Address') }}</span>
+                    <span class="text-xs font-semibold text-slate-700">{{ __('address') }}</span>
                     <input
                         type="text"
                         name="contact_address"

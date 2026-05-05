@@ -15,10 +15,18 @@ use Illuminate\View\View;
 
 class PostController extends Controller
 {
-    public function index(PostAdminService $posts): View
+    public function index(Request $request, PostAdminService $posts, CategoryRepositoryInterface $categories): View
     {
+        $filters = [
+            'q' => trim((string) $request->query('q', '')),
+            'status' => trim((string) $request->query('status', '')),
+            'category_id' => trim((string) $request->query('category_id', '')),
+        ];
+
         return view('admin.posts.index', [
-            'posts' => $posts->paginate(15),
+            'posts' => $posts->paginate(15, $filters),
+            'filters' => $filters,
+            'categories' => $categories->all(),
         ]);
     }
 
@@ -72,6 +80,18 @@ class PostController extends Controller
             if ($page > 0) {
                 $query['page'] = $page;
             }
+        }
+
+        if ($request->filled('q')) {
+            $query['q'] = trim((string) $request->input('q'));
+        }
+
+        if ($request->filled('status')) {
+            $query['status'] = (string) $request->input('status');
+        }
+
+        if ($request->filled('category_id')) {
+            $query['category_id'] = (string) $request->input('category_id');
         }
 
         return $query;

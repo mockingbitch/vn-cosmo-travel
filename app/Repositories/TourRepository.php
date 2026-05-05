@@ -83,12 +83,32 @@ class TourRepository implements TourRepositoryInterface
             ->get();
     }
 
-    public function adminPaginate(int $perPage = 15): LengthAwarePaginator
+    public function adminPaginate(int $perPage = 15, array $filters = []): LengthAwarePaginator
     {
         return Tour::query()
             ->with(['destination', 'creator', 'updatedBy'])
+            ->when(
+                filled($filters['q'] ?? null),
+                function ($query) use ($filters): void {
+                    $keyword = trim((string) $filters['q']);
+                    $query->where(function ($inner) use ($keyword): void {
+                        $inner
+                            ->where('title', 'like', '%'.$keyword.'%')
+                            ->orWhere('slug', 'like', '%'.$keyword.'%');
+                    });
+                }
+            )
+            ->when(
+                filled($filters['status'] ?? null),
+                fn ($query) => $query->where('status', (string) $filters['status'])
+            )
+            ->when(
+                filled($filters['destination_id'] ?? null),
+                fn ($query) => $query->where('destination_id', (int) $filters['destination_id'])
+            )
             ->latest('id')
-            ->paginate($perPage);
+            ->paginate($perPage)
+            ->withQueryString();
     }
 
     public function adminCreate(array $data): Tour

@@ -15,16 +15,45 @@ class UserController extends Controller
 {
     public function index(): View
     {
+        $q = trim((string) request()->query('q', ''));
+        $status = trim((string) request()->query('status', ''));
+        $role = trim((string) request()->query('role', ''));
+
+        $users = User::query()
+            ->when($q !== '', function ($query) use ($q): void {
+                $query->where(function ($inner) use ($q): void {
+                    $inner
+                        ->where('name', 'like', '%'.$q.'%')
+                        ->orWhere('email', 'like', '%'.$q.'%');
+                });
+            })
+            ->when($status !== '', fn ($query) => $query->where('status', $status))
+            ->when($role !== '', function ($query) use ($role): void {
+                if ($role === 'admin') {
+                    $query->where('is_admin', true);
+                } elseif ($role === 'editor') {
+                    $query->where('is_admin', false);
+                }
+            })
+            ->orderByDesc('id')
+            ->paginate(20)
+            ->withQueryString();
+
         return view('admin.users.index', [
-            'title' => __('Users'),
-            'users' => User::query()->orderByDesc('id')->paginate(20)->withQueryString(),
+            'title' => __('users'),
+            'users' => $users,
+            'filters' => [
+                'q' => $q,
+                'status' => $status,
+                'role' => $role,
+            ],
         ]);
     }
 
     public function create(): View
     {
         return view('admin.users.create', [
-            'title' => __('New user'),
+            'title' => __('ui.new_user'),
         ]);
     }
 
@@ -47,7 +76,7 @@ class UserController extends Controller
     public function edit(User $user): View
     {
         return view('admin.users.edit', [
-            'title' => __('Edit user'),
+            'title' => __('ui.edit_user'),
             'editUser' => $user,
         ]);
     }
@@ -94,6 +123,18 @@ class UserController extends Controller
             if ($page > 0) {
                 $query['page'] = $page;
             }
+        }
+
+        if ($request->filled('q')) {
+            $query['q'] = trim((string) $request->input('q'));
+        }
+
+        if ($request->filled('status')) {
+            $query['status'] = (string) $request->input('status');
+        }
+
+        if ($request->filled('role')) {
+            $query['role'] = (string) $request->input('role');
         }
 
         return $query;

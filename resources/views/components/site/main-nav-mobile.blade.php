@@ -2,9 +2,9 @@
     'destinationGroups',
 ])
 
-<nav x-data="{ t: false, c: false, d: false }" class="w-full" aria-label="{{ __('Mobile navigation') }}">
+<nav x-data="{ t: false, c: false, d: false }" class="w-full" aria-label="{{ __('nav.header.mobile_navigation') }}">
     <div class="grid gap-1 text-sm font-medium text-slate-700">
-        <a class="rounded-lg px-3 py-2 hover:bg-slate-50" href="{{ route('home') }}">{{ __('Home') }}</a>
+        <a class="rounded-lg px-3 py-2 hover:bg-slate-50" href="{{ route('home') }}">{{ __('nav.header.home') }}</a>
 
         <div class="rounded-lg border border-slate-100">
             <button type="button" class="flex w-full items-center justify-between px-3 py-2 text-left font-semibold" @click="t = !t" :aria-expanded="t">
@@ -71,7 +71,7 @@
             </div>
         </div>
 
-        <a class="rounded-lg px-3 py-2 hover:bg-slate-50" href="{{ route('blog.index') }}">{{ __('Blog') }}</a>
-        <a class="rounded-lg px-3 py-2 hover:bg-slate-50" href="{{ route('home') }}#contact">{{ __('Contact') }}</a>
+        <a class="rounded-lg px-3 py-2 hover:bg-slate-50" href="{{ route('blog.index') }}">{{ __('nav.header.blog') }}</a>
+        <a class="rounded-lg px-3 py-2 hover:bg-slate-50" href="{{ route('home') }}#contact">{{ __('nav.header.contact') }}</a>
     </div>
 </nav>

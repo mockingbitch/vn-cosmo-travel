@@ -36,13 +36,13 @@ class BookingController extends Controller
 
         if ($request->expectsJson()) {
             return response()->json([
-                'message' => __('Booking request received. We will contact you shortly.'),
+                'message' => __('ui.booking_request_received_we_will_contact_you_shortly'),
                 'booking_id' => $booking->id,
             ]);
         }
 
         return back()
-            ->with('booking_success', __('Booking request received. We will contact you shortly.'))
+            ->with('booking_success', __('ui.booking_request_received_we_will_contact_you_shortly'))
             ->withInput([]);
     }
 }

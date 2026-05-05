@@ -9,11 +9,11 @@
 ])
 
 @php
-    $confirmTitle = $title ?: __('Confirm delete');
-    $confirmMessage = $message ?: __('Are you sure you want to delete this item?');
-    $confirmDescription = $description ?: __('This action cannot be undone.');
-    $confirmLabelText = $confirmLabel ?: __('Delete');
-    $cancelLabelText = $cancelLabel ?: __('Cancel');
+    $confirmTitle = $title ?: __('ui.confirm_delete');
+    $confirmMessage = $message ?: __('ui.are_you_sure_you_want_to_delete_this_item');
+    $confirmDescription = $description ?: __('ui.this_action_cannot_be_undone');
+    $confirmLabelText = $confirmLabel ?: __('delete');
+    $cancelLabelText = $cancelLabel ?: __('cancel');
     $deleteUrlJs = $deleteUrl !== null ? \Illuminate\Support\Js::from((string) $deleteUrl) : 'null';
     $itemNameJs = $itemName !== null ? \Illuminate\Support\Js::from((string) $itemName) : 'null';
 @endphp
@@ -56,7 +56,7 @@
                     <x-admin.button type="submit" variant="danger" x-bind:disabled="submitting">
                         <x-icon name="delete" size="sm" />
                         <span x-show="!submitting">{{ $confirmLabelText }}</span>
-                        <span x-show="submitting" x-cloak>{{ __('Deleting…') }}</span>
+                        <span x-show="submitting" x-cloak>{{ __('deleting…') }}</span>
                     </x-admin.button>
                 </form>
             </div>

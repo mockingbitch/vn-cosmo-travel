@@ -36,7 +36,7 @@ class BlogController extends Controller
 
         return view('pages.blog.show', [
             'seo' => new SeoViewModel(
-                title: $post->title.' — '.__('Blog suffix'),
+                title: $post->title.' — '.__('ui.blog_suffix'),
                 description: \Illuminate\Support\Str::limit(strip_tags((string) $post->content), 155),
             ),
             'post' => $post,

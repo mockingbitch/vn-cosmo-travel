@@ -28,7 +28,7 @@
 
         <div class="mt-4 space-y-4">
             <div>
-                <label class="block text-sm font-medium text-slate-700">{{ __('Title') }}</label>
+                <label class="block text-sm font-medium text-slate-700">{{ __('title') }}</label>
                 <input
                     type="text"
                     name="translations[{{ $loc }}][title]"
@@ -45,7 +45,7 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-slate-700">{{ __('Content (HTML allowed)') }}</label>
+                <label class="block text-sm font-medium text-slate-700">{{ __('ui.content_html_allowed') }}</label>
                 <p class="mt-1 text-xs text-slate-500">
                     {{ __('Use wordtohtml.net to format blog content.') }}
                     <a class="font-semibold text-slate-700 underline underline-offset-4 hover:text-slate-900" href="https://wordtohtml.net/" target="_blank" rel="noopener noreferrer">wordtohtml.net</a>.

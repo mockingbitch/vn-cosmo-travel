@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Contracts\Interfaces\SettingRepositoryInterface;
-use App\Services\SettingsService;
 use Illuminate\Database\Seeder;
 
 class SettingsSeeder extends Seeder
@@ -31,9 +30,9 @@ class SettingsSeeder extends Seeder
 
         $settings->set('content.home_why', $this->homeWhyFromLang());
 
-        $settings->set('content.testimonials', app(SettingsService::class)->testimonialsBaseline());
+        $settings->set('content.testimonials', $this->testimonialsSeedData());
 
-        app(SettingsService::class)->forgetCache();
+        app(\App\Services\SettingsService::class)->forgetCache();
 
         app()->setLocale($defaultLocale);
     }
@@ -67,5 +66,43 @@ class SettingsSeeder extends Seeder
         }
 
         return $out;
+    }
+
+    /**
+     * @return array{title: string, subtitle: string, items: list<array{quote: string, author: string, meta: string, image_url: string, scene_alt: string}>}
+     */
+    private function testimonialsSeedData(): array
+    {
+        app()->setLocale('en');
+
+        $urls = array_values((array) config('home.testimonial_scene_urls', []));
+
+        return [
+            'title' => (string) __('home.testimonials.title'),
+            'subtitle' => (string) __('home.testimonials.subtitle'),
+            'items' => [
+                [
+                    'quote' => (string) __('home.testimonials.quote_1'),
+                    'author' => (string) __('home.testimonials.author_1'),
+                    'meta' => (string) __('home.testimonials.meta_1'),
+                    'image_url' => (string) ($urls[0] ?? ''),
+                    'scene_alt' => (string) __('home.testimonials.scene_alt_1'),
+                ],
+                [
+                    'quote' => (string) __('home.testimonials.quote_2'),
+                    'author' => (string) __('home.testimonials.author_2'),
+                    'meta' => (string) __('home.testimonials.meta_2'),
+                    'image_url' => (string) ($urls[1] ?? ''),
+                    'scene_alt' => (string) __('home.testimonials.scene_alt_2'),
+                ],
+                [
+                    'quote' => (string) __('home.testimonials.quote_3'),
+                    'author' => (string) __('home.testimonials.author_3'),
+                    'meta' => (string) __('home.testimonials.meta_3'),
+                    'image_url' => (string) ($urls[2] ?? ''),
+                    'scene_alt' => (string) __('home.testimonials.scene_alt_3'),
+                ],
+            ],
+        ];
     }
 }

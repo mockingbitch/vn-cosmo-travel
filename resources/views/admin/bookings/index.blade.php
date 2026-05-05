@@ -15,8 +15,8 @@
     <div class="grid gap-6">
         <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
             <div>
-                <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('Bookings') }}</h1>
-                <p class="mt-1 text-sm text-slate-600">{{ __('Booking requests submitted from the tour pages.') }}</p>
+                <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('bookings') }}</h1>
+                <p class="mt-1 text-sm text-slate-600">{{ __('ui.booking_requests_submitted_from_the_tour_pages') }}</p>
             </div>
             <div class="text-xs font-semibold text-slate-500">
                 {{ __(':total bookings', ['total' => $bookings->total()]) }}
@@ -26,23 +26,23 @@
         <x-admin.card>
             <form method="GET" class="grid gap-3 sm:grid-cols-12">
                 <label class="sm:col-span-5">
-                    <span class="mb-1 block text-xs font-semibold text-slate-700">{{ __('Search') }}</span>
+                    <span class="mb-1 block text-xs font-semibold text-slate-700">{{ __('search') }}</span>
                     <input
                         type="search"
                         name="q"
                         value="{{ $filters['q'] ?? '' }}"
-                        placeholder="{{ __('Name, email, phone, note…') }}"
+                        placeholder="{{ __('ui.name_email_phone_note') }}"
                         class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                     />
                 </label>
 
                 <label class="sm:col-span-3">
-                    <span class="mb-1 block text-xs font-semibold text-slate-700">{{ __('Status') }}</span>
+                    <span class="mb-1 block text-xs font-semibold text-slate-700">{{ __('status') }}</span>
                     <select
                         name="status"
                         class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                     >
-                        <option value="">{{ __('All') }}</option>
+                        <option value="">{{ __('all') }}</option>
                         @foreach(['pending', 'confirmed', 'cancelled'] as $st)
                             <option value="{{ $st }}" @selected(($filters['status'] ?? '') === $st)>{{ __('status.'.$st) }}</option>
                         @endforeach
@@ -50,12 +50,12 @@
                 </label>
 
                 <label class="sm:col-span-3">
-                    <span class="mb-1 block text-xs font-semibold text-slate-700">{{ __('Tour') }}</span>
+                    <span class="mb-1 block text-xs font-semibold text-slate-700">{{ __('tour') }}</span>
                     <select
                         name="tour_id"
                         class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                     >
-                        <option value="">{{ __('All') }}</option>
+                        <option value="">{{ __('all') }}</option>
                         @foreach($tours as $t)
                             <option value="{{ $t->id }}" @selected((int) ($filters['tour_id'] ?? 0) === (int) $t->id)>{{ $t->title }}</option>
                         @endforeach
@@ -65,7 +65,7 @@
                 <div class="flex items-end gap-2 sm:col-span-1">
                     <x-admin.button type="submit" variant="primary" class="w-full justify-center">
                         <x-icon name="search" size="sm" />
-                        {{ __('Filter') }}
+                        {{ __('filter') }}
                     </x-admin.button>
                 </div>
             </form>
@@ -85,17 +85,17 @@
                             <table class="min-w-full divide-y divide-slate-200 text-sm">
                                 <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
                                     <tr>
-                                        <th class="px-4 py-3">{{ __('Tour') }}</th>
-                                        <th class="px-4 py-3">{{ __('Guest') }}</th>
-                                        <th class="px-4 py-3">{{ __('Travel date') }}</th>
-                                        <th class="px-4 py-3">{{ __('People') }}</th>
-                                        <th class="px-4 py-3">{{ __('Status') }}</th>
-                                        <th class="px-4 py-3">{{ __('Submitted') }}</th>
+                                        <th class="px-4 py-3">{{ __('tour') }}</th>
+                                        <th class="px-4 py-3">{{ __('guest') }}</th>
+                                        <th class="px-4 py-3">{{ __('ui.travel_date') }}</th>
+                                        <th class="px-4 py-3">{{ __('people') }}</th>
+                                        <th class="px-4 py-3">{{ __('status') }}</th>
+                                        <th class="px-4 py-3">{{ __('submitted') }}</th>
                                         @if(auth()->user()->canManageUsers())
                                             <th class="px-4 py-3">{{ __('audit.created_by') }}</th>
                                             <th class="px-4 py-3">{{ __('audit.updated_by') }}</th>
                                         @endif
-                                        <th class="px-4 py-3 text-right">{{ __('Actions') }}</th>
+                                        <th class="px-4 py-3 text-right">{{ __('actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-100 bg-white">
@@ -133,7 +133,7 @@
                                     target="_blank"
                                     rel="noopener"
                                     class="inline-flex items-center gap-2 font-medium text-slate-900 hover:text-indigo-700 hover:underline"
-                                    title="{{ __('View on site') }}"
+                                    title="{{ __('ui.view_on_site') }}"
                                 >
                                     <span class="line-clamp-2">{{ $booking->tour->title }}</span>
                                     <x-icon name="external-link" size="sm" class="!h-3.5 !w-3.5 shrink-0 text-slate-400" />
@@ -171,7 +171,7 @@
                             <div class="flex items-center justify-end">
                                 <x-admin.action-icon
                                     icon="eye"
-                                    :title="__('View details')"
+                                    :title="__('ui.view_details')"
                                     @click="open({{ \Illuminate\Support\Js::from($detailPayload) }})"
                                 />
                             </div>
@@ -188,8 +188,8 @@
                         <div class="grid h-12 w-12 place-items-center rounded-2xl bg-slate-100 text-slate-400">
                             <x-icon name="envelope" size="lg" />
                         </div>
-                        <div class="mt-3 text-sm font-semibold text-slate-900">{{ __('No bookings yet') }}</div>
-                        <p class="mt-1 max-w-md text-xs text-slate-500">{{ __('When customers submit a booking from a tour page, it will appear here.') }}</p>
+                        <div class="mt-3 text-sm font-semibold text-slate-900">{{ __('ui.no_bookings_yet') }}</div>
+                        <p class="mt-1 max-w-md text-xs text-slate-500">{{ __('ui.when_customers_submit_a_booking_from_a_tour_page_it_will_appear_here') }}</p>
                     </div>
                 @endforelse
 
@@ -198,21 +198,21 @@
                 @endif
 
                 {{-- Booking detail modal --}}
-                <x-admin.modal name="detailOpen" :title="__('Booking details')">
+                <x-admin.modal name="detailOpen" :title="__('ui.booking_details')">
                     <div class="grid gap-5">
                         <div class="grid gap-3 sm:grid-cols-2">
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('Tour') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('tour') }}</div>
                                 <div class="mt-1 text-sm font-semibold text-slate-900" x-text="detail.tour"></div>
                                 <template x-if="detail.tourFrontendUrl">
                                     <a :href="detail.tourFrontendUrl" target="_blank" rel="noopener" class="mt-1.5 inline-flex items-center gap-2 text-xs font-semibold text-indigo-700 hover:underline">
                                         <x-icon name="external-link" size="sm" class="!h-3.5 !w-3.5" />
-                                        {{ __('View on site') }}
+                                        {{ __('ui.view_on_site') }}
                                     </a>
                                 </template>
                             </div>
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('Submitted') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('submitted') }}</div>
                                 <div class="mt-1 text-sm text-slate-700" x-text="detail.createdAt"></div>
                             </div>
                             @if(auth()->user()->canManageUsers())
@@ -229,30 +229,30 @@
 
                         <div class="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50/60 p-4 sm:grid-cols-2">
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('Full name') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('ui.full_name') }}</div>
                                 <div class="mt-1 text-sm font-semibold text-slate-900" x-text="detail.name"></div>
                             </div>
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('Email') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('email') }}</div>
                                 <a class="mt-1 block break-all text-sm font-medium text-indigo-700 hover:underline" :href="'mailto:' + detail.email" x-text="detail.email"></a>
                             </div>
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('Phone') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('phone') }}</div>
                                 <a class="mt-1 block text-sm font-medium text-indigo-700 hover:underline" :href="'tel:' + detail.phone" x-text="detail.phone"></a>
                             </div>
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('Travel date') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('ui.travel_date') }}</div>
                                 <div class="mt-1 text-sm text-slate-700" x-text="detail.travelDate"></div>
                             </div>
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('People') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('people') }}</div>
                                 <div class="mt-1 text-sm text-slate-700" x-text="detail.peopleCount"></div>
                             </div>
                         </div>
 
                         <template x-if="detail.note && detail.note.length > 0">
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('Note') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('note') }}</div>
                                 <p class="mt-1 whitespace-pre-line rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-700" x-text="detail.note"></p>
                             </div>
                         </template>
@@ -266,7 +266,7 @@
                             @if(request()->filled('page')) <input type="hidden" name="page" value="{{ request('page') }}"> @endif
 
                             <label class="block flex-1">
-                                <span class="mb-1 block text-xs font-semibold text-slate-700">{{ __('Status') }}</span>
+                                <span class="mb-1 block text-xs font-semibold text-slate-700">{{ __('status') }}</span>
                                 <select
                                     name="status"
                                     x-model="detail.status"
@@ -279,7 +279,7 @@
                             </label>
                             <x-admin.button type="submit" variant="primary">
                                 <x-icon name="save" size="sm" />
-                                {{ __('Save') }}
+                                {{ __('save') }}
                             </x-admin.button>
                         </form>
                     </div>

@@ -11,7 +11,7 @@
             class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400/60 focus:ring-offset-2"
         >
             <x-icon name="add" size="sm" />
-            {{ __('Create') }}
+            {{ __('create') }}
         </a>
     </div>
 
@@ -21,8 +21,8 @@
                 <tr>
                     <th class="px-4 py-3">{{ __('Banner') }}</th>
                     <th class="px-4 py-3">{{ __('Order') }}</th>
-                    <th class="px-4 py-3">{{ __('Status') }}</th>
-                    <th class="px-4 py-3 text-right">{{ __('Actions') }}</th>
+                    <th class="px-4 py-3">{{ __('status') }}</th>
+                    <th class="px-4 py-3 text-right">{{ __('actions') }}</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-200">
@@ -59,13 +59,13 @@
                                 <x-admin.action-icon
                                     :href="route('admin.banners.edit', $banner)"
                                     icon="pencil"
-                                    :title="__('Edit')"
+                                    :title="__('edit')"
                                 />
                                 <x-admin.confirm-delete
                                     :delete-url="route('admin.banners.destroy', $banner)"
                                     :message="__('Are you sure?')"
                                 >
-                                    <x-admin.action-icon icon="trash" variant="danger" :title="__('Delete')" />
+                                    <x-admin.action-icon icon="trash" variant="danger" :title="__('delete')" />
                                 </x-admin.confirm-delete>
                             </div>
                         </td>

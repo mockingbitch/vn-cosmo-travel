@@ -36,7 +36,7 @@
         :aria-expanded="open.toString()"
         aria-haspopup="menu"
         aria-controls="{{ $langNavId }}"
-        @if (! $block) aria-label="{{ __('Change language') }}: {{ $currentLabel }}" @endif
+        @if (! $block) aria-label="{{ __('nav.header.change_language') }}: {{ $currentLabel }}" @endif
     >
         @if ($block)
             <span class="inline-flex min-w-0 flex-1 items-center gap-2.5">
@@ -57,7 +57,7 @@
         x-transition
         x-cloak
         class="absolute z-[60] mt-1.5 max-w-[min(20rem,calc(100vw-2rem))] origin-top overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg {{ $panelClass }}"
-        aria-label="{{ __('Languages') }}"
+        aria-label="{{ __('nav.header.languages') }}"
         role="menu"
     >
         @foreach ($supported as $key => $meta)

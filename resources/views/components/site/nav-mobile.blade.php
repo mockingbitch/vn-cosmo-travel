@@ -9,7 +9,7 @@
     $row2 = $dm['rows'][1] ?? [];
 @endphp
 
-<nav class="w-full" aria-label="{{ __('Main navigation') }}">
+<nav class="w-full" aria-label="{{ __('nav.header.main_navigation') }}">
     <div class="space-y-1.5 text-sm font-medium text-slate-800">
         @foreach($items as $entry)
             @if(($entry['type'] ?? '') === 'link' && ($entry['href'] ?? '#') !== '#')

@@ -16,7 +16,7 @@ interface PostRepositoryInterface
 
     public function related(int $postId, ?int $categoryId, int $limit = 3): Collection;
 
-    public function adminPaginate(int $perPage = 15): LengthAwarePaginator;
+    public function adminPaginate(int $perPage = 15, array $filters = []): LengthAwarePaginator;
 
     public function adminCreate(array $data): Post;
 

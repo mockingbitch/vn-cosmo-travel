@@ -12,7 +12,7 @@
 <nav
     class="hidden w-full max-w-4xl shrink-0 items-center justify-center gap-0.5 text-sm font-medium text-slate-700 lg:flex lg:gap-1.5 min-[80rem]:text-[0.8rem]"
     role="menubar"
-    aria-label="{{ __('Main navigation') }}"
+    aria-label="{{ __('nav.header.main_navigation') }}"
 >
     @foreach($items as $entry)
         @if(($entry['type'] ?? '') === 'link' && ($entry['href'] ?? '#') !== '#')

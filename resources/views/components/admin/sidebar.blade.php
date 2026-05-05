@@ -5,21 +5,21 @@
             'items' => [
                 ['label' => __('Dashboard'), 'route' => 'admin.dashboard', 'icon' => 'home'],
                 ['label' => __('admin.guide.menu'), 'route' => 'admin.guide', 'icon' => 'book'],
-                ['label' => __('Profile'), 'route' => 'admin.profile.edit', 'icon' => 'user'],
+                ['label' => __('profile'), 'route' => 'admin.profile.edit', 'icon' => 'user'],
             ],
         ],
         [
-            'title' => __('Customers'),
+            'title' => __('customers'),
             'items' => [
-                ['label' => __('Bookings'), 'route' => 'admin.bookings.index', 'icon' => 'inbox'],
+                ['label' => __('bookings'), 'route' => 'admin.bookings.index', 'icon' => 'inbox'],
             ],
         ],
         [
             'title' => __('Content'),
             'items' => [
-                ['label' => __('Tours'), 'route' => 'admin.tours.index', 'icon' => 'tours'],
-                ['label' => __('Destinations'), 'route' => 'admin.destinations.index', 'icon' => 'map'],
-                ['label' => __('Blog'), 'route' => 'admin.posts.index', 'icon' => 'document'],
+                ['label' => __('tours'), 'route' => 'admin.tours.index', 'icon' => 'tours'],
+                ['label' => __('destinations'), 'route' => 'admin.destinations.index', 'icon' => 'map'],
+                ['label' => __('blog'), 'route' => 'admin.posts.index', 'icon' => 'document'],
                 ['label' => __('Media'), 'route' => 'admin.media.index', 'icon' => 'folder'],
             ],
         ],
@@ -34,10 +34,10 @@
                     'icon' => 'cog',
                     'children' => [
                         ['label' => __('Website'), 'route' => 'admin.settings.general.edit', 'icon' => 'cog'],
-                        ['label' => __('Contact'), 'route' => 'admin.settings.contact.edit', 'icon' => 'phone'],
+                        ['label' => __('contact'), 'route' => 'admin.settings.contact.edit', 'icon' => 'phone'],
                         ['label' => __('Social links'), 'route' => 'admin.settings.social.edit', 'icon' => 'share'],
-                        ['label' => __('Home why section'), 'route' => 'admin.settings.homeWhy.edit', 'icon' => 'sparkles'],
-                        ['label' => __('Home testimonials section'), 'route' => 'admin.settings.testimonials.edit', 'icon' => 'quotes'],
+                        ['label' => __('admin.settings.home_why.section'), 'route' => 'admin.settings.homeWhy.edit', 'icon' => 'sparkles'],
+                        ['label' => __('admin.settings.testimonials.section'), 'route' => 'admin.settings.testimonials.edit', 'icon' => 'quotes'],
                         ['label' => __('nav.primary.about_us'), 'route' => 'admin.about.edit', 'icon' => 'about'],
                         ['label' => __('Hero Banners'), 'route' => 'admin.banners.edit', 'icon' => 'photo'],
                     ],
@@ -56,9 +56,9 @@
         ];
 
         $sections[] = [
-            'title' => __('Team'),
+            'title' => __('team'),
             'items' => [
-                ['label' => __('Users'), 'route' => 'admin.users.index', 'icon' => 'users'],
+                ['label' => __('users'), 'route' => 'admin.users.index', 'icon' => 'users'],
             ],
         ];
     }
@@ -84,7 +84,7 @@
             <span class="grid h-10 w-10 shrink-0 place-items-center rounded-2xl bg-slate-900 text-sm font-semibold text-white shadow-sm">VC</span>
             <span class="min-w-0" x-show="!sidebarCollapsed" x-transition.opacity.duration.200ms>
                 <span class="block truncate text-sm font-semibold text-slate-900">{{ config('app.name') }}</span>
-                <span class="block truncate text-xs font-medium text-slate-500">{{ __('Admin') }}</span>
+                <span class="block truncate text-xs font-medium text-slate-500">{{ __('admin') }}</span>
             </span>
         </a>
 

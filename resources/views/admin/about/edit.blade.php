@@ -24,11 +24,11 @@
                 <div class="flex flex-wrap gap-3 pt-2">
                     <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">
                         <x-icon name="save" size="sm" />
-                        {{ __('Save') }}
+                        {{ __('save') }}
                     </button>
                     <a href="{{ route('admin.dashboard') }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50">
                         <x-icon name="arrow-left" size="sm" />
-                        {{ __('Cancel') }}
+                        {{ __('cancel') }}
                     </a>
                 </div>
             </form>

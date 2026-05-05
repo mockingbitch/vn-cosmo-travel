@@ -20,19 +20,6 @@
             </div>
         </div>
 
-        <div class="hidden w-full max-w-md items-center gap-3 md:flex">
-            <div class="relative w-full">
-                <div class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400">
-                    <x-icon name="search" size="md" />
-                </div>
-                <input
-                    type="search"
-                    placeholder="{{ __('placeholder.admin_search') }}"
-                    class="w-full rounded-2xl border border-slate-200 bg-white px-10 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
-                />
-            </div>
-        </div>
-
         <div class="flex items-center gap-2">
             <a
                 href="{{ route('home') }}"
@@ -117,7 +104,7 @@
                         <div class="mt-1 truncate text-sm font-semibold text-slate-900">{{ auth()->user()->email ?? '' }}</div>
                     </div>
                     <div class="h-px bg-slate-200"></div>
-                    <a class="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50" href="{{ route('admin.profile.edit') }}">{{ __('Profile') }}</a>
+                    <a class="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50" href="{{ route('admin.profile.edit') }}">{{ __('profile') }}</a>
                     @if(auth()->user()->canManageUsers())
                         <a class="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50" href="{{ route('admin.settings.general.edit') }}">{{ __('Settings') }}</a>
                     @endif

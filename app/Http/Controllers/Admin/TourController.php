@@ -15,10 +15,18 @@ use Illuminate\View\View;
 
 class TourController extends Controller
 {
-    public function index(TourAdminService $tours): View
+    public function index(Request $request, TourAdminService $tours, DestinationService $destinations): View
     {
+        $filters = [
+            'q' => trim((string) $request->query('q', '')),
+            'status' => trim((string) $request->query('status', '')),
+            'destination_id' => trim((string) $request->query('destination_id', '')),
+        ];
+
         return view('admin.tours.index', [
-            'tours' => $tours->paginate(15),
+            'tours' => $tours->paginate(15, $filters),
+            'filters' => $filters,
+            'destinations' => $destinations->all(),
         ]);
     }
 
@@ -68,7 +76,7 @@ class TourController extends Controller
     /**
      * Preserve pagination when updating status from the list row forms.
      *
-     * @return array<string, int>
+     * @return array<string, int|string>
      */
     private function tourListQueryFromRequest(Request $request): array
     {
@@ -79,6 +87,18 @@ class TourController extends Controller
             if ($page > 0) {
                 $query['page'] = $page;
             }
+        }
+
+        if ($request->filled('q')) {
+            $query['q'] = trim((string) $request->input('q'));
+        }
+
+        if ($request->filled('status')) {
+            $query['status'] = (string) $request->input('status');
+        }
+
+        if ($request->filled('destination_id')) {
+            $query['destination_id'] = (string) $request->input('destination_id');
         }
 
         return $query;

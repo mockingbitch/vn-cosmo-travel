@@ -3,7 +3,7 @@
 ])
 
 @php
-    $pageTitle = $title ?: __('Admin');
+    $pageTitle = $title ?: __('admin');
 @endphp
 
 <!DOCTYPE html>

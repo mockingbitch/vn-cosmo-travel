@@ -80,14 +80,14 @@
                         >
                             <div class="grid gap-3 text-left lg:grid-cols-2 lg:gap-4">
                                 <div class="min-w-0 lg:border-r lg:border-slate-100 lg:pr-4">
-                                    <div class="text-[10px] font-bold uppercase tracking-wide text-slate-400">{{ __('Vietnamese') }}</div>
+                                    <div class="text-[10px] font-bold uppercase tracking-wide text-slate-400">{{ __('vietnamese') }}</div>
                                     <div class="mt-1 truncate text-sm font-semibold text-slate-900">{{ $titleVi }}</div>
                                     @if(filled($subtitleVi))
                                         <div class="mt-1 line-clamp-2 break-words text-sm text-slate-600">{{ $subtitleVi }}</div>
                                     @endif
                                 </div>
                                 <div class="min-w-0">
-                                    <div class="text-[10px] font-bold uppercase tracking-wide text-slate-400">{{ __('English') }}</div>
+                                    <div class="text-[10px] font-bold uppercase tracking-wide text-slate-400">{{ __('english') }}</div>
                                     <div class="mt-1 truncate text-sm font-semibold text-slate-900">{{ $titleEn }}</div>
                                     @if(filled($subtitleEn))
                                         <div class="mt-1 line-clamp-2 break-words text-sm text-slate-600">{{ $subtitleEn }}</div>
@@ -112,9 +112,9 @@
 
                             <div class="grid gap-4 lg:grid-cols-2 lg:gap-6">
                                 <div class="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                                    <div class="border-b border-slate-200/80 pb-2 text-xs font-semibold text-slate-600">{{ __('Vietnamese') }}</div>
+                                    <div class="border-b border-slate-200/80 pb-2 text-xs font-semibold text-slate-600">{{ __('vietnamese') }}</div>
                                     <div>
-                                        <div class="text-xs font-semibold text-slate-500">{{ __('Title') }}</div>
+                                        <div class="text-xs font-semibold text-slate-500">{{ __('title') }}</div>
                                         <div class="mt-1 text-sm font-semibold text-slate-900" x-text="preview.title.vi"></div>
                                     </div>
                                     <template x-if="preview.subtitle && preview.subtitle.vi && preview.subtitle.vi.length">
@@ -131,9 +131,9 @@
                                     </template>
                                 </div>
                                 <div class="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-                                    <div class="border-b border-slate-200/80 pb-2 text-xs font-semibold text-slate-600">{{ __('English') }}</div>
+                                    <div class="border-b border-slate-200/80 pb-2 text-xs font-semibold text-slate-600">{{ __('english') }}</div>
                                     <div>
-                                        <div class="text-xs font-semibold text-slate-500">{{ __('Title') }}</div>
+                                        <div class="text-xs font-semibold text-slate-500">{{ __('title') }}</div>
                                         <div class="mt-1 text-sm font-semibold text-slate-900" x-text="preview.title.en"></div>
                                     </div>
                                     <template x-if="preview.subtitle && preview.subtitle.en && preview.subtitle.en.length">
@@ -172,7 +172,7 @@
                                     @csrf
                                     <x-admin.button variant="primary" type="submit">
                                         <x-icon name="check" size="sm" />
-                                        {{ __('Apply') }}
+                                        {{ __('apply') }}
                                     </x-admin.button>
                                 </form>
                             </div>

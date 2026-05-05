@@ -17,7 +17,7 @@
                 @csrf
 
                 <label class="grid gap-1">
-                    <span class="text-xs font-semibold text-slate-700">{{ __('Email') }}</span>
+                    <span class="text-xs font-semibold text-slate-700">{{ __('email') }}</span>
                     <input
                         type="email"
                         name="email"
@@ -32,7 +32,7 @@
                 </label>
 
                 <label class="grid gap-1">
-                    <span class="text-xs font-semibold text-slate-700">{{ __('Password') }}</span>
+                    <span class="text-xs font-semibold text-slate-700">{{ __('password') }}</span>
                     <input
                         type="password"
                         name="password"

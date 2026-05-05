@@ -19,7 +19,7 @@
                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400/60 focus:ring-offset-2"
             >
                 <x-icon name="add" size="sm" />
-                {{ __('Create') }}
+                {{ __('create') }}
             </button>
         </div>
     </form>

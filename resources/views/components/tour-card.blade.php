@@ -24,10 +24,10 @@
             <div class="mt-3 flex items-center justify-between">
                 <div class="text-sm font-semibold text-slate-900">
                     {{ $vm->priceLabel() }}
-                    <span class="text-xs font-medium text-slate-500">{{ __('per person') }}</span>
+                    <span class="text-xs font-medium text-slate-500">{{ __('ui.per_person') }}</span>
                 </div>
                 <span class="inline-flex items-center gap-2 text-sm font-semibold text-slate-900">
-                    {{ __('View detail') }}
+                    {{ __('ui.view_detail') }}
                     <x-icon name="chevron-right" size="sm" class="transition group-hover:translate-x-0.5" />
                 </span>
             </div>

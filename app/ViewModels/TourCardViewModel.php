@@ -25,7 +25,7 @@ class TourCardViewModel
     {
         $days = (int) $this->tour->duration;
 
-        return $days === 1 ? __('1 day') : __(':count days', ['count' => $days]);
+        return $days === 1 ? __('ui.1_day') : __(':count days', ['count' => $days]);
     }
 
     public function priceLabel(): string

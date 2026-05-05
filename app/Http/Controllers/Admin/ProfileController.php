@@ -12,7 +12,7 @@ class ProfileController extends Controller
     public function edit(): View
     {
         return view('admin.profile.edit', [
-            'title' => __('Profile'),
+            'title' => __('profile'),
         ]);
     }
 

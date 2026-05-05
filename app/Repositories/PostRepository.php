@@ -50,12 +50,32 @@ class PostRepository implements PostRepositoryInterface
             ->get();
     }
 
-    public function adminPaginate(int $perPage = 15): LengthAwarePaginator
+    public function adminPaginate(int $perPage = 15, array $filters = []): LengthAwarePaginator
     {
         return Post::query()
             ->with(['category', 'thumbnailMedia', 'creator', 'updatedBy'])
+            ->when(
+                filled($filters['q'] ?? null),
+                function ($query) use ($filters): void {
+                    $keyword = trim((string) $filters['q']);
+                    $query->where(function ($inner) use ($keyword): void {
+                        $inner
+                            ->where('title', 'like', '%'.$keyword.'%')
+                            ->orWhere('slug', 'like', '%'.$keyword.'%');
+                    });
+                }
+            )
+            ->when(
+                filled($filters['status'] ?? null),
+                fn ($query) => $query->where('status', (string) $filters['status'])
+            )
+            ->when(
+                filled($filters['category_id'] ?? null),
+                fn ($query) => $query->where('category_id', (int) $filters['category_id'])
+            )
             ->latest('id')
-            ->paginate($perPage);
+            ->paginate($perPage)
+            ->withQueryString();
     }
 
     public function adminCreate(array $data): Post

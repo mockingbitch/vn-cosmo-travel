@@ -21,6 +21,6 @@
 @endif
 </x-mail::panel>
 
-{{ __('Thanks') }},<br>
+{{ __('thanks') }},<br>
 {{ config('app.name') }}
 </x-mail::message>

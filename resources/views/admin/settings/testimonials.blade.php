@@ -27,7 +27,7 @@
             class="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700"
         >
             <x-icon name="external-link" size="sm" />
-            {{ __('Preview on site') }}
+            {{ __('ui.preview_on_site') }}
         </a>
     </div>
 
@@ -48,13 +48,13 @@
         @method('PUT')
 
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div class="text-sm font-semibold text-slate-900">{{ __('Home testimonials section') }}</div>
-            <p class="mt-1 text-xs text-slate-500">{{ __('Home testimonials section help') }}</p>
-            <p class="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800 ring-1 ring-amber-200">{{ __('Home testimonials english only note') }}</p>
+            <div class="text-sm font-semibold text-slate-900">{{ __('admin.settings.testimonials.section') }}</div>
+            <p class="mt-1 text-xs text-slate-500">{{ __('admin.settings.testimonials.help') }}</p>
+            <p class="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800 ring-1 ring-amber-200">{{ __('admin.settings.testimonials.english_only_note') }}</p>
 
             <div class="mt-6 grid gap-4 sm:grid-cols-2">
                 <label class="grid gap-1 sm:col-span-2">
-                    <span class="text-xs font-semibold text-slate-700">{{ __('Section title') }}</span>
+                    <span class="text-xs font-semibold text-slate-700">{{ __('admin.settings.testimonials.section_title') }}</span>
                     <input
                         type="text"
                         name="testimonials[title]"
@@ -67,7 +67,7 @@
                 </label>
 
                 <label class="grid gap-1 sm:col-span-2">
-                    <span class="text-xs font-semibold text-slate-700">{{ __('Section subtitle') }}</span>
+                    <span class="text-xs font-semibold text-slate-700">{{ __('admin.settings.testimonials.section_subtitle') }}</span>
                     <textarea
                         name="testimonials[subtitle]"
                         rows="2"
@@ -85,7 +85,7 @@
                     $it = is_array($itemsForm[$i] ?? null) ? $itemsForm[$i] : [];
                 @endphp
                 <div class="mt-6 rounded-xl border border-dashed border-slate-200 bg-slate-50/80 p-4">
-                    <div class="text-xs font-semibold text-slate-700">{{ __('Testimonial card :number', ['number' => $i + 1]) }}</div>
+                    <div class="text-xs font-semibold text-slate-700">{{ __('admin.settings.testimonials.card', ['number' => $i + 1]) }}</div>
 
                     <div class="mt-3 grid gap-1">
                         <span class="text-xs font-semibold text-slate-700">{{ __('admin.settings.testimonial_image_url') }}</span>

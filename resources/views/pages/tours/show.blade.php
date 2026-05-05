@@ -14,13 +14,13 @@
                 <div class="flex flex-wrap items-center gap-3">
                     <div class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900">
                         @if((int) $tour->duration === 1)
-                            {{ __('1 day') }}
+                            {{ __('ui.1_day') }}
                         @else
                             {{ __(':count days', ['count' => $tour->duration]) }}
                         @endif
                     </div>
                     <div class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white">
-                        {{ number_format((int) $tour->price) }}₫ <span class="text-white/80 text-xs font-medium">{{ __('per person') }}</span>
+                        {{ number_format((int) $tour->price) }}₫ <span class="text-white/80 text-xs font-medium">{{ __('ui.per_person') }}</span>
                     </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                             class="absolute left-3 top-1/2 -translate-y-1/2 rounded-xl bg-white/90 p-2 text-slate-900 shadow hover:bg-white"
                             @click="active = (active - 1 + slides.length) % slides.length"
                         >
-                            <span class="sr-only">{{ __('Previous image') }}</span>
+                            <span class="sr-only">{{ __('ui.previous_image') }}</span>
                             <x-icon name="chevron-left" size="md" />
                         </button>
                         <button
@@ -73,7 +73,7 @@
                             class="absolute right-3 top-1/2 -translate-y-1/2 rounded-xl bg-white/90 p-2 text-slate-900 shadow hover:bg-white"
                             @click="active = (active + 1) % slides.length"
                         >
-                            <span class="sr-only">{{ __('Next image') }}</span>
+                            <span class="sr-only">{{ __('ui.next_image') }}</span>
                             <x-icon name="chevron-right" size="md" />
                         </button>
                     </div>
@@ -195,7 +195,7 @@
 
                 <div class="mt-12">
                     <div class="flex items-end justify-between gap-6">
-                        <h2 class="text-xl font-semibold tracking-tight text-slate-900">{{ __('Related tours') }}</h2>
+                        <h2 class="text-xl font-semibold tracking-tight text-slate-900">{{ __('ui.related_tours') }}</h2>
                         <a href="{{ route('tours.index', ['destination' => $tour->destination?->slug]) }}" class="text-sm font-semibold text-slate-600 hover:text-slate-900">
                             {{ __('More in destination', ['destination' => $tour->destination?->localizedName() ?? '']) }}
                         </a>
@@ -212,8 +212,8 @@
                 <div class="sticky top-24 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                     <div class="flex items-start justify-between gap-4">
                         <div>
-                            <div class="text-sm font-semibold text-slate-900">{{ __('Book this tour') }}</div>
-                            <div class="mt-1 text-xs text-slate-500">{{ __('We’ll contact you quickly to confirm details.') }}</div>
+                            <div class="text-sm font-semibold text-slate-900">{{ __('ui.book_this_tour') }}</div>
+                            <div class="mt-1 text-xs text-slate-500">{{ __('ui.well_contact_you_quickly_to_confirm_details') }}</div>
                         </div>
                         <div class="rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white">
                             {{ number_format((int) $tour->price) }}₫
@@ -243,7 +243,7 @@
                             }).then(async (res) => {
                                 if (res.status === 429) {
                                     const data = await res.json().catch(() => ({}));
-                                    throw { rateLimited: true, message: (data && data.message) ? data.message : '{{ __('Too many requests. Please slow down and try again later.') }}' };
+                                    throw { rateLimited: true, message: (data && data.message) ? data.message : '{{ __('ui.too_many_requests_please_slow_down_and_try_again_later') }}' };
                                 }
                                 if (!res.ok) {
                                     const data = await res.json().catch(() => ({}));
@@ -261,13 +261,13 @@
                     >
                         @csrf
 
-                        <x-input label="{{ __('Full name') }}" name="name" :placeholder="__('placeholder.name')" />
-                        <x-input label="{{ __('Email') }}" name="email" type="email" :placeholder="__('placeholder.email')" />
-                        <x-input label="{{ __('Phone') }}" name="phone" :placeholder="__('placeholder.phone')" />
-                        <x-input label="{{ __('Travel date') }}" name="travel_date" type="date" />
+                        <x-input label="{{ __('ui.full_name') }}" name="name" :placeholder="__('placeholder.name')" />
+                        <x-input label="{{ __('email') }}" name="email" type="email" :placeholder="__('placeholder.email')" />
+                        <x-input label="{{ __('phone') }}" name="phone" :placeholder="__('placeholder.phone')" />
+                        <x-input label="{{ __('ui.travel_date') }}" name="travel_date" type="date" />
 
                         <label class="block">
-                            <span class="mb-1 block text-sm font-medium text-slate-700">{{ __('People') }}</span>
+                            <span class="mb-1 block text-sm font-medium text-slate-700">{{ __('people') }}</span>
                             <select
                                 name="people_count"
                                 class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
@@ -283,7 +283,7 @@
                         </label>
 
                         <label class="block">
-                            <span class="mb-1 block text-sm font-medium text-slate-700">{{ __('Note (optional)') }}</span>
+                            <span class="mb-1 block text-sm font-medium text-slate-700">{{ __('ui.note_optional') }}</span>
                             <textarea
                                 name="note"
                                 rows="3"
@@ -297,8 +297,8 @@
 
                         <x-button type="submit" variant="primary" class="w-full justify-center" x-bind:class="loading ? 'opacity-70 cursor-not-allowed' : ''">
                             <x-icon name="envelope" size="sm" />
-                            <span x-show="!loading">{{ __('Request booking') }}</span>
-                            <span x-show="loading">{{ __('Sending…') }}</span>
+                            <span x-show="!loading">{{ __('ui.request_booking') }}</span>
+                            <span x-show="loading">{{ __('sending…') }}</span>
                         </x-button>
 
                         <template x-if="message">
@@ -310,7 +310,7 @@
                         </template>
 
                         <p class="text-xs leading-5 text-slate-500">
-                            {{ __('Booking consent') }}
+                            {{ __('ui.booking_consent') }}
                         </p>
                     </form>
                 </div>

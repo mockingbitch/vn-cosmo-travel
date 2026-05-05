@@ -21,7 +21,7 @@
                 {{ $vm->excerpt() }}
             </p>
             <div class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-slate-900">
-                {{ __('Read more') }}
+                {{ __('ui.read_more') }}
                 <x-icon name="chevron-right" size="sm" class="transition group-hover:translate-x-0.5" />
             </div>
         </div>

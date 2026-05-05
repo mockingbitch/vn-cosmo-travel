@@ -14,9 +14,9 @@ class TourAdminService
         private readonly TourRepositoryInterface $tours,
     ) {}
 
-    public function paginate(int $perPage = 15): LengthAwarePaginator
+    public function paginate(int $perPage = 15, array $filters = []): LengthAwarePaginator
     {
-        return $this->tours->adminPaginate($perPage);
+        return $this->tours->adminPaginate($perPage, $filters);
     }
 
     public function create(array $data): Tour

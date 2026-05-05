@@ -4,10 +4,10 @@
 
 <div class="grid gap-8 lg:grid-cols-2 lg:gap-10">
     <div class="grid gap-4">
-        <h2 class="border-b border-slate-200 pb-2 text-sm font-semibold text-slate-900">{{ __('Vietnamese') }}</h2>
+        <h2 class="border-b border-slate-200 pb-2 text-sm font-semibold text-slate-900">{{ __('vietnamese') }}</h2>
 
         <label class="grid gap-1">
-            <span class="text-xs font-semibold text-slate-700">{{ __('Title') }}</span>
+            <span class="text-xs font-semibold text-slate-700">{{ __('title') }}</span>
             <input
                 type="text"
                 name="title_vi"
@@ -57,10 +57,10 @@
     </div>
 
     <div class="grid gap-4 lg:border-l lg:border-slate-200 lg:pl-10">
-        <h2 class="border-b border-slate-200 pb-2 text-sm font-semibold text-slate-900">{{ __('English') }}</h2>
+        <h2 class="border-b border-slate-200 pb-2 text-sm font-semibold text-slate-900">{{ __('english') }}</h2>
 
         <label class="grid gap-1">
-            <span class="text-xs font-semibold text-slate-700">{{ __('Title') }}</span>
+            <span class="text-xs font-semibold text-slate-700">{{ __('title') }}</span>
             <input
                 type="text"
                 name="title_en"

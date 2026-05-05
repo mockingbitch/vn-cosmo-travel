@@ -15,9 +15,9 @@ class PostAdminService
         private readonly MediaUsageService $mediaUsage,
     ) {}
 
-    public function paginate(int $perPage = 15): LengthAwarePaginator
+    public function paginate(int $perPage = 15, array $filters = []): LengthAwarePaginator
     {
-        return $this->posts->adminPaginate($perPage);
+        return $this->posts->adminPaginate($perPage, $filters);
     }
 
     public function create(array $data): Post

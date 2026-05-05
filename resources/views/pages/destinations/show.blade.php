@@ -12,7 +12,7 @@
         </div>
         <div class="relative mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
             <div class="max-w-3xl">
-                <div class="text-sm font-semibold text-white/70">{{ __('Destination') }}</div>
+                <div class="text-sm font-semibold text-white/70">{{ __('destination') }}</div>
                 <h1 class="mt-2 text-4xl font-semibold tracking-tight text-white sm:text-5xl">{{ $destination->localizedName() }}</h1>
                 <p class="mt-4 text-base leading-7 text-white/85 sm:text-lg">
                     {{ $destination->description }}

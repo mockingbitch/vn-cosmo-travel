@@ -26,7 +26,7 @@ class HomeHeroViewModel
     {
         $title = $this->banner?->getTitleForLocale($this->locale) ?? '';
 
-        return $title !== '' ? $title : (string) __('Hero title');
+        return $title !== '' ? $title : (string) __('ui.hero_title');
     }
 
     public function subtitle(): string
@@ -35,7 +35,7 @@ class HomeHeroViewModel
 
         return is_string($subtitle) && $subtitle !== ''
             ? $subtitle
-            : (string) __('Hero subtitle');
+            : (string) __('ui.hero_subtitle');
     }
 
     public function ctaText(): string
@@ -44,7 +44,7 @@ class HomeHeroViewModel
 
         return is_string($cta) && $cta !== ''
             ? $cta
-            : (string) __('Explore Tours');
+            : (string) __('ui.explore_tours');
     }
 
     public function ctaLink(): string

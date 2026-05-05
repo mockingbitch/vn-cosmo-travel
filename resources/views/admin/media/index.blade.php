@@ -18,7 +18,7 @@
                 />
                 <x-admin.button type="submit" variant="secondary">
                     <x-icon name="search" size="sm" />
-                    {{ __('Filter') }}
+                    {{ __('filter') }}
                 </x-admin.button>
             </form>
         </div>
@@ -273,7 +273,7 @@
                                 @click="openDeleteConfirm(preview.deleteUrl)"
                             >
                                 <x-icon name="delete" size="sm" />
-                                {{ __('Delete') }}
+                                {{ __('delete') }}
                             </x-admin.button>
 
                             <x-admin.button type="button" variant="primary" @click="closePreview()">
@@ -299,14 +299,14 @@
                                     <span class="grid h-5 w-5 place-items-center rounded-full bg-indigo-600 text-[10px] font-bold text-white" x-text="selectedIds.length"></span>
                                     {{ __('items selected') }}
                                 </p>
-                                <p class="mt-2 text-xs font-medium text-slate-500">{{ __('This action cannot be undone.') }}</p>
+                                <p class="mt-2 text-xs font-medium text-slate-500">{{ __('ui.this_action_cannot_be_undone') }}</p>
                             </div>
                         </div>
 
                         <div class="flex items-center justify-end gap-2">
                             <x-admin.button type="button" variant="secondary" @click="bulkConfirmOpen = false" x-bind:disabled="bulkSubmitting">
                                 <x-icon name="close" size="sm" />
-                                {{ __('Cancel') }}
+                                {{ __('cancel') }}
                             </x-admin.button>
 
                             <form method="POST" action="{{ route('admin.media.bulkDestroy') }}" @submit="bulkSubmitting = true">
@@ -327,31 +327,31 @@
                                 <x-admin.button type="submit" variant="danger" x-bind:disabled="bulkSubmitting">
                                     <x-icon name="delete" size="sm" />
                                     <span x-show="!bulkSubmitting">{{ __('Delete selected') }}</span>
-                                    <span x-show="bulkSubmitting" x-cloak>{{ __('Deleting…') }}</span>
+                                    <span x-show="bulkSubmitting" x-cloak>{{ __('deleting…') }}</span>
                                 </x-admin.button>
                             </form>
                         </div>
                     </div>
                 </x-admin.modal>
 
-                <x-admin.modal name="confirmDeleteOpen" size="sm" :show-close="false" :aria-label="__('Confirm delete')">
+                <x-admin.modal name="confirmDeleteOpen" size="sm" :show-close="false" :aria-label="__('ui.confirm_delete')">
                     <div class="grid gap-5" x-data="{ submitting: false }">
                         <div class="flex items-start gap-4">
                             <div class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-rose-50 ring-4 ring-rose-50/60">
                                 <x-icon name="exclamation-triangle" size="md" class="text-rose-600" />
                             </div>
                             <div class="min-w-0">
-                                <div class="text-base font-semibold text-slate-900">{{ __('Confirm delete') }}</div>
+                                <div class="text-base font-semibold text-slate-900">{{ __('ui.confirm_delete') }}</div>
                                 <p class="mt-1 text-sm text-slate-600">{{ __('Delete this media?') }}</p>
                                 <p class="mt-3 truncate rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-800" x-text="preview.fileName"></p>
-                                <p class="mt-2 text-xs font-medium text-slate-500">{{ __('This action cannot be undone.') }}</p>
+                                <p class="mt-2 text-xs font-medium text-slate-500">{{ __('ui.this_action_cannot_be_undone') }}</p>
                             </div>
                         </div>
 
                         <div class="flex items-center justify-end gap-2">
                             <x-admin.button type="button" variant="secondary" @click="closeDeleteConfirm()" x-bind:disabled="submitting">
                                 <x-icon name="close" size="sm" />
-                                {{ __('Cancel') }}
+                                {{ __('cancel') }}
                             </x-admin.button>
 
                             <form method="POST" :action="confirmDeleteUrl" @submit="submitting = true">
@@ -368,8 +368,8 @@
                                 @endif
                                 <x-admin.button type="submit" variant="danger" x-bind:disabled="submitting">
                                     <x-icon name="delete" size="sm" />
-                                    <span x-show="!submitting">{{ __('Delete') }}</span>
-                                    <span x-show="submitting" x-cloak>{{ __('Deleting…') }}</span>
+                                    <span x-show="!submitting">{{ __('delete') }}</span>
+                                    <span x-show="submitting" x-cloak>{{ __('deleting…') }}</span>
                                 </x-admin.button>
                             </form>
                         </div>

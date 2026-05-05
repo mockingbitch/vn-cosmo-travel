@@ -106,11 +106,10 @@ class SettingsService
      */
     public function getTestimonials(): array
     {
+        $locale = app()->getLocale();
         /** @var array<string, mixed> $stored */
         $stored = $this->get('content.testimonials', []);
         $stored = is_array($stored) ? $stored : [];
-
-        $defaults = $this->testimonialsBaseline();
 
         $title = isset($stored['title']) ? trim((string) $stored['title']) : '';
         $subtitle = isset($stored['subtitle']) ? trim((string) $stored['subtitle']) : '';
@@ -119,7 +118,6 @@ class SettingsService
         for ($i = 0; $i < 3; $i++) {
             /** @var array<string, mixed> $row */
             $row = is_array($stored['items'][$i] ?? null) ? $stored['items'][$i] : [];
-            $def = $defaults['items'][$i];
             $quote = isset($row['quote']) ? trim((string) $row['quote']) : '';
             $author = isset($row['author']) ? trim((string) $row['author']) : '';
             $meta = isset($row['meta']) ? trim((string) $row['meta']) : '';
@@ -127,56 +125,21 @@ class SettingsService
             $sceneAlt = isset($row['scene_alt']) ? trim((string) $row['scene_alt']) : '';
 
             $items[] = [
-                'quote' => $quote !== '' ? $quote : $def['quote'],
-                'author' => $author !== '' ? $author : $def['author'],
-                'meta' => $meta !== '' ? $meta : $def['meta'],
-                'image_url' => $imageUrl !== '' ? $imageUrl : $def['image_url'],
-                'scene_alt' => $sceneAlt !== '' ? $sceneAlt : $def['scene_alt'],
+                'quote' => $quote,
+                'author' => $author,
+                'meta' => $meta,
+                'image_url' => $imageUrl,
+                'scene_alt' => $sceneAlt,
             ];
         }
 
+        $localizedTitle = (string) __('home.testimonials.title');
+        $localizedSubtitle = (string) __('home.testimonials.subtitle');
+
         return [
-            'title' => $title !== '' ? $title : $defaults['title'],
-            'subtitle' => $subtitle !== '' ? $subtitle : $defaults['subtitle'],
+            'title' => $locale === 'en' ? $title : ($localizedTitle !== '' ? $localizedTitle : $title),
+            'subtitle' => $locale === 'en' ? $subtitle : ($localizedSubtitle !== '' ? $localizedSubtitle : $subtitle),
             'items' => $items,
-        ];
-    }
-
-    /**
-     * Baseline English copy + image URLs matching historical homepage defaults (seed / fallback).
-     *
-     * @return array{title: string, subtitle: string, items: list<array{quote: string, author: string, meta: string, image_url: string, scene_alt: string}>}
-     */
-    public function testimonialsBaseline(): array
-    {
-        $urls = array_values((array) config('home.testimonial_scene_urls', []));
-
-        return [
-            'title' => 'Testimonials',
-            'subtitle' => 'What travelers have said after their trip with us.',
-            'items' => [
-                [
-                    'quote' => 'Airport pickup was on time and our guide’s English was easy to follow. Ha Long looked better than the photos; the old-quarter room was small but clean, as they’d described by email.',
-                    'author' => 'Lan A.',
-                    'meta' => 'Hanoi & Ha Long · 3 days',
-                    'image_url' => (string) ($urls[0] ?? ''),
-                    'scene_alt' => 'Travel photo: Ha Long Bay limestone karsts and sea, Vietnam.',
-                ],
-                [
-                    'quote' => 'Booked a 3-day Mekong trip online and got a reply the same day. The local restaurants were a highlight; heavy rain one afternoon meant a shorter boat ride than planned.',
-                    'author' => 'Michael C.',
-                    'meta' => 'Can Tho & Chau Doc · 3 days',
-                    'image_url' => (string) ($urls[1] ?? ''),
-                    'scene_alt' => 'Travel photo: boats on a tropical river.',
-                ],
-                [
-                    'quote' => 'We had young kids and worried about a packed schedule, but lunch breaks were sensible and we didn’t start too early. Thanks for moving the kayak slot when our child was unwell on day three.',
-                    'author' => 'Thao’s family',
-                    'meta' => 'Hue to Da Nang · 5 days',
-                    'image_url' => (string) ($urls[2] ?? ''),
-                    'scene_alt' => 'Travel photo: turquoise sea and palm-fringed shore.',
-                ],
-            ],
         ];
     }
 }

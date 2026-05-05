@@ -5,7 +5,7 @@
         <div class="absolute inset-0">
             <img
                 src="{{ $hero->imageUrl() }}"
-                alt="{{ __('Hero image alt') }}"
+                alt="{{ __('ui.hero_image_alt') }}"
                 class="h-full w-full object-cover"
                 loading="lazy"
             />
@@ -16,7 +16,7 @@
             <div class="max-w-3xl">
                 <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs font-semibold text-white ring-1 ring-white/20">
                     <span class="h-2 w-2 rounded-full bg-emerald-300"></span>
-                    {{ __('Hero badge') }}
+                    {{ __('ui.hero_badge') }}
                 </div>
 
                 <h1 class="mt-5 text-4xl font-semibold tracking-tight text-white sm:text-5xl">
@@ -33,7 +33,7 @@
                     </x-button>
                     <x-button href="#booking" variant="ghost" class="justify-center text-white hover:bg-white/10 focus:ring-white/50">
                         <x-icon name="chevron-down" size="sm" />
-                        {{ __('Plan with us') }}
+                        {{ __('ui.plan_with_us') }}
                     </x-button>
                 </div>
             </div>
@@ -42,12 +42,12 @@
                 <form action="{{ route('tours.index') }}" method="GET" class="rounded-2xl bg-white/95 p-4 shadow-lg ring-1 ring-slate-200 backdrop-blur sm:p-5">
                     <div class="grid gap-4 sm:grid-cols-3">
                         <label class="block">
-                            <span class="mb-1 block text-xs font-semibold text-slate-700">{{ __('Destination') }}</span>
+                            <span class="mb-1 block text-xs font-semibold text-slate-700">{{ __('destination') }}</span>
                             <select
                                 name="destination"
                                 class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                             >
-                                <option value="">{{ __('Any destination') }}</option>
+                                <option value="">{{ __('ui.any_destination') }}</option>
                                 @foreach($destinations as $destination)
                                     <option value="{{ $destination->slug }}">{{ $destination->localizedName() }}</option>
                                 @endforeach
@@ -55,21 +55,21 @@
                         </label>
 
                         <label class="block">
-                            <span class="mb-1 block text-xs font-semibold text-slate-700">{{ __('Duration') }}</span>
+                            <span class="mb-1 block text-xs font-semibold text-slate-700">{{ __('duration') }}</span>
                             <select
                                 name="duration"
                                 class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                             >
-                                <option value="">{{ __('Any') }}</option>
-                                <option value="1-3">{{ __('1–3 days') }}</option>
-                                <option value="4-7">{{ __('4–7 days') }}</option>
-                                <option value="8+">{{ __('8+ days') }}</option>
+                                <option value="">{{ __('any') }}</option>
+                                <option value="1-3">{{ __('ui.13_days') }}</option>
+                                <option value="4-7">{{ __('ui.47_days') }}</option>
+                                <option value="8+">{{ __('ui.8_days') }}</option>
                             </select>
                         </label>
 
                         <div class="flex items-end">
                             <x-button type="submit" variant="primary" class="w-full justify-center">
-                                {{ __('Find tours') }}
+                                {{ __('ui.find_tours') }}
                                 <x-icon name="search" size="sm" />
                             </x-button>
                         </div>
@@ -87,7 +87,7 @@
             />
             <div class="hidden sm:block">
                 <x-button href="{{ route('tours.index') }}" variant="secondary">
-                    {{ __('View all') }}
+                    {{ __('ui.view_all') }}
                     <x-icon name="chevron-right" size="sm" />
                 </x-button>
             </div>
@@ -101,7 +101,7 @@
 
         <div class="mt-8 sm:hidden">
             <x-button href="{{ route('tours.index') }}" variant="secondary" class="w-full justify-center">
-                {{ __('View all tours') }}
+                {{ __('ui.view_all_tours') }}
                 <x-icon name="chevron-right" size="sm" />
             </x-button>
         </div>
@@ -188,7 +188,7 @@
                 />
                 <div class="hidden sm:block">
                     <x-button href="{{ route('blog.index') }}" variant="secondary">
-                        {{ __('View all') }}
+                        {{ __('ui.view_all') }}
                         <x-icon name="chevron-right" size="sm" />
                     </x-button>
                 </div>
@@ -217,7 +217,7 @@
                 >
                     <div class="text-sm font-semibold text-slate-900 group-hover:underline">{{ $destination->localizedName() }}</div>
                     <div class="mt-2 text-sm text-slate-600 line-clamp-2">{{ $destination->description }}</div>
-                    <div class="mt-3 text-sm font-semibold text-slate-900">{{ __('Explore tours arrow') }}</div>
+                    <div class="mt-3 text-sm font-semibold text-slate-900">{{ __('ui.explore_tours_arrow') }}</div>
                 </a>
             @empty
                 <p class="text-sm text-slate-600 sm:col-span-2 lg:col-span-4">{{ __('home.destinations.empty') }}</p>
@@ -240,7 +240,7 @@
                     <div class="mt-4">
                         <x-button href="{{ route('tours.index') }}" variant="primary" class="w-full justify-center">
                             <x-icon name="tours" size="sm" />
-                            {{ __('Browse tours') }}
+                            {{ __('ui.browse_tours') }}
                         </x-button>
                     </div>
                     <div class="mt-3 text-xs text-slate-500">
@@ -270,7 +270,7 @@
                                     <x-icon name="envelope" size="md" />
                                 </span>
                                 <div class="min-w-0">
-                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('Email') }}</div>
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('email') }}</div>
                                     <div class="mt-1 break-all text-sm font-semibold text-slate-900 group-hover:underline">{{ $siteContact->email() }}</div>
                                 </div>
                             </a>
@@ -289,7 +289,7 @@
                                     <x-icon name="phone" size="md" />
                                 </span>
                                 <div class="min-w-0">
-                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('Phone') }}</div>
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('phone') }}</div>
                                     <div class="mt-1 text-sm font-semibold text-slate-900 group-hover:underline">{{ $siteContact->phone() }}</div>
                                 </div>
                             </a>
@@ -301,7 +301,7 @@
                                     <x-icon name="map" size="md" />
                                 </span>
                                 <div class="min-w-0">
-                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('Address') }}</div>
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('address') }}</div>
                                     <div class="mt-1 text-sm font-semibold text-slate-900">{{ $siteContact->address() }}</div>
                                 </div>
                             </div>
@@ -309,7 +309,7 @@
 
                         @if(count($siteContact->socialLinks()) > 0)
                             <div class="flex flex-wrap items-center gap-2 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                                <span class="mr-1 text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('Follow us') }}</span>
+                                <span class="mr-1 text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('ui.follow_us') }}</span>
                                 @foreach($siteContact->socialLinks() as $link)
                                     <a
                                         href="{{ $link['url'] }}"

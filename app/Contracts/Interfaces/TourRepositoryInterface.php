@@ -16,7 +16,7 @@ interface TourRepositoryInterface
 
     public function getRelated(int $tourId, int $destinationId, int $limit = 4): Collection;
 
-    public function adminPaginate(int $perPage = 15): LengthAwarePaginator;
+    public function adminPaginate(int $perPage = 15, array $filters = []): LengthAwarePaginator;
 
     public function adminCreate(array $data): Tour;
 

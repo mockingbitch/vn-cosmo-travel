@@ -66,7 +66,7 @@ class TourController extends Controller
 
         return view('pages.tours.show', [
             'seo' => new SeoViewModel(
-                title: $tour->title.' — '.__('Vietnam Tour'),
+                title: $tour->title.' — '.__('ui.vietnam_tour'),
                 description: Str::limit(strip_tags((string) $tour->description), 155),
                 image: $seoImage,
             ),

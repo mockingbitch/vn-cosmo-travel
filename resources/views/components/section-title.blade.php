@@ -9,7 +9,7 @@
 @endphp
 
 <div {{ $attributes->merge(['class' => $wrap]) }}>
-    <div class="text-sm font-semibold tracking-wide text-slate-500">{{ __('Brand name') }}</div>
+    <div class="text-sm font-semibold tracking-wide text-slate-500">{{ __('ui.brand_name') }}</div>
     <h2 class="mt-2 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">
         {{ $title }}
     </h2>

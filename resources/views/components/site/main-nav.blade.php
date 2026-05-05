@@ -3,7 +3,7 @@
 ])
 
 <nav class="hidden shrink-0 items-center gap-1 text-sm font-medium text-slate-700 md:flex md:overflow-visible">
-    <a class="rounded-lg px-2.5 py-1.5 hover:text-slate-900" href="{{ route('home') }}">{{ __('Home') }}</a>
+    <a class="rounded-lg px-2.5 py-1.5 hover:text-slate-900" href="{{ route('home') }}">{{ __('nav.header.home') }}</a>
 
     {{-- Tours: duration + quick links --}}
     <div class="relative" x-data="{ open: false }" @click.outside="open = false">
@@ -122,6 +122,6 @@
         </div>
     </div>
 
-    <a class="rounded-lg px-2.5 py-1.5 hover:text-slate-900" href="{{ route('blog.index') }}">{{ __('Blog') }}</a>
-    <a class="rounded-lg px-2.5 py-1.5 hover:text-slate-900" href="{{ route('home') }}#contact">{{ __('Contact') }}</a>
+    <a class="rounded-lg px-2.5 py-1.5 hover:text-slate-900" href="{{ route('blog.index') }}">{{ __('nav.header.blog') }}</a>
+    <a class="rounded-lg px-2.5 py-1.5 hover:text-slate-900" href="{{ route('home') }}#contact">{{ __('nav.header.contact') }}</a>
 </nav>
