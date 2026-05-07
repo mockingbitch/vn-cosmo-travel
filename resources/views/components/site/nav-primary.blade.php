@@ -89,16 +89,18 @@
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0"
                     id="{{ $panelDomId }}"
-                    class="max-lg:hidden absolute left-0 top-full z-50 mt-1.5 min-w-[19rem] rounded-2xl border border-slate-200/80 bg-white py-2.5 text-sm shadow-2xl"
+                    class="max-lg:hidden absolute left-0 top-full z-50 mt-1.5 min-w-[24rem] max-w-[28rem] overflow-hidden rounded-2xl border border-slate-200/80 bg-white py-3 text-sm shadow-2xl"
                     role="menu"
                 >
-                    @foreach($panelItems as $item)
-                        <a
-                            href="{{ $item['href'] }}"
-                            class="block px-4 py-2.5 text-slate-800 transition hover:bg-slate-50/95 hover:text-emerald-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-slate-400"
-                            role="menuitem"
-                        >{{ $item['label'] }}</a>
-                    @endforeach
+                    <div class="space-y-1 px-2">
+                        @foreach($panelItems as $item)
+                            <a
+                                href="{{ $item['href'] }}"
+                                class="block w-full whitespace-nowrap rounded-lg px-3 py-2 text-[12px] font-semibold tracking-wide transition hover:bg-slate-50/95 hover:text-[#1f9f90] focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-slate-400"
+                                role="menuitem"
+                            >{{ $item['label'] }}</a>
+                        @endforeach
+                    </div>
                 </div>
             </div>
         @endif
