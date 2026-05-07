@@ -63,7 +63,7 @@
                 <button
                     type="button"
                     class="inline-flex items-center gap-1 rounded-lg px-2.5 py-2 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
-                    :class="panel === @js($panelKey) ? 'bg-slate-100/95 text-slate-900' : ($entry['active'] ?? false ? 'bg-slate-100/95' : 'text-slate-800 hover:text-slate-900')"
+                    :class="panel === @js($panelKey) ? 'bg-slate-100/95 text-slate-900' : (@js((bool) ($entry['active'] ?? false)) ? 'bg-slate-100/95' : 'text-slate-800 hover:text-slate-900')"
                     @click="isDesktop ? (clearTimers(), (panel = panel === @js($panelKey) ? null : @js($panelKey))) : toggle(@js($panelKey))"
                     :aria-expanded="(panel === @js($panelKey)).toString()"
                     aria-haspopup="true"
@@ -89,10 +89,10 @@
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0"
                     id="{{ $panelDomId }}"
-                    class="max-lg:hidden absolute left-0 top-full z-50 mt-2 min-w-[26rem] max-w-[30rem] overflow-hidden rounded-2xl border border-slate-200/80 bg-white py-4 text-base shadow-2xl"
+                    class="nav-dropdown-panel max-lg:hidden absolute left-0 top-full z-50 mt-2 overflow-hidden rounded-2xl border border-slate-200/80 bg-white py-3.5 text-base shadow-2xl"
                     role="menu"
                 >
-                    <div class="space-y-1.5 px-2.5">
+                    <div class="space-y-1 px-2">
                         @foreach($panelItems as $item)
                             <a
                                 href="{{ $item['href'] }}"

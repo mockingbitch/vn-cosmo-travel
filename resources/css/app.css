@@ -11,6 +11,18 @@
 }
 
 @layer components {
+    .nav-dropdown-panel {
+        width: 26rem !important;
+    }
+
+    .nav-dropdown-link {
+        font-size: 13px;
+    }
+
+    .nav-dropdown-link:hover {
+        color: #1f9f90;
+    }
+
     .richtext {
         @apply text-slate-700 leading-7;
         /* Blog body: use the OS / browser UI font stack (not the marketing `--font-sans`). */
