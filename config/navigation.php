@@ -58,6 +58,8 @@ return [
             ['label_key' => 'nav.sub.bai_tu_long', 'tour_params' => ['destination' => 'ha-long-bay']],
         ],
         'northern' => [
+            ['label_key' => 'nav.sub.ha_noi', 'tour_params' => ['destination' => 'hanoi']],
+            ['label_key' => 'nav.sub.ninh_binh', 'tour_params' => ['destination' => 'ninh-binh']],
             ['label_key' => 'nav.sub.sapa', 'tour_params' => ['destination' => 'sapa']],
             ['label_key' => 'nav.sub.ha_giang_loop', 'tour_params' => ['destination' => 'ha-giang']],
             ['label_key' => 'nav.sub.mai_chau', 'tour_params' => ['destination' => 'mai-chau']],
