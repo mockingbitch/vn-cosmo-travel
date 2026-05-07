@@ -1,9 +1,9 @@
 @php
     $sections = [
         [
-            'title' => __('General'),
+            'title' => __('admin.sidebar.general'),
             'items' => [
-                ['label' => __('Dashboard'), 'route' => 'admin.dashboard', 'icon' => 'home'],
+                ['label' => __('admin.sidebar.dashboard'), 'route' => 'admin.dashboard', 'icon' => 'home'],
                 ['label' => __('admin.guide.menu'), 'route' => 'admin.guide', 'icon' => 'book'],
                 ['label' => __('profile'), 'route' => 'admin.profile.edit', 'icon' => 'user'],
             ],
@@ -15,12 +15,12 @@
             ],
         ],
         [
-            'title' => __('Content'),
+            'title' => __('admin.sidebar.content'),
             'items' => [
                 ['label' => __('tours'), 'route' => 'admin.tours.index', 'icon' => 'tours'],
                 ['label' => __('destinations'), 'route' => 'admin.destinations.index', 'icon' => 'map'],
                 ['label' => __('blog'), 'route' => 'admin.posts.index', 'icon' => 'document'],
-                ['label' => __('Media'), 'route' => 'admin.media.index', 'icon' => 'folder'],
+                ['label' => __('admin.sidebar.media'), 'route' => 'admin.media.index', 'icon' => 'folder'],
             ],
         ],
     ];
@@ -30,16 +30,16 @@
             'title' => null,
             'items' => [
                 [
-                    'label' => __('Settings'),
+                    'label' => __('admin.sidebar.settings'),
                     'icon' => 'cog',
                     'children' => [
-                        ['label' => __('Website'), 'route' => 'admin.settings.general.edit', 'icon' => 'cog'],
+                        ['label' => __('admin.sidebar.website'), 'route' => 'admin.settings.general.edit', 'icon' => 'cog'],
                         ['label' => __('contact'), 'route' => 'admin.settings.contact.edit', 'icon' => 'phone'],
-                        ['label' => __('Social links'), 'route' => 'admin.settings.social.edit', 'icon' => 'share'],
+                        ['label' => __('admin.sidebar.social_links'), 'route' => 'admin.settings.social.edit', 'icon' => 'share'],
                         ['label' => __('admin.settings.home_why.section'), 'route' => 'admin.settings.homeWhy.edit', 'icon' => 'sparkles'],
                         ['label' => __('admin.settings.testimonials.section'), 'route' => 'admin.settings.testimonials.edit', 'icon' => 'quotes'],
                         ['label' => __('nav.primary.about_us'), 'route' => 'admin.about.edit', 'icon' => 'about'],
-                        ['label' => __('Hero Banners'), 'route' => 'admin.banners.edit', 'icon' => 'photo'],
+                        ['label' => __('admin.sidebar.hero_banners'), 'route' => 'admin.banners.edit', 'icon' => 'photo'],
                     ],
                 ],
                 [
@@ -94,7 +94,7 @@
                 class="hidden items-center justify-center rounded-xl border border-slate-200 bg-white/70 p-2 text-slate-700 shadow-sm transition-all duration-200 hover:bg-slate-50 hover:shadow md:inline-flex lg:inline-flex"
                 @click="sidebarCollapsed = !sidebarCollapsed; localStorage.setItem('admin.sidebarCollapsed', sidebarCollapsed ? '1' : '0')"
                 :aria-pressed="sidebarCollapsed.toString()"
-                aria-label="Collapse sidebar"
+                aria-label="{{ __('admin.sidebar.collapse_sidebar') }}"
             >
                 <span class="inline-flex transition-transform duration-200" :class="sidebarCollapsed ? 'rotate-180' : ''">
                     <x-icon name="arrow-left" size="md" />
@@ -105,7 +105,7 @@
                 type="button"
                 class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white/70 p-2 text-slate-700 shadow-sm transition hover:bg-slate-50 lg:hidden"
                 @click="sidebarOpen = false"
-                aria-label="Close sidebar"
+                aria-label="{{ __('admin.sidebar.close_sidebar') }}"
             >
                 <x-icon name="close" size="md" />
             </button>
@@ -275,8 +275,8 @@
         <div class="mt-6 h-px bg-slate-200/70"></div>
 
         <div class="mt-4 rounded-2xl border border-slate-200/70 bg-white/60 p-3 shadow-sm" x-show="!sidebarCollapsed" x-transition.opacity.duration.200ms>
-            <div class="text-xs font-semibold text-slate-600">{{ __('Tip') }}</div>
-            <div class="mt-1 text-xs text-slate-600">{{ __('Keep content fresh — update banners and posts weekly.') }}</div>
+            <div class="text-xs font-semibold text-slate-600">{{ __('admin.sidebar.tip') }}</div>
+            <div class="mt-1 text-xs text-slate-600">{{ __('admin.sidebar.keep_content_fresh') }}</div>
         </div>
     </nav>
 </aside>

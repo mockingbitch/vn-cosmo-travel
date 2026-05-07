@@ -4,7 +4,7 @@
     <div class="grid gap-6">
         <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
-                <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('Media') }}</h1>
+                <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('admin.media.title') }}</h1>
                 <p class="mt-1 text-sm text-slate-600">{{ __('admin.media.library_intro') }}</p>
             </div>
 
@@ -23,7 +23,8 @@
             </form>
         </div>
 
-        <x-admin.card :title="__('Upload')" :subtitle="__('admin.media.upload_drag_hint')">
+        <x-admin.card :title="__('admin.media.upload')"
+            :subtitle="__('admin.media.upload_drag_hint')">
             <form
                 method="POST"
                 action="{{ route('admin.media.store') }}"
@@ -59,11 +60,11 @@
                         <div class="grid h-12 w-12 place-items-center rounded-2xl bg-slate-900 text-white">
                             <x-icon name="arrow-up-tray" size="lg" />
                         </div>
-                        <div class="text-sm font-semibold text-slate-900">{{ __('Drop files here') }}</div>
-                        <div class="text-xs text-slate-600">{{ __('Or') }}</div>
+                        <div class="text-sm font-semibold text-slate-900">{{ __('admin.media.drop_files_here') }}</div>
+                        <div class="text-xs text-slate-600">{{ __('admin.media.or') }}</div>
                         <x-admin.button type="button" variant="primary" @click="pick()">
                             <x-icon name="arrow-up-tray" size="sm" />
-                            {{ __('Choose files') }}
+                            {{ __('admin.media.choose_files') }}
                         </x-admin.button>
                         <div class="text-xs text-slate-500">{{ __('admin.media.upload_formats_hint') }}</div>
                     </div>
@@ -71,7 +72,7 @@
 
                 @if($errors->any())
                     <div class="text-sm text-rose-700">
-                        {{ __('Upload failed. Please check file size/type.') }}
+                        {{ __('admin.media.upload_failed') }}
                     </div>
                 @endif
             </form>
@@ -80,7 +81,8 @@
         @php
             $pageMediaIds = $media->getCollection()->pluck('id')->map(fn ($v) => (int) $v)->all();
         @endphp
-        <x-admin.card :title="__('Library')" :subtitle="__('Click Preview to view, or select multiple to bulk delete')">
+        <x-admin.card :title="__('admin.media.library')"
+            :subtitle="__('admin.media.library_subtitle')">
             <div
                 x-data="{
                     previewOpen: false,
@@ -151,7 +153,7 @@
                         <span class="inline-flex h-7 min-w-7 items-center justify-center rounded-full bg-indigo-600 px-2 text-xs font-bold text-white">
                             <span x-text="selectedIds.length"></span>
                         </span>
-                        {{ __('items selected') }}
+                        {{ __('admin.media.items_selected') }}
                     </div>
                     <div class="flex items-center gap-2">
                         <x-admin.button
@@ -161,15 +163,15 @@
                             @click="selectAllOnPage()"
                         >
                             <x-icon name="check" size="sm" />
-                            {{ __('Select all on this page') }}
+                            {{ __('admin.media.select_all_on_page') }}
                         </x-admin.button>
                         <x-admin.button type="button" variant="ghost" @click="clearSelection()">
                             <x-icon name="close" size="sm" />
-                            {{ __('Clear selection') }}
+                            {{ __('admin.media.clear_selection') }}
                         </x-admin.button>
                         <x-admin.button type="button" variant="danger" @click="bulkConfirmOpen = true">
                             <x-icon name="delete" size="sm" />
-                            {{ __('Delete selected') }}
+                            {{ __('admin.media.delete_selected') }}
                         </x-admin.button>
                     </div>
                 </div>
@@ -208,7 +210,7 @@
                                 class="absolute left-2 top-2 grid h-7 w-7 cursor-pointer place-items-center rounded-lg shadow-sm ring-1 transition focus:outline-none focus:ring-2 focus:ring-indigo-300/60"
                                 :class="isSelected({{ $mediaId }}) ? 'bg-indigo-600 text-white ring-indigo-600 opacity-100' : 'bg-white/95 text-transparent ring-slate-200 opacity-0 group-hover:opacity-100'"
                                 :aria-pressed="isSelected({{ $mediaId }}).toString()"
-                                aria-label="{{ __('Select') }}"
+                                aria-label="{{ __('admin.media.select') }}"
                                 @click="toggle({{ $mediaId }})"
                             >
                                 <x-icon name="check" size="sm" />
@@ -221,7 +223,7 @@
                                 @click="openPreview({{ \Illuminate\Support\Js::from($previewPayload) }})"
                             >
                                 <x-icon name="eye" size="sm" />
-                                {{ __('Preview') }}
+                                {{ __('admin.media.preview') }}
                             </button>
                         </div>
 
@@ -230,7 +232,7 @@
                             <div class="mt-1 flex items-center justify-between gap-2 text-xs font-medium text-slate-500">
                                 <span>{{ $sizeKb }} KB</span>
                                 <span class="inline-flex items-center gap-1 rounded-full bg-slate-900/5 px-2 py-0.5 text-slate-700">
-                                    {{ __('Used') }}: {{ $used }}
+                                    {{ __('admin.media.used') }}: {{ $used }}
                                 </span>
                             </div>
                         </div>
@@ -242,7 +244,7 @@
                     {{ $media->links() }}
                 </div>
 
-                <x-admin.modal name="previewOpen" :title="__('Preview')">
+                <x-admin.modal name="previewOpen" :title="__('admin.media.preview')">
                     <div class="grid gap-4">
                         <div class="h-[60vh] max-w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 p-2">
                             <div class="grid h-full w-full place-items-center">
@@ -257,14 +259,14 @@
                         <div class="grid gap-2">
                             <div class="text-sm font-semibold text-slate-900" x-text="preview.fileName"></div>
                             <div class="text-xs font-semibold text-slate-500">
-                                {{ __('Used') }}: <span x-text="preview.usedCount"></span>
+                                {{ __('admin.media.used') }}: <span x-text="preview.usedCount"></span>
                             </div>
                         </div>
 
                         <div class="flex flex-wrap items-center justify-end gap-2">
                             <x-admin.button type="button" variant="secondary" @click="copy(preview.url)">
                                 <x-icon name="document" size="sm" />
-                                {{ __('Copy URL') }}
+                                {{ __('admin.media.copy_url') }}
                             </x-admin.button>
 
                             <x-admin.button
@@ -278,26 +280,26 @@
 
                             <x-admin.button type="button" variant="primary" @click="closePreview()">
                                 <x-icon name="close" size="sm" />
-                                {{ __('Close') }}
+                                {{ __('admin.media.close') }}
                             </x-admin.button>
                         </div>
                     </div>
                 </x-admin.modal>
 
-                <x-admin.modal name="bulkConfirmOpen" size="sm" :show-close="false" :aria-label="__('Confirm bulk delete')">
+                <x-admin.modal name="bulkConfirmOpen" size="sm" :show-close="false" :aria-label="__('admin.media.confirm_bulk_delete')">
                     <div class="grid gap-5">
                         <div class="flex items-start gap-4">
                             <div class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-rose-50 ring-4 ring-rose-50/60">
                                 <x-icon name="exclamation-triangle" size="md" class="text-rose-600" />
                             </div>
                             <div class="min-w-0">
-                                <div class="text-base font-semibold text-slate-900">{{ __('Confirm bulk delete') }}</div>
+                                <div class="text-base font-semibold text-slate-900">{{ __('admin.media.confirm_bulk_delete') }}</div>
                                 <p class="mt-1 text-sm text-slate-600">
-                                    {{ __('Are you sure you want to delete the selected media?') }}
+                                    {{ __('admin.media.confirm_bulk_delete_description') }}
                                 </p>
                                 <p class="mt-3 inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-800">
                                     <span class="grid h-5 w-5 place-items-center rounded-full bg-indigo-600 text-[10px] font-bold text-white" x-text="selectedIds.length"></span>
-                                    {{ __('items selected') }}
+                                    {{ __('admin.media.items_selected') }}
                                 </p>
                                 <p class="mt-2 text-xs font-medium text-slate-500">{{ __('ui.this_action_cannot_be_undone') }}</p>
                             </div>
@@ -326,7 +328,7 @@
                                 </template>
                                 <x-admin.button type="submit" variant="danger" x-bind:disabled="bulkSubmitting">
                                     <x-icon name="delete" size="sm" />
-                                    <span x-show="!bulkSubmitting">{{ __('Delete selected') }}</span>
+                                    <span x-show="!bulkSubmitting">{{ __('admin.media.delete_selected') }}</span>
                                     <span x-show="bulkSubmitting" x-cloak>{{ __('deleting…') }}</span>
                                 </x-admin.button>
                             </form>
@@ -342,7 +344,7 @@
                             </div>
                             <div class="min-w-0">
                                 <div class="text-base font-semibold text-slate-900">{{ __('ui.confirm_delete') }}</div>
-                                <p class="mt-1 text-sm text-slate-600">{{ __('Delete this media?') }}</p>
+                                <p class="mt-1 text-sm text-slate-600">{{ __('admin.media.delete_this_media') }}</p>
                                 <p class="mt-3 truncate rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-medium text-slate-800" x-text="preview.fileName"></p>
                                 <p class="mt-2 text-xs font-medium text-slate-500">{{ __('ui.this_action_cannot_be_undone') }}</p>
                             </div>

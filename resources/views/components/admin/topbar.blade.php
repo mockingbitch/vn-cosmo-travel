@@ -9,7 +9,7 @@
                 type="button"
                 class="inline-flex items-center justify-center rounded-xl border border-slate-200 p-2 text-slate-700 hover:bg-slate-50 lg:hidden"
                 @click="sidebarOpen = true"
-                aria-label="Open sidebar"
+                aria-label="{{ __('admin.topbar.open_sidebar') }}"
             >
                 <x-icon name="menu" size="md" />
             </button>
@@ -26,8 +26,8 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white p-2 text-slate-700 shadow-sm transition hover:bg-slate-50"
-                aria-label="{{ __('Back to homepage') }}"
-                title="{{ __('Back to homepage') }}"
+                aria-label="{{ __('admin.topbar.back_to_homepage') }}"
+                title="{{ __('admin.topbar.back_to_homepage') }}"
             >
                 <x-icon name="home" size="md" />
             </a>
@@ -44,7 +44,7 @@
                     class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
                     @click="langOpen = !langOpen"
                     :aria-expanded="langOpen.toString()"
-                    aria-label="{{ __('Language') }}"
+                    aria-label="{{ __('admin.topbar.language') }}"
                 >
                     <x-icon name="globe-alt" size="sm" class="text-slate-500" />
                     <span>{{ $currentLocaleLabel }}</span>
@@ -73,7 +73,7 @@
             <button
                 type="button"
                 class="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white p-2 text-slate-700 shadow-sm transition hover:bg-slate-50"
-                aria-label="Notifications"
+                aria-label="{{ __('admin.topbar.notifications') }}"
             >
                 <x-icon name="bell" size="md" />
             </button>
@@ -88,7 +88,7 @@
                     <span class="grid h-8 w-8 place-items-center rounded-xl bg-slate-900 text-xs font-semibold text-white">
                         {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
                     </span>
-                    <span class="hidden max-w-[10rem] truncate sm:block">{{ auth()->user()->name ?? __('Account') }}</span>
+                    <span class="hidden max-w-[10rem] truncate sm:block">{{ auth()->user()->name ?? __('admin.topbar.account') }}</span>
                     <span class="inline-flex text-slate-400">
                         <x-icon name="chevron-down" size="sm" />
                     </span>
@@ -100,19 +100,19 @@
                     class="absolute right-0 mt-2 w-56 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg"
                 >
                     <div class="px-4 py-3">
-                        <div class="text-xs font-semibold text-slate-500">{{ __('Signed in as') }}</div>
+                        <div class="text-xs font-semibold text-slate-500">{{ __('admin.topbar.signed_in_as') }}</div>
                         <div class="mt-1 truncate text-sm font-semibold text-slate-900">{{ auth()->user()->email ?? '' }}</div>
                     </div>
                     <div class="h-px bg-slate-200"></div>
                     <a class="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50" href="{{ route('admin.profile.edit') }}">{{ __('profile') }}</a>
                     @if(auth()->user()->canManageUsers())
-                        <a class="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50" href="{{ route('admin.settings.general.edit') }}">{{ __('Settings') }}</a>
+                        <a class="block px-4 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50" href="{{ route('admin.settings.general.edit') }}">{{ __('admin.topbar.settings') }}</a>
                     @endif
                     <form method="POST" action="{{ route('admin.logout') }}">
                         @csrf
                         <button type="submit" class="inline-flex w-full items-center gap-2 px-4 py-3 text-sm font-semibold text-rose-700 hover:bg-rose-50">
                             <x-icon name="arrow-left" size="sm" />
-                            {{ __('Sign out') }}
+                            {{ __('admin.topbar.sign_out') }}
                         </button>
                     </form>
                 </div>

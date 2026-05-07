@@ -2,8 +2,8 @@
 
 @section('content')
     <div>
-        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('Settings') }}</h1>
-        <p class="mt-1 text-sm text-slate-600">{{ __('Manage website configuration') }}</p>
+        <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('admin.settings.page_title') }}</h1>
+        <p class="mt-1 text-sm text-slate-600">{{ __('admin.settings.page_subtitle') }}</p>
     </div>
 
     <form method="POST" action="{{ route('admin.settings.contact.update') }}" class="mt-6">
@@ -56,7 +56,7 @@
                 </label>
 
                 <label class="grid gap-1">
-                    <span class="text-xs font-semibold text-slate-700">{{ __('Google map iframe') }}</span>
+                    <span class="text-xs font-semibold text-slate-700">{{ __('admin.settings.contact.google_map_iframe') }}</span>
                     <textarea
                         name="google_map_iframe"
                         rows="5"
@@ -75,7 +75,7 @@
                 class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400/60 focus:ring-offset-2"
             >
                 <x-icon name="save" size="sm" />
-                {{ __('Save changes') }}
+                {{ __('admin.settings.save_changes') }}
             </button>
         </div>
     </form>

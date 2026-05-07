@@ -3,8 +3,8 @@
 @section('content')
     <div class="grid gap-6 lg:grid-cols-3">
         <div class="lg:col-span-3">
-            <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('Hero Banner') }}</h1>
-            <p class="mt-1 text-sm text-slate-600">{{ __('Edit banner copy in Vietnamese and English.') }}</p>
+            <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('admin.banners.hero_title') }}</h1>
+            <p class="mt-1 text-sm text-slate-600">{{ __('admin.banners.hero_subtitle') }}</p>
         </div>
 
         <div class="lg:col-span-2">
@@ -17,14 +17,14 @@
                 <div class="mt-6 flex items-center justify-end gap-3">
                     <x-admin.button type="submit" variant="primary">
                         <x-icon name="save" size="sm" />
-                        {{ __('Save changes') }}
+                        {{ __('admin.settings.save_changes') }}
                     </x-admin.button>
                 </div>
             </form>
         </div>
 
         <div>
-            <x-admin.card :title="__('History')" :subtitle="__('Previous versions')">
+            <x-admin.card :title="__('admin.banners.history_title')" :subtitle="__('admin.banners.history_subtitle')">
                 <div
                     class="grid max-w-full gap-3"
                     x-data="{
@@ -99,10 +99,10 @@
                             </div>
                         </button>
                     @empty
-                        <div class="text-sm text-slate-500">{{ __('No history yet') }}</div>
+                        <div class="text-sm text-slate-500">{{ __('admin.banners.no_history') }}</div>
                     @endforelse
 
-                    <x-admin.modal name="previewOpen" :title="__('Preview version')">
+                    <x-admin.modal name="previewOpen" :title="__('admin.banners.preview_version')">
                         <div class="grid gap-4">
                             <template x-if="preview.imageUrl">
                                 <div class="overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
@@ -119,13 +119,13 @@
                                     </div>
                                     <template x-if="preview.subtitle && preview.subtitle.vi && preview.subtitle.vi.length">
                                         <div>
-                                            <div class="text-xs font-semibold text-slate-500">{{ __('Subtitle') }}</div>
+                                            <div class="text-xs font-semibold text-slate-500">{{ __('admin.banners.subtitle') }}</div>
                                             <div class="mt-1 text-sm text-slate-700" x-text="preview.subtitle.vi"></div>
                                         </div>
                                     </template>
                                     <template x-if="preview.cta && preview.cta.vi && preview.cta.vi.length">
                                         <div>
-                                            <div class="text-xs font-semibold text-slate-500">{{ __('CTA text') }}</div>
+                                            <div class="text-xs font-semibold text-slate-500">{{ __('admin.banners.cta_text') }}</div>
                                             <div class="mt-1 text-sm text-slate-700" x-text="preview.cta.vi"></div>
                                         </div>
                                     </template>
@@ -138,13 +138,13 @@
                                     </div>
                                     <template x-if="preview.subtitle && preview.subtitle.en && preview.subtitle.en.length">
                                         <div>
-                                            <div class="text-xs font-semibold text-slate-500">{{ __('Subtitle') }}</div>
+                                            <div class="text-xs font-semibold text-slate-500">{{ __('admin.banners.subtitle') }}</div>
                                             <div class="mt-1 text-sm text-slate-700" x-text="preview.subtitle.en"></div>
                                         </div>
                                     </template>
                                     <template x-if="preview.cta && preview.cta.en && preview.cta.en.length">
                                         <div>
-                                            <div class="text-xs font-semibold text-slate-500">{{ __('CTA text') }}</div>
+                                            <div class="text-xs font-semibold text-slate-500">{{ __('admin.banners.cta_text') }}</div>
                                             <div class="mt-1 text-sm text-slate-700" x-text="preview.cta.en"></div>
                                         </div>
                                     </template>
@@ -153,7 +153,7 @@
 
                             <template x-if="preview.ctaLink && preview.ctaLink.length">
                                 <div class="rounded-2xl border border-slate-200 bg-white p-4">
-                                    <div class="text-xs font-semibold text-slate-500">{{ __('CTA link') }}</div>
+                                    <div class="text-xs font-semibold text-slate-500">{{ __('admin.banners.cta_link') }}</div>
                                     <div class="mt-1 break-all text-sm font-medium text-slate-800" x-text="preview.ctaLink"></div>
                                 </div>
                             </template>
@@ -165,10 +165,10 @@
                             <div class="flex items-center justify-end gap-2">
                                 <x-admin.button variant="ghost" type="button" @click="previewOpen = false">
                                     <x-icon name="close" size="sm" />
-                                    {{ __('Close') }}
+                                    {{ __('admin.media.close') }}
                                 </x-admin.button>
 
-                                <form method="POST" :action="'{{ url('/admin/banners/apply') }}/' + preview.id" onsubmit="return confirm('{{ __('Apply this version?') }}')">
+                                <form method="POST" :action="'{{ url('/admin/banners/apply') }}/' + preview.id" onsubmit="return confirm('{{ __('admin.banners.apply_this_version') }}')">
                                     @csrf
                                     <x-admin.button variant="primary" type="submit">
                                         <x-icon name="check" size="sm" />
