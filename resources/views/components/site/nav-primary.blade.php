@@ -10,7 +10,7 @@
 @endphp
 
 <nav
-    class="hidden w-full max-w-4xl shrink-0 items-center justify-center gap-0.5 text-sm font-medium text-slate-700 lg:flex lg:gap-1.5 min-[80rem]:text-[0.8rem]"
+    class="hidden w-full max-w-4xl shrink-0 items-center justify-center gap-0.5 text-[13px] font-medium text-slate-700 lg:flex lg:gap-1.5 min-[80rem]:text-[13px]"
     role="menubar"
     aria-label="{{ __('nav.header.main_navigation') }}"
 >
@@ -89,14 +89,14 @@
                     x-transition:leave-start="opacity-100"
                     x-transition:leave-end="opacity-0"
                     id="{{ $panelDomId }}"
-                    class="max-lg:hidden absolute left-0 top-full z-50 mt-1.5 min-w-[24rem] max-w-[28rem] overflow-hidden rounded-2xl border border-slate-200/80 bg-white py-3 text-sm shadow-2xl"
+                    class="max-lg:hidden absolute left-0 top-full z-50 mt-2 min-w-[26rem] max-w-[30rem] overflow-hidden rounded-2xl border border-slate-200/80 bg-white py-4 text-base shadow-2xl"
                     role="menu"
                 >
-                    <div class="space-y-1 px-2">
+                    <div class="space-y-1.5 px-2.5">
                         @foreach($panelItems as $item)
                             <a
                                 href="{{ $item['href'] }}"
-                                class="block w-full whitespace-nowrap rounded-lg px-3 py-2 text-[12px] font-semibold tracking-wide transition hover:bg-slate-50/95 hover:text-[#1f9f90] focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-slate-400"
+                                class="block w-full whitespace-nowrap rounded-lg px-3.5 py-2.5 text-[13px] font-semibold tracking-wide transition hover:bg-slate-50/95 hover:text-[#1f9f90] focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-slate-400"
                                 role="menuitem"
                             >{{ $item['label'] }}</a>
                         @endforeach
