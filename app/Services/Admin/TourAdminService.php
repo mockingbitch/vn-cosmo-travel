@@ -5,6 +5,7 @@ namespace App\Services\Admin;
 use App\Contracts\Interfaces\TourRepositoryInterface;
 use App\Models\Media;
 use App\Models\Tour;
+use App\Models\TourAttribute;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Str;
 
@@ -12,6 +13,7 @@ class TourAdminService
 {
     public function __construct(
         private readonly TourRepositoryInterface $tours,
+        private readonly TourAttributeService $attributes,
     ) {}
 
     public function paginate(int $perPage = 15, array $filters = []): LengthAwarePaginator
@@ -29,6 +31,7 @@ class TourAdminService
 
         $data = $this->applyThumbnail($data);
         $data = $this->normalizeTourLists($data);
+        $this->syncAttributes($data);
         $data['slug'] = $this->uniqueSlug(null, $data['title']);
 
         if (($uid = auth()->id()) !== null) {
@@ -63,6 +66,7 @@ class TourAdminService
 
         $data = $this->applyThumbnail($data);
         $data = $this->normalizeTourLists($data);
+        $this->syncAttributes($data);
         $title = $data['title'] ?? $tour->title;
         $data['slug'] = $this->uniqueSlug(null, $title, $tour->id);
 
@@ -130,12 +134,20 @@ class TourAdminService
         return $data;
     }
 
+    /**
+     * Persists any free-text services/amenities so they are reusable on other tours.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    private function syncAttributes(array $data): void
+    {
+        $this->attributes->sync($data['services'] ?? [], TourAttribute::TYPE_SERVICE);
+        $this->attributes->sync($data['amenities'] ?? [], TourAttribute::TYPE_AMENITY);
+    }
+
     private function normalizeTourLists(array $data): array
     {
-        $serviceKeys = config('tour_catalog.services', []);
-        $amenityKeys = config('tour_catalog.amenities', []);
-
-        foreach (['services' => $serviceKeys, 'amenities' => $amenityKeys] as $field => $allowed) {
+        foreach (['services', 'amenities'] as $field) {
             if (! array_key_exists($field, $data)) {
                 continue;
             }
@@ -143,9 +155,10 @@ class TourAdminService
             unset($data[$field]);
 
             if (is_array($raw)) {
+                // Keep both canonical catalog keys and free-text custom items, trimmed & deduped.
                 $items = array_values(array_unique(array_filter(
                     array_map(static fn ($v) => is_string($v) ? trim($v) : '', $raw),
-                    static fn (string $v) => $v !== '' && in_array($v, $allowed, true)
+                    static fn (string $v) => $v !== ''
                 )));
                 $data[$field] = $items === [] ? null : $items;
             } elseif (is_string($raw)) {
@@ -176,7 +189,7 @@ class TourAdminService
 
     /**
      * @param  array<string, mixed>  $data
-     * @return list<array{day: int, title: string, description: string|null}>
+     * @return list<array{day: int, title: string, description: string|null, schedule: list<array{time: string|null, title: string|null, description: string|null}>|null}>
      */
     private function extractItineraryRows(array $data): array
     {
@@ -197,6 +210,7 @@ class TourAdminService
             $ordered[] = [
                 'title' => $title,
                 'description' => $desc === '' ? null : $desc,
+                'schedule' => $this->extractScheduleSlots($row['schedule'] ?? null),
             ];
         }
 
@@ -206,6 +220,7 @@ class TourAdminService
                 'day' => $i + 1,
                 'title' => $row['title'],
                 'description' => $row['description'],
+                'schedule' => $row['schedule'],
             ];
         }
 
@@ -213,7 +228,41 @@ class TourAdminService
     }
 
     /**
-     * @param  list<array{day: int, title: string, description: string|null}>  $rows
+     * Normalizes the per-day hourly schedule, dropping fully empty slots.
+     *
+     * @return list<array{time: string|null, title: string|null, description: string|null}>|null
+     */
+    private function extractScheduleSlots(mixed $raw): ?array
+    {
+        if (! is_array($raw)) {
+            return null;
+        }
+
+        $slots = [];
+        foreach ($raw as $slot) {
+            if (! is_array($slot)) {
+                continue;
+            }
+            $time = isset($slot['time']) ? trim((string) $slot['time']) : '';
+            $title = isset($slot['title']) ? trim((string) $slot['title']) : '';
+            $desc = isset($slot['description']) ? trim((string) $slot['description']) : '';
+
+            if ($time === '' && $title === '' && $desc === '') {
+                continue;
+            }
+
+            $slots[] = [
+                'time' => $time === '' ? null : $time,
+                'title' => $title === '' ? null : $title,
+                'description' => $desc === '' ? null : $desc,
+            ];
+        }
+
+        return $slots === [] ? null : $slots;
+    }
+
+    /**
+     * @param  list<array{day: int, title: string, description: string|null, schedule: list<array<string, string|null>>|null}>  $rows
      */
     private function replaceItineraries(Tour $tour, array $rows): void
     {
@@ -223,6 +272,7 @@ class TourAdminService
                 'day' => $row['day'],
                 'title' => $row['title'],
                 'description' => $row['description'],
+                'schedule' => $row['schedule'],
             ]);
         }
     }

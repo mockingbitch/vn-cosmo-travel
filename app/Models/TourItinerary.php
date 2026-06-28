@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
     'day',
     'title',
     'description',
+    'schedule',
 ])]
 class TourItinerary extends Model
 {
@@ -18,6 +19,7 @@ class TourItinerary extends Model
     {
         return [
             'day' => 'integer',
+            'schedule' => 'array',
         ];
     }
 

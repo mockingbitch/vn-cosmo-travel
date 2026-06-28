@@ -165,9 +165,34 @@
                                 <div class="flex items-center justify-between gap-4">
                                     <div class="text-sm font-semibold text-slate-900">{{ __('tour.day_title', ['day' => $itinerary->day, 'title' => $itinerary->title]) }}</div>
                                 </div>
-                                <p class="mt-2 text-sm leading-7 text-slate-600">
-                                    {{ $itinerary->description }}
-                                </p>
+                                @if(filled($itinerary->description))
+                                    <p class="mt-2 text-sm leading-7 text-slate-600">
+                                        {{ $itinerary->description }}
+                                    </p>
+                                @endif
+                                @php($schedule = is_array($itinerary->schedule) ? array_filter($itinerary->schedule, 'is_array') : [])
+                                @if(! empty($schedule))
+                                    <ol class="mt-4 space-y-3 border-l-2 border-slate-100 pl-4">
+                                        @foreach($schedule as $slot)
+                                            <li class="relative">
+                                                <span class="absolute -left-[1.3rem] top-1.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-slate-300 ring-1 ring-slate-200" aria-hidden="true"></span>
+                                                <div class="flex flex-col gap-0.5 sm:flex-row sm:items-baseline sm:gap-3">
+                                                    @if(filled($slot['time'] ?? null))
+                                                        <span class="shrink-0 text-xs font-semibold tabular-nums text-slate-900">{{ $slot['time'] }}</span>
+                                                    @endif
+                                                    <div class="min-w-0">
+                                                        @if(filled($slot['title'] ?? null))
+                                                            <div class="text-sm font-medium text-slate-800">{{ $slot['title'] }}</div>
+                                                        @endif
+                                                        @if(filled($slot['description'] ?? null))
+                                                            <p class="mt-0.5 text-sm leading-6 text-slate-600">{{ $slot['description'] }}</p>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ol>
+                                @endif
                             </div>
                         @empty
                             <div class="rounded-xl bg-slate-50 p-4 text-sm text-slate-600">

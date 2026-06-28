@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class UpdateTourRequest extends FormRequest
 {
@@ -43,15 +42,19 @@ class UpdateTourRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'services' => ['present', 'array'],
-            'services.*' => ['string', Rule::in(config('tour_catalog.services', []))],
+            'services.*' => ['string', 'max:120'],
             'amenities' => ['present', 'array'],
-            'amenities.*' => ['string', Rule::in(config('tour_catalog.amenities', []))],
+            'amenities.*' => ['string', 'max:120'],
             'price' => ['required', 'integer', 'min:0'],
             'thumbnail' => ['nullable', 'string', 'max:2048'],
             'thumbnail_media_id' => ['nullable', 'integer', 'exists:media,id'],
             'itinerary' => ['nullable', 'array'],
             'itinerary.*.title' => ['nullable', 'string', 'max:255'],
             'itinerary.*.description' => ['nullable', 'string', 'max:10000'],
+            'itinerary.*.schedule' => ['nullable', 'array'],
+            'itinerary.*.schedule.*.time' => ['nullable', 'string', 'max:32'],
+            'itinerary.*.schedule.*.title' => ['nullable', 'string', 'max:255'],
+            'itinerary.*.schedule.*.description' => ['nullable', 'string', 'max:2000'],
             'gallery' => ['present', 'array'],
             'gallery.*' => ['nullable', 'string', 'max:2048'],
         ];
