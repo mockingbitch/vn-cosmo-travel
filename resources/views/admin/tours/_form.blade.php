@@ -97,6 +97,10 @@
     $priceInitial = ($priceOld !== null && $priceOld !== '') ? (int) $priceOld : null;
     $pricePlaceholderDigits = (int) preg_replace('/\D/', '', (string) __('placeholder.tour_price'));
     $pricePlaceholderFormatted = number_format(max(0, $pricePlaceholderDigits), 0, ',', '.');
+    $currencyInitial = (string) old('currency', $tour?->currency ?? \App\Models\Tour::CURRENCY_VND);
+    if (! array_key_exists($currencyInitial, \App\Models\Tour::CURRENCIES)) {
+        $currencyInitial = \App\Models\Tour::CURRENCY_VND;
+    }
 
     $thumbnailUrlField = old('thumbnail');
     if ($thumbnailUrlField === null) {
@@ -144,18 +148,30 @@
 </div>
 
 <div x-data="vndPriceInput(@js($priceInitial))">
-    <label class="block text-sm font-medium text-slate-700">{{ __('ui.price_vnd') }}</label>
+    <label class="block text-sm font-medium text-slate-700">{{ __('price') }}</label>
     <input type="hidden" name="price" :value="raw === null || raw === '' ? '' : raw" required>
-    <input
-        type="text"
-        x-ref="vis"
-        inputmode="numeric"
-        autocomplete="off"
-        placeholder="{{ $pricePlaceholderFormatted }}"
-        class="mt-1 w-full max-w-md rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
-        @input="onInput($event)"
-    />
+    <div class="mt-1 flex max-w-md gap-2">
+        <input
+            type="text"
+            x-ref="vis"
+            inputmode="numeric"
+            autocomplete="off"
+            placeholder="{{ $pricePlaceholderFormatted }}"
+            class="min-w-0 flex-1 rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
+            @input="onInput($event)"
+        />
+        <select
+            name="currency"
+            aria-label="{{ __('ui.currency') }}"
+            class="w-28 shrink-0 rounded-xl border border-slate-200 px-2 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
+        >
+            @foreach(array_keys(\App\Models\Tour::CURRENCIES) as $code)
+                <option value="{{ $code }}" @selected($currencyInitial === $code)>{{ $code }}</option>
+            @endforeach
+        </select>
+    </div>
     @error('price')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
+    @error('currency')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
 </div>
 
 <div

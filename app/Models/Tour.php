@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'services',
     'amenities',
     'price',
+    'currency',
     'duration',
     'destination_id',
     'created_by',
@@ -29,6 +30,20 @@ class Tour extends Model
 
     public const STATUS_DISABLED = 'disabled';
 
+    public const CURRENCY_VND = 'VND';
+
+    public const CURRENCY_USD = 'USD';
+
+    /**
+     * Supported price currencies. symbol_before = symbol shown before the amount.
+     *
+     * @var array<string, array{symbol: string, symbol_before: bool}>
+     */
+    public const CURRENCIES = [
+        self::CURRENCY_VND => ['symbol' => '₫', 'symbol_before' => false],
+        self::CURRENCY_USD => ['symbol' => '$', 'symbol_before' => true],
+    ];
+
     protected function casts(): array
     {
         return [
@@ -37,6 +52,27 @@ class Tour extends Model
             'services' => 'array',
             'amenities' => 'array',
         ];
+    }
+
+    /**
+     * Currency code, falling back to VND for legacy/empty rows.
+     */
+    public function currencyCode(): string
+    {
+        $code = (string) ($this->currency ?? '');
+
+        return array_key_exists($code, self::CURRENCIES) ? $code : self::CURRENCY_VND;
+    }
+
+    /**
+     * Price with its currency symbol, e.g. "8,990,000₫" or "$1,200".
+     */
+    public function formattedPrice(): string
+    {
+        $meta = self::CURRENCIES[$this->currencyCode()];
+        $amount = number_format((int) $this->price);
+
+        return $meta['symbol_before'] ? $meta['symbol'].$amount : $amount.$meta['symbol'];
     }
 
     public function getRouteKeyName(): string

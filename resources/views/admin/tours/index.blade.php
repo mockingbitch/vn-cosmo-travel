@@ -120,7 +120,7 @@
                                     </form>
                                 </td>
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->duration }}</td>
-                                <td class="px-4 py-3 text-slate-600 sm:px-6">{{ number_format((int) $tour->price) }}₫</td>
+                                <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->formattedPrice() }}</td>
                                 @if(auth()->user()->canManageUsers())
                                     <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->creator?->name ?? '—' }}</td>
                                     <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->updatedBy?->name ?? '—' }}</td>

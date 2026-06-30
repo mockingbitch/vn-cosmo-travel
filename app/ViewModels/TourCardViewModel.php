@@ -30,7 +30,7 @@ class TourCardViewModel
 
     public function priceLabel(): string
     {
-        return number_format((int) $this->tour->price).'₫';
+        return $this->tour->formattedPrice();
     }
 
     public function destinationName(): ?string

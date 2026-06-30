@@ -20,7 +20,7 @@
                         @endif
                     </div>
                     <div class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white">
-                        {{ number_format((int) $tour->price) }}₫ <span class="text-white/80 text-xs font-medium">{{ __('ui.per_person') }}</span>
+                        {{ $tour->formattedPrice() }} <span class="text-white/80 text-xs font-medium">{{ __('ui.per_person') }}</span>
                     </div>
                 </div>
             </div>
@@ -241,7 +241,7 @@
                             <div class="mt-1 text-xs text-slate-500">{{ __('ui.well_contact_you_quickly_to_confirm_details') }}</div>
                         </div>
                         <div class="rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white">
-                            {{ number_format((int) $tour->price) }}₫
+                            {{ $tour->formattedPrice() }}
                         </div>
                     </div>
 

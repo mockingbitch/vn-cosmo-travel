@@ -48,6 +48,7 @@ class StoreTourRequest extends FormRequest
             'amenities' => ['present', 'array'],
             'amenities.*' => ['string', 'max:120'],
             'price' => ['required', 'integer', 'min:0'],
+            'currency' => ['required', 'string', Rule::in(array_keys(Tour::CURRENCIES))],
             'thumbnail' => ['nullable', 'string', 'max:2048'],
             'thumbnail_media_id' => ['nullable', 'integer', 'exists:media,id'],
             'itinerary' => ['nullable', 'array'],
