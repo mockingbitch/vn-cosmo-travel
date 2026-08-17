@@ -154,8 +154,15 @@
                                     <a class="font-medium text-slate-900 hover:underline" href="{{ $footerPhoneHref }}" @if(str_starts_with($footerPhoneHref, 'http')) target="_blank" rel="noopener noreferrer" @endif>{{ $siteContact->phone() }}</a>
                                 </div>
                             @endif
-                            @if($siteContact->address())
-                                <div>{{ __('address') }}: <span class="font-medium text-slate-900">{{ $siteContact->address() }}</span></div>
+                            @if(count($siteContact->addresses()) > 0)
+                                <div>
+                                    <span>{{ count($siteContact->addresses()) > 1 ? __('ui.addresses') : __('address') }}:</span>
+                                    <div class="mt-1 space-y-1">
+                                        @foreach($siteContact->addresses() as $address)
+                                            <div class="font-medium text-slate-900">{{ $address }}</div>
+                                        @endforeach
+                                    </div>
+                                </div>
                             @endif
                             @if(count($siteContact->socialLinks()) > 0)
                                 <div class="flex flex-wrap gap-3 pt-1">

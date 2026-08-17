@@ -2,39 +2,53 @@
 
 @section('content')
     <section class="bg-slate-50">
-        <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-            <div class="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-                <div>
-                    <div class="text-sm font-semibold text-slate-500">{{ $tour->destination?->localizedName() }}</div>
-                    <h1 class="mt-1 text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">{{ $tour->title }}</h1>
-                    <p class="mt-2 max-w-3xl text-sm leading-7 text-slate-600 sm:text-base">
+        <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+            <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+                <div class="min-w-0 flex-1">
+                    <x-tour-book-now-badge class="mb-3" />
+                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 sm:text-sm">{{ $tour->destination?->localizedName() }}</div>
+                    <h1 class="mt-1 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">{{ $tour->title }}</h1>
+                    <p class="mt-2 hidden max-w-3xl text-sm leading-7 text-slate-600 sm:block sm:text-base">
                         {{ \Illuminate\Support\Str::limit(strip_tags((string) $tour->description), 220) }}
                     </p>
                 </div>
-                <div class="flex flex-wrap items-center gap-3">
-                    <div class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900">
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+                    <div class="rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-900 sm:px-4 sm:py-2 sm:text-sm">
                         @if((int) $tour->duration === 1)
                             {{ __('ui.1_day') }}
                         @else
                             {{ __(':count days', ['count' => $tour->duration]) }}
                         @endif
                     </div>
-                    <div class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white">
-                        {{ $tour->formattedPrice() }} <span class="text-white/80 text-xs font-medium">{{ __('ui.per_person') }}</span>
+                    <div class="rounded-xl bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white sm:px-4 sm:py-2 sm:text-sm">
+                        {{ $tour->formattedPrice() }}
+                        <span class="text-[10px] font-medium text-white/80 sm:text-xs">{{ __('ui.per_person') }}</span>
                     </div>
+                    <a
+                        href="#tour-booking"
+                        class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-4 py-2 text-xs font-bold uppercase tracking-wide text-white shadow-md animate-book-now-blink sm:text-sm lg:hidden"
+                    >
+                        {{ __('ui.book_now') }}
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div class="grid gap-10 lg:grid-cols-12">
-            <div class="lg:col-span-8">
+    <section class="mx-auto max-w-7xl px-4 pb-24 pt-4 sm:px-6 sm:py-6 lg:px-8 lg:pb-10 lg:pt-10">
+        <div class="grid gap-6 lg:grid-cols-12 lg:gap-10">
+            <aside id="tour-booking" class="order-2 scroll-mt-20 lg:order-2 lg:col-span-4">
+                <div class="lg:sticky lg:top-24">
+                    <x-tour-booking-panel :tour="$tour" />
+                </div>
+            </aside>
+
+            <div class="order-1 lg:order-1 lg:col-span-8">
                 <div
                     x-data="{ active: 0, slides: @js($gallerySlides) }"
                     class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
                 >
-                    <div class="relative aspect-[16/10] bg-slate-100">
+                    <div class="relative aspect-[4/3] bg-slate-100 sm:aspect-[16/10]">
                         <template x-for="(slide, idx) in slides" :key="idx">
                             <div
                                 x-show="active === idx"
@@ -78,7 +92,7 @@
                         </button>
                     </div>
 
-                    <div class="grid grid-cols-5 gap-2 p-4 sm:grid-cols-6">
+                    <div class="grid grid-cols-4 gap-2 p-3 sm:grid-cols-6 sm:p-4">
                         <template x-for="(slide, idx) in slides" :key="'thumb-'+idx">
                             <button
                                 type="button"
@@ -90,14 +104,14 @@
                                     :src="slide.posterUrl || slide.src"
                                     alt=""
                                     loading="lazy"
-                                    class="h-16 w-full object-cover sm:h-20"
+                                    class="h-14 w-full object-cover sm:h-20"
                                 />
                                 <span
                                     x-show="slide.type === 'youtube'"
                                     class="pointer-events-none absolute inset-0 flex items-center justify-center"
                                     aria-hidden="true"
                                 >
-                                    <span class="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-slate-900 shadow-md ring-1 ring-slate-200/80">
+                                    <span class="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-slate-900 shadow-md ring-1 ring-slate-200/80 sm:h-9 sm:w-9">
                                         <x-icon name="play" size="sm" class="ml-0.5 text-slate-900" />
                                     </span>
                                 </span>
@@ -106,49 +120,42 @@
                     </div>
                 </div>
 
-                <div class="mt-10 rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
-                    <h2 class="text-xl font-semibold tracking-tight text-slate-900">{{ __('tour.overview') }}</h2>
-                    <div class="prose prose-slate mt-4 max-w-none">
+                <div class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:mt-10 sm:p-7">
+                    <h2 class="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">{{ __('tour.overview') }}</h2>
+                    <div class="prose prose-slate mt-4 max-w-none text-sm sm:text-base">
                         {!! nl2br(e((string) $tour->description)) !!}
                     </div>
                 </div>
 
                 @php
-                    $serviceItems = is_array($tour->services) ? $tour->services : [];
-                    $amenityItems = is_array($tour->amenities) ? $tour->amenities : [];
+                    $includedItems = \App\Models\Tour::labeledListItems($tour->includedItems(), 'services');
+                    $excludedItems = \App\Models\Tour::labeledListItems($tour->excludedItems(), 'amenities');
                 @endphp
-                @if($serviceItems !== [] || $amenityItems !== [])
-                    <div class="mt-10 rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
-                        <h2 class="text-xl font-semibold tracking-tight text-slate-900">{{ __('tour.services_and_amenities') }}</h2>
-                        <div class="mt-6 grid gap-8 sm:grid-cols-2">
-                            @if($serviceItems !== [])
+                @if($includedItems !== [] || $excludedItems !== [])
+                    <div class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:mt-10 sm:p-7">
+                        <div class="grid gap-8 sm:grid-cols-2">
+                            @if($includedItems !== [])
                                 <div>
-                                    <h3 class="text-sm font-semibold text-slate-900">{{ __('tour.services') }}</h3>
-                                    <ul class="mt-3 grid gap-2 text-sm text-slate-700">
-                                        @foreach($serviceItems as $item)
-                                            @php
-                                                $allowedSvc = config('tour_catalog.services', []);
-                                                $label = is_string($item) && in_array($item, $allowedSvc, true)
-                                                    ? __('tour.catalog.service.'.$item)
-                                                    : $item;
-                                            @endphp
-                                            <li class="flex gap-2"><span class="text-slate-400" aria-hidden="true">•</span> {{ $label }}</li>
+                                    <h2 class="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">{{ __('tour.included') }}</h2>
+                                    <ul class="mt-4 grid gap-2 text-sm text-slate-700">
+                                        @foreach($includedItems as $label)
+                                            <li class="flex gap-2">
+                                                <span class="text-emerald-600" aria-hidden="true">✓</span>
+                                                <span>{{ $label }}</span>
+                                            </li>
                                         @endforeach
                                     </ul>
                                 </div>
                             @endif
-                            @if($amenityItems !== [])
+                            @if($excludedItems !== [])
                                 <div>
-                                    <h3 class="text-sm font-semibold text-slate-900">{{ __('tour.amenities') }}</h3>
-                                    <ul class="mt-3 grid gap-2 text-sm text-slate-700">
-                                        @foreach($amenityItems as $item)
-                                            @php
-                                                $allowedAmn = config('tour_catalog.amenities', []);
-                                                $label = is_string($item) && in_array($item, $allowedAmn, true)
-                                                    ? __('tour.catalog.amenity.'.$item)
-                                                    : $item;
-                                            @endphp
-                                            <li class="flex gap-2"><span class="text-slate-400" aria-hidden="true">•</span> {{ $label }}</li>
+                                    <h2 class="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">{{ __('tour.excluded') }}</h2>
+                                    <ul class="mt-4 grid gap-2 text-sm text-slate-700">
+                                        @foreach($excludedItems as $label)
+                                            <li class="flex gap-2">
+                                                <span class="text-slate-400" aria-hidden="true">×</span>
+                                                <span>{{ $label }}</span>
+                                            </li>
                                         @endforeach
                                     </ul>
                                 </div>
@@ -157,11 +164,11 @@
                     </div>
                 @endif
 
-                <div class="mt-10 rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
-                    <h2 class="text-xl font-semibold tracking-tight text-slate-900">{{ __('tour.itinerary') }}</h2>
+                <div class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:mt-10 sm:p-7">
+                    <h2 class="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">{{ __('tour.itinerary') }}</h2>
                     <div class="mt-5 grid gap-4">
                         @forelse($tour->itineraries as $itinerary)
-                            <div class="rounded-2xl border border-slate-200 p-5">
+                            <div class="rounded-2xl border border-slate-200 p-4 sm:p-5">
                                 <div class="flex items-center justify-between gap-4">
                                     <div class="text-sm font-semibold text-slate-900">{{ __('tour.day_title', ['day' => $itinerary->day, 'title' => $itinerary->title]) }}</div>
                                 </div>
@@ -202,8 +209,8 @@
                     </div>
                 </div>
 
-                <div class="mt-10 rounded-2xl border border-slate-200 bg-white p-7 shadow-sm">
-                    <h2 class="text-xl font-semibold tracking-tight text-slate-900">{{ __('tour.faq') }}</h2>
+                <div class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:mt-10 sm:p-7">
+                    <h2 class="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">{{ __('tour.faq') }}</h2>
                     <div class="mt-4 grid gap-4">
                         @foreach([
                             ['q' => __('tour.faq.q1'), 'a' => __('tour.faq.a1')],
@@ -218,9 +225,9 @@
                     </div>
                 </div>
 
-                <div class="mt-12">
+                <div class="mt-8 sm:mt-12">
                     <div class="flex items-end justify-between gap-6">
-                        <h2 class="text-xl font-semibold tracking-tight text-slate-900">{{ __('ui.related_tours') }}</h2>
+                        <h2 class="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">{{ __('ui.related_tours') }}</h2>
                         <a href="{{ route('tours.index', ['destination' => $tour->destination?->slug]) }}" class="text-sm font-semibold text-slate-600 hover:text-slate-900">
                             {{ __('More in destination', ['destination' => $tour->destination?->localizedName() ?? '']) }}
                         </a>
@@ -232,115 +239,16 @@
                     </div>
                 </div>
             </div>
-
-            <aside class="lg:col-span-4">
-                <div class="sticky top-24 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                    <div class="flex items-start justify-between gap-4">
-                        <div>
-                            <div class="text-sm font-semibold text-slate-900">{{ __('ui.book_this_tour') }}</div>
-                            <div class="mt-1 text-xs text-slate-500">{{ __('ui.well_contact_you_quickly_to_confirm_details') }}</div>
-                        </div>
-                        <div class="rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white">
-                            {{ $tour->formattedPrice() }}
-                        </div>
-                    </div>
-
-                    @if(session('booking_success'))
-                        <div class="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-                            {{ session('booking_success') }}
-                        </div>
-                    @endif
-
-                    <form
-                        class="mt-5 grid gap-4"
-                        method="POST"
-                        action="{{ route('tours.book', $tour) }}"
-                        x-data="{ loading: false, message: null, errorMessage: null }"
-                        @submit.prevent="
-                            loading = true;
-                            message = null;
-                            errorMessage = null;
-                            $el.querySelectorAll('p.text-rose-600').forEach(p => p.remove());
-                            fetch($el.action, {
-                                method: 'POST',
-                                headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest', 'X-CSRF-TOKEN': '{{ csrf_token() }}' },
-                                body: new FormData($el)
-                            }).then(async (res) => {
-                                if (res.status === 429) {
-                                    const data = await res.json().catch(() => ({}));
-                                    throw { rateLimited: true, message: (data && data.message) ? data.message : '{{ __('ui.too_many_requests_please_slow_down_and_try_again_later') }}' };
-                                }
-                                if (!res.ok) {
-                                    const data = await res.json().catch(() => ({}));
-                                    throw data;
-                                }
-                                return res.json();
-                            }).then((data) => {
-                                message = data.message;
-                                $el.reset();
-                            }).catch((err) => {
-                                if (err && err.rateLimited) { errorMessage = err.message; return; }
-                                $el.submit();
-                            }).finally(() => loading = false);
-                        "
-                    >
-                        @csrf
-
-                        <x-input label="{{ __('ui.full_name') }}" name="name" :placeholder="__('placeholder.name')" />
-                        <x-input label="{{ __('email') }}" name="email" type="email" :placeholder="__('placeholder.email')" />
-                        <x-input label="{{ __('phone') }}" name="phone" :placeholder="__('placeholder.phone')" />
-                        <x-input label="{{ __('ui.travel_date') }}" name="travel_date" type="date" />
-
-                        <label class="block">
-                            <span class="mb-1 block text-sm font-medium text-slate-700">{{ __('people') }}</span>
-                            <select
-                                name="people_count"
-                                class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
-                            >
-                                @for($i = 1; $i <= 10; $i++)
-                                    <option value="{{ $i }}" @selected((int) old('people_count', 2) === $i)>{{ $i }}</option>
-                                @endfor
-                                <option value="11" @selected((int) old('people_count', 2) === 11)>{{ __('booking.people_10_plus') }}</option>
-                            </select>
-                            @error('people_count')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
-                            @enderror
-                        </label>
-
-                        <label class="block">
-                            <span class="mb-1 block text-sm font-medium text-slate-700">{{ __('ui.note_optional') }}</span>
-                            <textarea
-                                name="note"
-                                rows="3"
-                                placeholder="{{ __('placeholder.note') }}"
-                                class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
-                            >{{ old('note') }}</textarea>
-                            @error('note')
-                                <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
-                            @enderror
-                        </label>
-
-                        <x-button type="submit" variant="primary" class="w-full justify-center" x-bind:class="loading ? 'opacity-70 cursor-not-allowed' : ''">
-                            <x-icon name="envelope" size="sm" />
-                            <span x-show="!loading">{{ __('ui.request_booking') }}</span>
-                            <span x-show="loading">{{ __('sending…') }}</span>
-                        </x-button>
-
-                        <template x-if="message">
-                            <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800" x-text="message"></div>
-                        </template>
-
-                        <template x-if="errorMessage">
-                            <div class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800" x-text="errorMessage"></div>
-                        </template>
-
-                        <p class="text-xs leading-5 text-slate-500">
-                            {{ __('ui.booking_consent') }}
-                        </p>
-                    </form>
-                </div>
-            </aside>
         </div>
     </section>
-@endsection
 
+    <div class="fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 p-3 shadow-[0_-8px_30px_rgba(15,23,42,0.08)] backdrop-blur lg:hidden">
+        <a
+            href="#tour-booking"
+            class="flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold uppercase tracking-wide text-white animate-book-now-blink"
+        >
+            {{ __('ui.book_now') }}
+            <span class="font-semibold">· {{ $tour->formattedPrice() }}</span>
+        </a>
+    </div>
+@endsection

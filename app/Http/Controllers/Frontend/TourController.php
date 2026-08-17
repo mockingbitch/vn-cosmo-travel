@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Tour;
 use App\Services\DestinationService;
 use App\Services\TourService;
+use App\Support\CurrencyFormatter;
 use App\Support\TourGallerySlide;
 use App\ViewModels\SeoViewModel;
 use App\ViewModels\TourCardViewModel;
@@ -22,6 +23,18 @@ class TourController extends Controller
     public function index(Request $request)
     {
         $filters = $request->only(['destination', 'duration', 'min_price', 'max_price', 'sort']);
+        $filters['currency'] = Tour::CURRENCY_USD;
+
+        foreach (['min_price', 'max_price'] as $priceKey) {
+            if (array_key_exists($priceKey, $filters)) {
+                $parsed = CurrencyFormatter::parse(
+                    is_scalar($filters[$priceKey]) ? (string) $filters[$priceKey] : null
+                );
+                $filters[$priceKey] = $parsed !== null ? (string) $parsed : null;
+            }
+        }
+
+        $filters = array_filter($filters, fn ($value) => $value !== null && $value !== '');
 
         $tours = $this->tourService->paginate($filters, 12);
         $tourCards = $tours->getCollection()->map(fn ($tour) => new TourCardViewModel($tour));

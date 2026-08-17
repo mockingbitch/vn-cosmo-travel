@@ -17,19 +17,23 @@ class SetLocale
         $supported = array_keys((array) config('locales.supported', []));
         $default = (string) config('locales.default', config('app.locale'));
 
-        $locale = $request->session()->get('locale');
-
-        if (!is_string($locale) || $locale === '') {
-            $locale = $request->cookie('locale');
-        }
-
-        if (!is_string($locale) || $locale === '') {
-            $preferred = $request->getPreferredLanguage($supported);
-            $locale = $preferred ?: $default;
-        }
-
-        if (!in_array($locale, $supported, true)) {
+        if (count($supported) <= 1) {
             $locale = $default;
+        } else {
+            $locale = $request->session()->get('locale');
+
+            if (! is_string($locale) || $locale === '') {
+                $locale = $request->cookie('locale');
+            }
+
+            if (! is_string($locale) || $locale === '') {
+                $preferred = $request->getPreferredLanguage($supported);
+                $locale = $preferred ?: $default;
+            }
+
+            if (! in_array($locale, $supported, true)) {
+                $locale = $default;
+            }
         }
 
         App::setLocale($locale);

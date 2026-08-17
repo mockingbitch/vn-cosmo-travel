@@ -39,7 +39,7 @@ class SettingAdminService
     {
         $this->settings->set('contact.email', $data['contact_email'] ?? null);
         $this->settings->set('contact.phone', $data['contact_phone'] ?? null);
-        $this->settings->set('contact.address', $data['contact_address'] ?? null);
+        $this->settings->set('contact.addresses', $this->normalizeAddresses($data['contact_addresses'] ?? []));
         $this->settings->set('contact.map_iframe', $data['google_map_iframe'] ?? null);
 
         $this->settingsService->forgetCache();
@@ -48,12 +48,50 @@ class SettingAdminService
     /** @param array<string, mixed> $data */
     public function updateSocial(array $data): void
     {
-        $this->settings->set('social.facebook', $data['facebook'] ?? null);
-        $this->settings->set('social.instagram', $data['instagram'] ?? null);
-        $this->settings->set('social.youtube', $data['youtube'] ?? null);
-        $this->settings->set('social.tiktok', $data['tiktok'] ?? null);
+        $this->settings->set('social.links', $this->normalizeSocialLinks($data['social_links'] ?? []));
 
         $this->settingsService->forgetCache();
+    }
+
+    /**
+     * @param  mixed  $input
+     * @return list<string>
+     */
+    private function normalizeAddresses(mixed $input): array
+    {
+        $rows = is_array($input) ? $input : [];
+        $out = [];
+        for ($i = 0; $i < 3; $i++) {
+            $out[] = isset($rows[$i]) ? trim((string) $rows[$i]) : '';
+        }
+
+        return $out;
+    }
+
+    /**
+     * @param  mixed  $input
+     * @return list<array{label: string, url: string}>
+     */
+    private function normalizeSocialLinks(mixed $input): array
+    {
+        $rows = is_array($input) ? $input : [];
+        $out = [];
+        foreach ($rows as $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+            $label = isset($row['label']) ? trim((string) $row['label']) : '';
+            $url = isset($row['url']) ? trim((string) $row['url']) : '';
+            if ($url === '') {
+                continue;
+            }
+            $out[] = [
+                'label' => $label !== '' ? $label : $url,
+                'url' => $url,
+            ];
+        }
+
+        return $out;
     }
 
     /** @param array<string, mixed> $data */
@@ -73,7 +111,7 @@ class SettingAdminService
     private function normalizeHomeWhy(array $input): array
     {
         $out = [];
-        foreach (['vi', 'en'] as $loc) {
+        foreach (array_keys((array) config('locales.supported', [])) as $loc) {
             /** @var array<string, mixed> $b */
             $b = is_array($input[$loc] ?? null) ? $input[$loc] : [];
             $items = [];

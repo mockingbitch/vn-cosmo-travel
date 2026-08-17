@@ -10,7 +10,7 @@
                     {{ __('ui.add_tour') }}
                 </a>
             </div>
-            <form method="GET" action="{{ route('admin.tours.index') }}" class="grid items-end gap-3 border-b border-slate-100 bg-slate-50/70 px-5 py-4 lg:grid-cols-5 sm:px-6">
+            <form method="GET" action="{{ route('admin.tours.index') }}" class="grid items-end gap-3 border-b border-slate-100 bg-slate-50/70 px-5 py-4 sm:grid-cols-2 lg:grid-cols-5 sm:px-6">
                 <label class="grid gap-1 lg:col-span-2">
                     <span class="text-xs font-semibold text-slate-700">{{ __('ui.filter_keyword_label') }}</span>
                     <input
@@ -44,7 +44,7 @@
                         @endforeach
                     </select>
                 </label>
-                <div class="flex gap-2">
+                <div class="flex gap-2 sm:col-span-2 lg:col-span-1">
                     <button type="submit" class="inline-flex h-10 items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 text-sm font-semibold text-white hover:bg-slate-800">
                         <x-icon name="search" size="sm" />
                         {{ __('filter') }}
@@ -64,7 +64,7 @@
                             <th class="px-4 py-3 sm:px-6">{{ __('destination') }}</th>
                             <th class="px-4 py-3 sm:px-6">{{ __('status') }}</th>
                             <th class="px-4 py-3 sm:px-6">{{ __('days') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('price') }}</th>
+                            <th class="px-4 py-3 sm:px-6">{{ __('ui.price_usd') }}</th>
                             @if(auth()->user()->canManageUsers())
                                 <th class="px-4 py-3 sm:px-6">{{ __('audit.created_by') }}</th>
                                 <th class="px-4 py-3 sm:px-6">{{ __('audit.updated_by') }}</th>

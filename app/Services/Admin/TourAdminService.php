@@ -7,6 +7,7 @@ use App\Models\Media;
 use App\Models\Tour;
 use App\Models\TourAttribute;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class TourAdminService
@@ -21,6 +22,39 @@ class TourAdminService
         return $this->tours->adminPaginate($perPage, $filters);
     }
 
+    public function listFeatured(): Collection
+    {
+        return $this->tours->adminFeaturedList();
+    }
+
+    public function paginateNonFeatured(int $perPage = 15, array $filters = []): LengthAwarePaginator
+    {
+        return $this->tours->adminPaginateNonFeatured($perPage, $filters);
+    }
+
+    /**
+     * @param  list<array{tour_id: int|string, featured_sort?: int|string|null}>  $rows
+     */
+    public function updateFeaturedSorts(array $rows): void
+    {
+        foreach ($rows as $row) {
+            $tourId = (int) ($row['tour_id'] ?? 0);
+            if ($tourId <= 0) {
+                continue;
+            }
+
+            $tour = Tour::query()->find($tourId);
+            if ($tour === null || ! $tour->is_featured) {
+                continue;
+            }
+
+            $sortRaw = $row['featured_sort'] ?? null;
+            $sort = ($sortRaw === null || $sortRaw === '') ? null : max(0, (int) $sortRaw);
+
+            $this->updateFeatured($tour, true, $sort);
+        }
+    }
+
     public function create(array $data): Tour
     {
         $itineraryRows = $this->extractItineraryRows($data);
@@ -31,6 +65,7 @@ class TourAdminService
 
         $data = $this->applyThumbnail($data);
         $data = $this->normalizeTourLists($data);
+        $data['currency'] = Tour::CURRENCY_USD;
         $this->syncAttributes($data);
         $data['slug'] = $this->uniqueSlug(null, $data['title']);
 
@@ -56,6 +91,20 @@ class TourAdminService
         $this->tours->adminUpdate($tour, $data);
     }
 
+    public function updateFeatured(Tour $tour, bool $isFeatured, ?int $featuredSort = null): void
+    {
+        $data = [
+            'is_featured' => $isFeatured,
+            'featured_sort' => $isFeatured ? $featuredSort : null,
+        ];
+
+        if (($uid = auth()->id()) !== null) {
+            $data['updated_by'] = $uid;
+        }
+
+        $this->tours->adminUpdate($tour, $data);
+    }
+
     public function update(Tour $tour, array $data): Tour
     {
         $itineraryRows = $this->extractItineraryRows($data);
@@ -66,6 +115,7 @@ class TourAdminService
 
         $data = $this->applyThumbnail($data);
         $data = $this->normalizeTourLists($data);
+        $data['currency'] = Tour::CURRENCY_USD;
         $this->syncAttributes($data);
         $title = $data['title'] ?? $tour->title;
         $data['slug'] = $this->uniqueSlug(null, $title, $tour->id);
@@ -145,6 +195,10 @@ class TourAdminService
         $this->attributes->sync($data['amenities'] ?? [], TourAttribute::TYPE_AMENITY);
     }
 
+    /**
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
     private function normalizeTourLists(array $data): array
     {
         foreach (['services', 'amenities'] as $field) {

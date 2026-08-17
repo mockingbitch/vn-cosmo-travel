@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\CurrencyFormatter;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -12,6 +13,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
     'title',
     'slug',
     'status',
+    'is_featured',
+    'featured_sort',
     'description',
     'services',
     'amenities',
@@ -30,17 +33,12 @@ class Tour extends Model
 
     public const STATUS_DISABLED = 'disabled';
 
-    public const CURRENCY_VND = 'VND';
-
     public const CURRENCY_USD = 'USD';
 
     /**
-     * Supported price currencies. symbol_before = symbol shown before the amount.
-     *
      * @var array<string, array{symbol: string, symbol_before: bool}>
      */
     public const CURRENCIES = [
-        self::CURRENCY_VND => ['symbol' => '₫', 'symbol_before' => false],
         self::CURRENCY_USD => ['symbol' => '$', 'symbol_before' => true],
     ];
 
@@ -49,30 +47,64 @@ class Tour extends Model
         return [
             'price' => 'integer',
             'duration' => 'integer',
+            'is_featured' => 'boolean',
+            'featured_sort' => 'integer',
             'services' => 'array',
             'amenities' => 'array',
         ];
     }
 
-    /**
-     * Currency code, falling back to VND for legacy/empty rows.
-     */
     public function currencyCode(): string
     {
-        $code = (string) ($this->currency ?? '');
-
-        return array_key_exists($code, self::CURRENCIES) ? $code : self::CURRENCY_VND;
+        return self::CURRENCY_USD;
     }
 
     /**
-     * Price with its currency symbol, e.g. "8,990,000₫" or "$1,200".
+     * Price with USD symbol, e.g. "$1,200".
      */
     public function formattedPrice(): string
     {
-        $meta = self::CURRENCIES[$this->currencyCode()];
-        $amount = number_format((int) $this->price);
+        return CurrencyFormatter::format((int) $this->price, $this->currencyCode());
+    }
 
-        return $meta['symbol_before'] ? $meta['symbol'].$amount : $amount.$meta['symbol'];
+    /**
+     * @param  list<string>  $items
+     * @return list<string>
+     */
+    public static function labeledListItems(array $items, string $field): array
+    {
+        $catalog = $field === 'services'
+            ? config('tour_catalog.services', [])
+            : config('tour_catalog.amenities', []);
+        $prefix = $field === 'services'
+            ? 'tour.catalog.service.'
+            : 'tour.catalog.amenity.';
+
+        return array_values(array_filter(array_map(
+            static function (mixed $item) use ($catalog, $prefix): string {
+                if (! is_string($item) || $item === '') {
+                    return '';
+                }
+                if (in_array($item, $catalog, true)) {
+                    return __($prefix.$item);
+                }
+
+                return $item;
+            },
+            $items
+        ), static fn (string $label): bool => $label !== ''));
+    }
+
+    /** @return list<string> */
+    public function includedItems(): array
+    {
+        return is_array($this->services) ? array_values($this->services) : [];
+    }
+
+    /** @return list<string> */
+    public function excludedItems(): array
+    {
+        return is_array($this->amenities) ? array_values($this->amenities) : [];
     }
 
     public function getRouteKeyName(): string

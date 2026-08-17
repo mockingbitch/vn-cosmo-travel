@@ -6,10 +6,6 @@ return [
             'label' => 'EN',
             'name' => 'English',
         ],
-        'vi' => [
-            'label' => 'VI',
-            'name' => 'Tiếng Việt',
-        ],
     ],
 
     'default' => env('APP_LOCALE', 'en'),

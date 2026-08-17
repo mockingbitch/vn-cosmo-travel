@@ -7,6 +7,10 @@
     use Illuminate\Support\Str;
 
     $supported = (array) config('locales.supported', []);
+
+    if (count($supported) <= 1) {
+        return;
+    }
     $currentLocale = app()->getLocale();
     $current = $supported[$currentLocale] ?? null;
     $currentLabel = $current['name'] ?? $current['label'] ?? strtoupper($currentLocale);

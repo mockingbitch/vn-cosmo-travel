@@ -20,13 +20,14 @@ class SettingsSeeder extends Seeder
 
         $settings->set('contact.email', 'hello@vietnamcosmotravel.com');
         $settings->set('contact.phone', '+84 90 123 4567');
-        $settings->set('contact.address', 'District 1, Ho Chi Minh City, Vietnam');
+        $settings->set('contact.addresses', [
+            'District 1, Ho Chi Minh City, Vietnam',
+            'Old Quarter, Hanoi, Vietnam',
+            'Hoi An Ancient Town, Quang Nam, Vietnam',
+        ]);
         $settings->set('contact.map_iframe', '');
 
-        $settings->set('social.facebook', null);
-        $settings->set('social.instagram', null);
-        $settings->set('social.youtube', null);
-        $settings->set('social.tiktok', null);
+        $settings->set('social.links', []);
 
         $settings->set('content.home_why', $this->homeWhyFromLang());
 

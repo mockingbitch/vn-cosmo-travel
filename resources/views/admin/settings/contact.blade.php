@@ -42,18 +42,33 @@
             </div>
 
             <div class="mt-4 grid gap-4">
-                <label class="grid gap-1">
-                    <span class="text-xs font-semibold text-slate-700">{{ __('address') }}</span>
-                    <input
-                        type="text"
-                        name="contact_address"
-                        value="{{ old('contact_address', $settings['contact.address'] ?? '') }}"
-                        class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
-                    />
-                    @error('contact_address')
-                        <div class="text-xs font-medium text-rose-700">{{ $message }}</div>
-                    @enderror
-                </label>
+                @php
+                    $storedAddresses = $settings['contact.addresses'] ?? null;
+                    $addressValues = ['', '', ''];
+
+                    if (is_array($storedAddresses)) {
+                        for ($i = 0; $i < 3; $i++) {
+                            $addressValues[$i] = trim((string) ($storedAddresses[$i] ?? ''));
+                        }
+                    } elseif (! empty($settings['contact.address'])) {
+                        $addressValues[0] = trim((string) $settings['contact.address']);
+                    }
+                @endphp
+
+                @for ($i = 0; $i < 3; $i++)
+                    <label class="grid gap-1">
+                        <span class="text-xs font-semibold text-slate-700">{{ __('admin.settings.contact.address_number', ['number' => $i + 1]) }}</span>
+                        <input
+                            type="text"
+                            name="contact_addresses[]"
+                            value="{{ old('contact_addresses.'.$i, $addressValues[$i]) }}"
+                            class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
+                        />
+                        @error('contact_addresses.'.$i)
+                            <div class="text-xs font-medium text-rose-700">{{ $message }}</div>
+                        @enderror
+                    </label>
+                @endfor
 
                 <label class="grid gap-1">
                     <span class="text-xs font-semibold text-slate-700">{{ __('admin.settings.contact.google_map_iframe') }}</span>

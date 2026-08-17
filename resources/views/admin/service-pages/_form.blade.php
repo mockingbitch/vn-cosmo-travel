@@ -2,11 +2,7 @@
     /** @var \App\Models\ServicePage $page */
     /** @var string $type */
     $codes = array_keys((array) config('locales.supported', []));
-    usort($codes, fn ($a, $b) => match (true) {
-        $a === 'vi' => -1,
-        $b === 'vi' => 1,
-        default => strcmp((string) $a, (string) $b),
-    });
+    sort($codes);
     /** @var array<string, mixed> $oldTranslations */
     $oldTranslations = old('translations', []);
 @endphp

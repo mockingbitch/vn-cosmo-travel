@@ -26,7 +26,7 @@ document.addEventListener('alpine:init', () => {
 });
 
 Alpine.data('mainSiteNav', mainSiteNav);
-Alpine.data('vndPriceInput', (initial) => ({
+Alpine.data('currencyPriceInput', (initial) => ({
     raw:
         initial === null || initial === undefined || initial === ''
             ? null
@@ -36,7 +36,7 @@ Alpine.data('vndPriceInput', (initial) => ({
             return '';
         }
         const num = Math.max(0, Math.floor(Number(n)));
-        return num.toLocaleString('vi-VN');
+        return num.toLocaleString('en-US');
     },
     init() {
         this.$nextTick(() => {

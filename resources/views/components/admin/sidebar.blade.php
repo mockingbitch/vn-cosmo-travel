@@ -18,6 +18,7 @@
             'title' => __('admin.sidebar.content'),
             'items' => [
                 ['label' => __('tours'), 'route' => 'admin.tours.index', 'icon' => 'tours'],
+                ['label' => __('admin.sidebar.featured_tours'), 'route' => 'admin.featured-tours.index', 'icon' => 'sparkles'],
                 ['label' => __('destinations'), 'route' => 'admin.destinations.index', 'icon' => 'map'],
                 ['label' => __('blog'), 'route' => 'admin.posts.index', 'icon' => 'document'],
                 ['label' => __('admin.sidebar.media'), 'route' => 'admin.media.index', 'icon' => 'folder'],

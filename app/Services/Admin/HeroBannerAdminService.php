@@ -41,24 +41,18 @@ class HeroBannerAdminService
 
         $data['title_translations'] = [
             'en' => (string) ($data['title_en'] ?? ''),
-            'vi' => (string) ($data['title_vi'] ?? ''),
         ];
         $data['subtitle_translations'] = [
             'en' => $data['subtitle_en'] ?? null,
-            'vi' => $data['subtitle_vi'] ?? null,
         ];
         $data['cta_text_translations'] = [
             'en' => $data['cta_text_en'] ?? null,
-            'vi' => $data['cta_text_vi'] ?? null,
         ];
 
         unset(
             $data['title_en'],
-            $data['title_vi'],
             $data['subtitle_en'],
-            $data['subtitle_vi'],
             $data['cta_text_en'],
-            $data['cta_text_vi'],
         );
 
         return $this->banners->makeCurrent($data);

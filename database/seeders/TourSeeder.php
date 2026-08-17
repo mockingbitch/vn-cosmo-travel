@@ -26,7 +26,7 @@ class TourSeeder extends Seeder
                 'destination_id' => $hanoi?->id,
                 'title' => 'Hanoi Food & Culture Essentials',
                 'duration' => 3,
-                'price' => 3500000,
+                'price' => 149,
                 'thumbnail' => 'https://images.unsplash.com/photo-1555921015-5532091f6026?auto=format&fit=crop&w=1400&q=80',
                 'description' => 'A fast, comfortable introduction to Hanoi: Old Quarter walks, street food, and cultural landmarks.',
                 'itinerary' => [
@@ -43,7 +43,7 @@ class TourSeeder extends Seeder
                 'destination_id' => $halong?->id,
                 'title' => 'Ha Long Bay Overnight Cruise',
                 'duration' => 2,
-                'price' => 5200000,
+                'price' => 219,
                 'thumbnail' => 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1400&q=80',
                 'description' => 'A high-conversion classic: comfortable cruise, stunning scenery, easy logistics.',
                 'itinerary' => [
@@ -58,7 +58,7 @@ class TourSeeder extends Seeder
                 'destination_id' => $danang?->id,
                 'title' => 'Da Nang & Hoi An Highlights',
                 'duration' => 4,
-                'price' => 7400000,
+                'price' => 299,
                 'thumbnail' => 'https://images.unsplash.com/photo-1500622944204-b135684e99fd?auto=format&fit=crop&w=1400&q=80',
                 'description' => 'Coastal relaxation + heritage charm with comfortable pacing and great photos.',
                 'itinerary' => [
@@ -75,7 +75,7 @@ class TourSeeder extends Seeder
                 'destination_id' => $hcm?->id,
                 'title' => 'Ho Chi Minh City + Mekong Day Trip',
                 'duration' => 3,
-                'price' => 6100000,
+                'price' => 249,
                 'thumbnail' => 'https://images.unsplash.com/photo-1533371452382-d45a9da51ad9?auto=format&fit=crop&w=1400&q=80',
                 'description' => 'History + modern city energy, plus an easy Mekong experience.',
                 'itinerary' => [
@@ -89,7 +89,7 @@ class TourSeeder extends Seeder
             ],
         ];
 
-        foreach ($items as $item) {
+        foreach ($items as $index => $item) {
             if (! $item['destination_id']) {
                 continue;
             }
@@ -102,8 +102,11 @@ class TourSeeder extends Seeder
                     'description' => $item['description'],
                     'duration' => $item['duration'],
                     'price' => $item['price'],
+                    'currency' => Tour::CURRENCY_USD,
                     'thumbnail' => $item['thumbnail'],
                     'status' => Tour::STATUS_ACTIVE,
+                    'is_featured' => $index < 4,
+                    'featured_sort' => $index < 4 ? $index + 1 : null,
                 ],
             );
 

@@ -32,9 +32,12 @@
                 <x-icon name="home" size="md" />
             </a>
 
+            @php
+                $supportedLocales = (array) config('locales.supported', []);
+            @endphp
+            @if (count($supportedLocales) > 1)
             <div class="relative" x-data="{ langOpen: false }" @click.outside="langOpen = false">
                 @php
-                    $supportedLocales = (array) config('locales.supported', []);
                     $currentLocale = app()->getLocale();
                     $currentLocaleLabel = $supportedLocales[$currentLocale]['label'] ?? strtoupper((string) $currentLocale);
                 @endphp
@@ -69,6 +72,7 @@
                     @endforeach
                 </div>
             </div>
+            @endif
 
             <button
                 type="button"

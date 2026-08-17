@@ -1,6 +1,38 @@
 @extends('admin.layouts.app')
 
 @section('content')
+    @php
+        $storedLinks = $settings['social.links'] ?? null;
+        $initialLinks = [];
+
+        if (is_array($storedLinks)) {
+            foreach ($storedLinks as $row) {
+                if (! is_array($row)) {
+                    continue;
+                }
+                $initialLinks[] = [
+                    'label' => trim((string) ($row['label'] ?? '')),
+                    'url' => trim((string) ($row['url'] ?? '')),
+                ];
+            }
+        }
+
+        if ($initialLinks === []) {
+            $legacy = [
+                'facebook' => 'Facebook',
+                'instagram' => 'Instagram',
+                'youtube' => 'YouTube',
+                'tiktok' => 'TikTok',
+            ];
+            foreach ($legacy as $key => $label) {
+                $url = trim((string) ($settings['social.'.$key] ?? ''));
+                if ($url !== '') {
+                    $initialLinks[] = ['label' => $label, 'url' => $url];
+                }
+            }
+        }
+    @endphp
+
     <div>
         <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('admin.settings.social.page_title') }}</h1>
         <p class="mt-1 text-sm text-slate-600">{{ __('admin.settings.social.page_subtitle') }}</p>
@@ -11,61 +43,12 @@
         @method('PUT')
 
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-            <div class="text-sm font-semibold text-slate-900">{{ __('admin.settings.social.section_title') }}</div>
-
-            <div class="mt-4 grid gap-4 sm:grid-cols-2">
-                <label class="grid gap-1">
-                    <span class="text-xs font-semibold text-slate-700">{{ __('facebook') }}</span>
-                    <input
-                        type="url"
-                        name="facebook"
-                        value="{{ old('facebook', $settings['social.facebook'] ?? '') }}"
-                        class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
-                    />
-                    @error('facebook')
-                        <div class="text-xs font-medium text-rose-700">{{ $message }}</div>
-                    @enderror
-                </label>
-
-                <label class="grid gap-1">
-                    <span class="text-xs font-semibold text-slate-700">{{ __('instagram') }}</span>
-                    <input
-                        type="url"
-                        name="instagram"
-                        value="{{ old('instagram', $settings['social.instagram'] ?? '') }}"
-                        class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
-                    />
-                    @error('instagram')
-                        <div class="text-xs font-medium text-rose-700">{{ $message }}</div>
-                    @enderror
-                </label>
-
-                <label class="grid gap-1">
-                    <span class="text-xs font-semibold text-slate-700">{{ __('admin.settings.social.youtube') }}</span>
-                    <input
-                        type="url"
-                        name="youtube"
-                        value="{{ old('youtube', $settings['social.youtube'] ?? '') }}"
-                        class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
-                    />
-                    @error('youtube')
-                        <div class="text-xs font-medium text-rose-700">{{ $message }}</div>
-                    @enderror
-                </label>
-
-                <label class="grid gap-1">
-                    <span class="text-xs font-semibold text-slate-700">{{ __('admin.settings.social.tiktok') }}</span>
-                    <input
-                        type="url"
-                        name="tiktok"
-                        value="{{ old('tiktok', $settings['social.tiktok'] ?? '') }}"
-                        class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
-                    />
-                    @error('tiktok')
-                        <div class="text-xs font-medium text-rose-700">{{ $message }}</div>
-                    @enderror
-                </label>
-            </div>
+            <x-admin.link-list-editor
+                name="social_links"
+                :label="__('admin.settings.social.section_title')"
+                :help="__('admin.settings.social.section_help')"
+                :links="$initialLinks"
+            />
         </div>
 
         <div class="mt-10 flex items-center justify-end gap-3 pt-2 sm:pt-3">

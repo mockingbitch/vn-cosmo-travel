@@ -48,9 +48,34 @@ class SiteContactViewModel
         return 'tel:'.preg_replace('/\s+/', '', $phone);
     }
 
+    /**
+     * @return list<string>
+     */
+    public function addresses(): array
+    {
+        $stored = $this->settings->get('contact.addresses');
+        if (is_array($stored)) {
+            $addresses = [];
+            foreach ($stored as $row) {
+                $value = trim((string) $row);
+                if ($value !== '') {
+                    $addresses[] = $value;
+                }
+            }
+
+            return $addresses;
+        }
+
+        $legacy = $this->stringOrNull('contact.address');
+
+        return $legacy !== null ? [$legacy] : [];
+    }
+
     public function address(): ?string
     {
-        return $this->stringOrNull('contact.address');
+        $addresses = $this->addresses();
+
+        return $addresses[0] ?? null;
     }
 
     public function mapIframe(): ?string
@@ -58,43 +83,44 @@ class SiteContactViewModel
         return $this->stringOrNull('contact.map_iframe');
     }
 
-    public function facebook(): ?string
-    {
-        return $this->stringOrNull('social.facebook');
-    }
-
-    public function instagram(): ?string
-    {
-        return $this->stringOrNull('social.instagram');
-    }
-
-    public function youtube(): ?string
-    {
-        return $this->stringOrNull('social.youtube');
-    }
-
-    public function tiktok(): ?string
-    {
-        return $this->stringOrNull('social.tiktok');
-    }
-
     /**
-     * @return array<int, array{label: string, url: string, icon: string}>
+     * @return array<int, array{label: string, url: string}>
      */
     public function socialLinks(): array
     {
+        $stored = $this->settings->get('social.links');
+        if (is_array($stored)) {
+            $links = [];
+            foreach ($stored as $row) {
+                if (! is_array($row)) {
+                    continue;
+                }
+                $label = isset($row['label']) ? trim((string) $row['label']) : '';
+                $url = isset($row['url']) ? trim((string) $row['url']) : '';
+                if ($url === '') {
+                    continue;
+                }
+                $links[] = [
+                    'label' => $label !== '' ? $label : $url,
+                    'url' => $url,
+                ];
+            }
+
+            return $links;
+        }
+
+        $legacy = [
+            'facebook' => 'Facebook',
+            'instagram' => 'Instagram',
+            'youtube' => 'YouTube',
+            'tiktok' => 'TikTok',
+        ];
         $links = [];
-        if ($this->facebook()) {
-            $links[] = ['label' => 'Facebook', 'url' => (string) $this->facebook(), 'icon' => 'facebook'];
-        }
-        if ($this->instagram()) {
-            $links[] = ['label' => 'Instagram', 'url' => (string) $this->instagram(), 'icon' => 'instagram'];
-        }
-        if ($this->youtube()) {
-            $links[] = ['label' => 'YouTube', 'url' => (string) $this->youtube(), 'icon' => 'youtube'];
-        }
-        if ($this->tiktok()) {
-            $links[] = ['label' => 'TikTok', 'url' => (string) $this->tiktok(), 'icon' => 'tiktok'];
+        foreach ($legacy as $key => $label) {
+            $url = $this->stringOrNull('social.'.$key);
+            if ($url !== null) {
+                $links[] = ['label' => $label, 'url' => $url];
+            }
         }
 
         return $links;
@@ -102,7 +128,9 @@ class SiteContactViewModel
 
     public function hasContactInfo(): bool
     {
-        return $this->email() !== null || $this->phone() !== null || $this->address() !== null;
+        return $this->email() !== null
+            || $this->phone() !== null
+            || $this->addresses() !== [];
     }
 
     public function hasMap(): bool

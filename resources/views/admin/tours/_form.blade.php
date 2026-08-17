@@ -1,4 +1,3 @@
-@inject('tourAttributes', 'App\Services\Admin\TourAttributeService')
 @php
     /** @var \App\Models\Tour|null $tour */
     $normalizeSchedule = static function ($raw): array {
@@ -67,40 +66,23 @@
         $galleryInitial[] = ['_k' => $galleryRowKey(), 'url' => ''];
     }
 
-    $serviceKeys = config('tour_catalog.services', []);
-    $amenityKeys = config('tour_catalog.amenities', []);
-    $labelsSvc = collect($serviceKeys)->mapWithKeys(fn ($k) => [$k => __('tour.catalog.service.'.$k)])->all();
-    $labelsAmn = collect($amenityKeys)->mapWithKeys(fn ($k) => [$k => __('tour.catalog.amenity.'.$k)])->all();
     $cleanList = static fn ($raw): array => is_array($raw)
         ? array_values(array_filter(
             array_map(static fn ($v) => is_string($v) ? trim($v) : '', $raw),
             static fn (string $v) => $v !== ''
         ))
         : [];
-    $oldSvc = old('services');
-    $initialServices = is_array($oldSvc)
-        ? $cleanList($oldSvc)
+    $oldIncluded = old('services');
+    $initialIncluded = is_array($oldIncluded)
+        ? $cleanList($oldIncluded)
         : (isset($tour) && is_array($tour->services) ? $cleanList($tour->services) : []);
-    $oldAmn = old('amenities');
-    $initialAmenities = is_array($oldAmn)
-        ? $cleanList($oldAmn)
+    $oldExcluded = old('amenities');
+    $initialExcluded = is_array($oldExcluded)
+        ? $cleanList($oldExcluded)
         : (isset($tour) && is_array($tour->amenities) ? $cleanList($tour->amenities) : []);
-    // Reusable custom items (admin-added, stored in DB) + any on this tour not yet persisted.
-    $dbServiceOptions = $tourAttributes->optionsFor(\App\Models\TourAttribute::TYPE_SERVICE);
-    $dbAmenityOptions = $tourAttributes->optionsFor(\App\Models\TourAttribute::TYPE_AMENITY);
-    $tourCustomServices = array_values(array_diff($initialServices, $serviceKeys));
-    $tourCustomAmenities = array_values(array_diff($initialAmenities, $amenityKeys));
-    $initialCustomServices = array_values(array_unique(array_merge($dbServiceOptions, $tourCustomServices)));
-    $initialCustomAmenities = array_values(array_unique(array_merge($dbAmenityOptions, $tourCustomAmenities)));
 
     $priceOld = old('price', $tour?->price);
     $priceInitial = ($priceOld !== null && $priceOld !== '') ? (int) $priceOld : null;
-    $pricePlaceholderDigits = (int) preg_replace('/\D/', '', (string) __('placeholder.tour_price'));
-    $pricePlaceholderFormatted = number_format(max(0, $pricePlaceholderDigits), 0, ',', '.');
-    $currencyInitial = (string) old('currency', $tour?->currency ?? \App\Models\Tour::CURRENCY_VND);
-    if (! array_key_exists($currencyInitial, \App\Models\Tour::CURRENCIES)) {
-        $currencyInitial = \App\Models\Tour::CURRENCY_VND;
-    }
 
     $thumbnailUrlField = old('thumbnail');
     if ($thumbnailUrlField === null) {
@@ -147,32 +129,14 @@
     @error('description')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
 </div>
 
-<div x-data="vndPriceInput(@js($priceInitial))">
-    <label class="block text-sm font-medium text-slate-700">{{ __('price') }}</label>
-    <input type="hidden" name="price" :value="raw === null || raw === '' ? '' : raw" required>
-    <div class="mt-1 flex max-w-md gap-2">
-        <input
-            type="text"
-            x-ref="vis"
-            inputmode="numeric"
-            autocomplete="off"
-            placeholder="{{ $pricePlaceholderFormatted }}"
-            class="min-w-0 flex-1 rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
-            @input="onInput($event)"
-        />
-        <select
-            name="currency"
-            aria-label="{{ __('ui.currency') }}"
-            class="w-28 shrink-0 rounded-xl border border-slate-200 px-2 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
-        >
-            @foreach(array_keys(\App\Models\Tour::CURRENCIES) as $code)
-                <option value="{{ $code }}" @selected($currencyInitial === $code)>{{ $code }}</option>
-            @endforeach
-        </select>
-    </div>
-    @error('price')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
-    @error('currency')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
-</div>
+<x-currency-price-input
+    name="price"
+    :label="__('ui.price_usd')"
+    :value="$priceInitial"
+    currency="USD"
+    :placeholder="__('placeholder.tour_price')"
+/>
+<input type="hidden" name="currency" value="USD">
 
 <div
     class="grid gap-3"
@@ -307,141 +271,24 @@
     @error('gallery.*')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
 </div>
 
-<div
-    class="space-y-4"
-    x-data="{
-        openServicesModal: false,
-        openAmenitiesModal: false,
-        serviceKeys: @js($serviceKeys),
-        amenityKeys: @js($amenityKeys),
-        labelsService: @js($labelsSvc),
-        labelsAmenity: @js($labelsAmn),
-        selectedServices: @js($initialServices),
-        selectedAmenities: @js($initialAmenities),
-        customServices: @js($initialCustomServices),
-        customAmenities: @js($initialCustomAmenities),
-        dbServices: @js($dbServiceOptions),
-        dbAmenities: @js($dbAmenityOptions),
-        customServiceInput: '',
-        customAmenityInput: '',
-        state(type) {
-            return type === 'service'
-                ? { keys: this.serviceKeys, labels: this.labelsService, selected: 'selectedServices', custom: 'customServices', input: 'customServiceInput' }
-                : { keys: this.amenityKeys, labels: this.labelsAmenity, selected: 'selectedAmenities', custom: 'customAmenities', input: 'customAmenityInput' };
-        },
-        labelOf(type, k) {
-            return this.state(type).labels[k] ?? k;
-        },
-        // Every checkbox option in the picker: catalog keys first, then custom items.
-        optionsOf(type) {
-            const s = this.state(type);
-            return [...s.keys, ...this[s.custom]];
-        },
-        addCustom(type) {
-            const s = this.state(type);
-            const value = (this[s.input] || '').trim();
-            this[s.input] = '';
-            if (value === '') return;
-            // Skip if it already exists as a catalog label or a custom option.
-            const exists = s.keys.some((k) => s.labels[k] === value) || this[s.custom].includes(value);
-            if (! exists) this[s.custom].push(value);
-            if (! this[s.selected].includes(value)) this[s.selected].push(value);
-        },
-        // Chip × / uncheck: drop from the selection only (custom stays an option).
-        removeItem(type, item) {
-            const s = this.state(type);
-            this[s.selected] = this[s.selected].filter((k) => k !== item);
-        },
-        // Delete a custom option entirely (removes it from the picker and selection).
-        deleteCustomOption(type, item) {
-            const s = this.state(type);
-            this[s.custom] = this[s.custom].filter((k) => k !== item);
-            this[s.selected] = this[s.selected].filter((k) => k !== item);
-        },
-    }"
-    @keydown.escape.window="openServicesModal = false; openAmenitiesModal = false"
->
-    <div class="grid gap-4 lg:grid-cols-2">
-        @php
-            $fields = [
-                ['type' => 'service', 'selected' => 'selectedServices', 'custom' => 'customServices', 'db' => 'dbServices', 'input' => 'customServiceInput', 'modal' => 'openServicesModal', 'name' => 'services', 'label' => __('ui.tour_services'), 'choose' => __('admin.tour_form.select_services')],
-                ['type' => 'amenity', 'selected' => 'selectedAmenities', 'custom' => 'customAmenities', 'db' => 'dbAmenities', 'input' => 'customAmenityInput', 'modal' => 'openAmenitiesModal', 'name' => 'amenities', 'label' => __('ui.tour_amenities'), 'choose' => __('admin.tour_form.select_amenities')],
-            ];
-        @endphp
-        @foreach($fields as $f)
-            <div>
-                <label class="block text-sm font-medium text-slate-700">{{ $f['label'] }}</label>
-                <div class="mt-2 min-h-[3.5rem] rounded-xl border border-slate-200 bg-slate-50/90 px-3 py-2">
-                    <template x-if="{{ $f['selected'] }}.length === 0">
-                        <p class="text-xs text-slate-500">{{ __('admin.tour_form.catalog_none') }}</p>
-                    </template>
-                    <ul class="flex flex-wrap gap-1.5" x-show="{{ $f['selected'] }}.length > 0">
-                        <template x-for="k in {{ $f['selected'] }}" :key="'{{ $f['type'] }}-chip-'+k">
-                            <li class="inline-flex items-center gap-1 rounded-full bg-white py-1 pl-2.5 pr-1.5 text-xs font-medium text-slate-800 ring-1 ring-slate-200">
-                                <span x-text="labelOf('{{ $f['type'] }}', k)"></span>
-                                <button type="button" class="leading-none text-slate-400 hover:text-rose-600" @click="removeItem('{{ $f['type'] }}', k)" aria-label="{{ __('admin.tour_form.remove_item') }}" title="{{ __('admin.tour_form.remove_item') }}">&times;</button>
-                            </li>
-                        </template>
-                    </ul>
-                </div>
-                <button
-                    type="button"
-                    class="mt-2 inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm hover:bg-slate-50"
-                    @click="{{ $f['modal'] }} = true"
-                >
-                    <x-icon name="edit" size="sm" />
-                    {{ $f['choose'] }}
-                    <span x-show="{{ $f['selected'] }}.length > 0" x-text="{{ $f['selected'] }}.length" class="rounded-full bg-slate-100 px-1.5 text-xs font-semibold text-slate-600"></span>
-                </button>
-                <template x-for="k in {{ $f['selected'] }}" :key="'{{ $f['type'] }}-h-'+k">
-                    <input type="hidden" name="{{ $f['name'] }}[]" :value="k" />
-                </template>
-                @error($f['name'])<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
-                @error($f['name'].'.*')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
-            </div>
-        @endforeach
-    </div>
+<div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-5">
+    <div class="text-sm font-semibold text-slate-900">{{ __('admin.tour_form.included_excluded_section') }}</div>
+    <p class="mt-1 text-xs text-slate-500">{{ __('admin.tour_form.included_excluded_help') }}</p>
 
-    @foreach($fields as $f)
-        <x-admin.modal :name="$f['modal']" :title="$f['type'] === 'service' ? __('admin.tour_form.modal_services_title') : __('admin.tour_form.modal_amenities_title')">
-            <div class="max-h-[min(55vh,26rem)] space-y-2 overflow-y-auto pr-1">
-                <template x-for="opt in optionsOf('{{ $f['type'] }}')" :key="'{{ $f['type'] }}-opt-'+opt">
-                    <div class="flex items-center gap-2 rounded-xl border border-slate-100 px-3 py-2.5 hover:bg-slate-50">
-                        <label class="flex flex-1 cursor-pointer items-center gap-3">
-                            <input type="checkbox" class="rounded border-slate-300 text-slate-900 focus:ring-slate-400" :value="opt" x-model="{{ $f['selected'] }}" />
-                            <span class="text-sm leading-snug text-slate-800" x-text="labelOf('{{ $f['type'] }}', opt)"></span>
-                        </label>
-                        <button type="button" x-show="{{ $f['custom'] }}.includes(opt) &amp;&amp; ! {{ $f['db'] }}.includes(opt)" @click="deleteCustomOption('{{ $f['type'] }}', opt)" class="shrink-0 text-slate-400 hover:text-rose-600" aria-label="{{ __('admin.tour_form.remove_item') }}" title="{{ __('admin.tour_form.remove_item') }}">
-                            <x-icon name="trash" size="sm" />
-                        </button>
-                    </div>
-                </template>
-            </div>
-            <div class="mt-3 border-t border-slate-100 pt-3">
-                <label class="mb-1.5 block text-xs font-medium text-slate-600">{{ __('admin.tour_form.custom_label') }}</label>
-                <div class="flex gap-2">
-                    <input
-                        type="text"
-                        maxlength="120"
-                        class="min-w-0 flex-1 rounded-lg border border-slate-200 px-3 py-2 text-sm"
-                        placeholder="{{ __('placeholder.custom_item') }}"
-                        x-model="{{ $f['input'] }}"
-                        @keydown.enter.prevent="addCustom('{{ $f['type'] }}')"
-                    />
-                    <button type="button" class="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 hover:bg-slate-50" @click="addCustom('{{ $f['type'] }}')">
-                        <x-icon name="plus" size="sm" />
-                        {{ __('admin.tour_form.custom_add') }}
-                    </button>
-                </div>
-            </div>
-            <div class="mt-4 flex justify-end border-t border-slate-100 pt-4">
-                <button type="button" class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800" @click="{{ $f['modal'] }} = false">
-                    <x-icon name="check" size="sm" />
-                    {{ __('admin.tour_form.catalog_modal_done') }}
-                </button>
-            </div>
-        </x-admin.modal>
-    @endforeach
+    <div class="mt-5 grid gap-6 lg:grid-cols-2">
+        <x-admin.tour-list-editor
+            name="services"
+            :label="__('tour.included')"
+            :help="__('admin.tour_form.included_help')"
+            :items="$initialIncluded"
+        />
+        <x-admin.tour-list-editor
+            name="amenities"
+            :label="__('tour.excluded')"
+            :help="__('admin.tour_form.excluded_help')"
+            :items="$initialExcluded"
+        />
+    </div>
 </div>
 
 <div

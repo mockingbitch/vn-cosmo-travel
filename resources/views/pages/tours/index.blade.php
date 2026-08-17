@@ -25,6 +25,8 @@
                     </div>
 
                     <div class="mt-4 grid gap-4">
+                        <input type="hidden" name="currency" value="USD">
+
                         <label class="block">
                             <span class="mb-1 block text-xs font-semibold text-slate-700">{{ __('destination') }}</span>
                             <select
@@ -42,36 +44,28 @@
 
                         <label class="block">
                             <span class="mb-1 block text-xs font-semibold text-slate-700">{{ __('duration') }}</span>
-                            <select
-                                name="duration"
-                                class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
-                            >
-                                <option value="">{{ __('any') }}</option>
-                                <option value="1-3" @selected(($filters['duration'] ?? '') === '1-3')>{{ __('ui.13_days') }}</option>
-                                <option value="4-7" @selected(($filters['duration'] ?? '') === '4-7')>{{ __('ui.47_days') }}</option>
-                                <option value="8+" @selected(($filters['duration'] ?? '') === '8+')>{{ __('ui.8_days') }}</option>
-                            </select>
+                            <x-tour-duration-select :selected="$filters['duration'] ?? ''" />
                         </label>
 
                         <div class="grid grid-cols-2 items-end gap-x-3 gap-y-2">
                             <div class="min-w-0">
-                                <x-input
+                                <x-currency-price-input
                                     compact
-                                    label="{{ __('ui.min_price_vnd') }}"
+                                    currency="USD"
+                                    label="{{ __('ui.min_price_usd') }}"
                                     name="min_price"
-                                    :placeholder="__('placeholder.min_price')"
+                                    :placeholder="__('placeholder.min_price_usd')"
                                     :value="$filters['min_price'] ?? null"
-                                    inputmode="numeric"
                                 />
                             </div>
                             <div class="min-w-0">
-                                <x-input
+                                <x-currency-price-input
                                     compact
-                                    label="{{ __('ui.max_price_vnd') }}"
+                                    currency="USD"
+                                    label="{{ __('ui.max_price_usd') }}"
                                     name="max_price"
-                                    :placeholder="__('placeholder.max_price')"
+                                    :placeholder="__('placeholder.max_price_usd')"
                                     :value="$filters['max_price'] ?? null"
-                                    inputmode="numeric"
                                 />
                             </div>
                         </div>

@@ -4,7 +4,9 @@
     @php
         /** @var array<string, mixed> $homeWhyForm */
         $homeWhyForm = old('home_why', $settings['content.home_why'] ?? []);
-        $homeWhyLocales = ['vi' => __('vietnamese'), 'en' => __('english')];
+        $homeWhyLocales = collect((array) config('locales.supported', []))
+            ->mapWithKeys(fn (array $meta, string $key): array => [$key => $meta['name'] ?? strtoupper($key)])
+            ->all();
     @endphp
 
     <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">

@@ -50,10 +50,6 @@ class Destination extends Model
             return __($key);
         }
 
-        if (app()->getLocale() === 'vi' || str_starts_with((string) app()->getLocale(), 'vi')) {
-            return (string) (filled($this->name_vi) ? $this->name_vi : $this->name_en);
-        }
-
         return (string) (filled($this->name_en) ? $this->name_en : $this->name_vi);
     }
 }

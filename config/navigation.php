@@ -51,9 +51,9 @@ return [
     */
     'dropdown_panels' => [
         'halong' => [
-            ['label_key' => 'nav.sub.halong_day1', 'tour_params' => ['destination' => 'ha-long-bay', 'duration' => '1-3']],
-            ['label_key' => 'nav.sub.halong_2d1n', 'tour_params' => ['destination' => 'ha-long-bay', 'duration' => '1-3']],
-            ['label_key' => 'nav.sub.halong_3d2n', 'tour_params' => ['destination' => 'ha-long-bay', 'duration' => '4-7']],
+            ['label_key' => 'nav.sub.halong_day1', 'tour_params' => ['destination' => 'ha-long-bay', 'duration' => '1']],
+            ['label_key' => 'nav.sub.halong_2d1n', 'tour_params' => ['destination' => 'ha-long-bay', 'duration' => '2']],
+            ['label_key' => 'nav.sub.halong_3d2n', 'tour_params' => ['destination' => 'ha-long-bay', 'duration' => '3']],
             ['label_key' => 'nav.sub.lan_ha_bay', 'tour_params' => ['destination' => 'cat-ba']],
             ['label_key' => 'nav.sub.bai_tu_long', 'tour_params' => ['destination' => 'ha-long-bay']],
         ],

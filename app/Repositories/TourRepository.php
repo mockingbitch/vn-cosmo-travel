@@ -20,13 +20,19 @@ class TourRepository implements TourRepositoryInterface
             $query->whereHas('destination', fn ($q) => $q->where('slug', $filters['destination']));
         }
 
+        if (! empty($filters['min_price']) || ! empty($filters['max_price'])) {
+            $query->where('currency', Tour::CURRENCY_USD);
+        }
+
         if (! empty($filters['duration'])) {
-            // duration: "1-3", "4-7", "8+"
+            // duration: "1", "2", "1-3", "4-7", "8+"
             $duration = (string) $filters['duration'];
             if (preg_match('/^(\d+)\-(\d+)$/', $duration, $m)) {
                 $query->whereBetween('duration', [(int) $m[1], (int) $m[2]]);
             } elseif ($duration === '8+') {
                 $query->where('duration', '>=', 8);
+            } elseif (ctype_digit($duration)) {
+                $query->where('duration', (int) $duration);
             }
         }
 
@@ -56,10 +62,47 @@ class TourRepository implements TourRepositoryInterface
     {
         return Tour::query()
             ->active()
+            ->where('is_featured', true)
             ->with(['destination'])
-            ->latest('id')
+            ->orderByRaw('featured_sort IS NULL, featured_sort ASC')
+            ->orderByDesc('id')
             ->limit($limit)
             ->get();
+    }
+
+    public function adminFeaturedList(): Collection
+    {
+        return Tour::query()
+            ->with(['destination'])
+            ->where('is_featured', true)
+            ->orderByRaw('featured_sort IS NULL, featured_sort ASC')
+            ->orderByDesc('id')
+            ->get();
+    }
+
+    public function adminPaginateNonFeatured(int $perPage = 15, array $filters = []): LengthAwarePaginator
+    {
+        return Tour::query()
+            ->with(['destination'])
+            ->where('is_featured', false)
+            ->when(
+                filled($filters['q'] ?? null),
+                function ($query) use ($filters): void {
+                    $keyword = trim((string) $filters['q']);
+                    $query->where(function ($inner) use ($keyword): void {
+                        $inner
+                            ->where('title', 'like', '%'.$keyword.'%')
+                            ->orWhere('slug', 'like', '%'.$keyword.'%');
+                    });
+                }
+            )
+            ->when(
+                filled($filters['destination_id'] ?? null),
+                fn ($query) => $query->where('destination_id', (int) $filters['destination_id'])
+            )
+            ->latest('id')
+            ->paginate($perPage)
+            ->withQueryString();
     }
 
     public function findBySlugOrFail(string $slug): Tour

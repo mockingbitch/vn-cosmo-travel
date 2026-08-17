@@ -28,13 +28,9 @@ class TourAttributeService
      */
     public function sync(array $labels, string $type): void
     {
-        $catalogKeys = $type === TourAttribute::TYPE_SERVICE
-            ? config('tour_catalog.services', [])
-            : config('tour_catalog.amenities', []);
-
         foreach ($labels as $label) {
             $label = is_string($label) ? trim($label) : '';
-            if ($label === '' || in_array($label, $catalogKeys, true)) {
+            if ($label === '') {
                 continue;
             }
 

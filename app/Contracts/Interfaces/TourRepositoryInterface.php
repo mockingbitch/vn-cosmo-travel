@@ -12,6 +12,10 @@ interface TourRepositoryInterface
 
     public function getFeatured(int $limit = 4): Collection;
 
+    public function adminFeaturedList(): Collection;
+
+    public function adminPaginateNonFeatured(int $perPage = 15, array $filters = []): LengthAwarePaginator;
+
     public function findBySlugOrFail(string $slug): Tour;
 
     public function getRelated(int $tourId, int $destinationId, int $limit = 4): Collection;

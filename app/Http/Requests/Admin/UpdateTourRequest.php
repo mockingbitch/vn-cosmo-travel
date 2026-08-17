@@ -32,6 +32,8 @@ class UpdateTourRequest extends FormRequest
         if (! $this->has('gallery')) {
             $this->merge(['gallery' => []]);
         }
+
+        $this->merge(['currency' => Tour::CURRENCY_USD]);
     }
 
     /**
@@ -48,7 +50,7 @@ class UpdateTourRequest extends FormRequest
             'amenities' => ['present', 'array'],
             'amenities.*' => ['string', 'max:120'],
             'price' => ['required', 'integer', 'min:0'],
-            'currency' => ['required', 'string', Rule::in(array_keys(Tour::CURRENCIES))],
+            'currency' => ['required', 'string', Rule::in([Tour::CURRENCY_USD])],
             'thumbnail' => ['nullable', 'string', 'max:2048'],
             'thumbnail_media_id' => ['nullable', 'integer', 'exists:media,id'],
             'itinerary' => ['nullable', 'array'],

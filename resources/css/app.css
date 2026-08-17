@@ -87,6 +87,29 @@
     .richtext blockquote {
         @apply mt-6 border-l-4 border-slate-200 pl-4 italic text-slate-700;
     }
+
+    @keyframes book-now-blink {
+        0%,
+        100% {
+            opacity: 1;
+            box-shadow: 0 0 0 0 rgb(16 185 129 / 0.45);
+        }
+
+        50% {
+            opacity: 0.88;
+            box-shadow: 0 0 0 6px rgb(16 185 129 / 0);
+        }
+    }
+
+    .animate-book-now-blink {
+        animation: book-now-blink 1.15s ease-in-out infinite;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .animate-book-now-blink {
+            animation: none;
+        }
+    }
 }
 
 @layer base {

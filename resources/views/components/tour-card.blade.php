@@ -5,7 +5,10 @@
 
 <article class="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
     <a href="{{ route('tours.show', $vm->slug()) }}" class="block">
-        <div class="aspect-[16/10] overflow-hidden bg-slate-100">
+        <div class="relative aspect-[16/10] overflow-hidden bg-slate-100">
+            <div class="absolute left-3 top-3 z-10">
+                <x-tour-book-now-badge />
+            </div>
             <img
                 src="{{ $vm->thumbnailUrl() }}"
                 alt="{{ $vm->title() }}"
@@ -21,17 +24,16 @@
             <h3 class="mt-2 line-clamp-2 text-base font-semibold tracking-tight text-slate-900">
                 {{ $vm->title() }}
             </h3>
-            <div class="mt-3 flex items-center justify-between">
+            <div class="mt-3 flex items-center justify-between gap-3">
                 <div class="text-sm font-semibold text-slate-900">
                     {{ $vm->priceLabel() }}
                     <span class="text-xs font-medium text-slate-500">{{ __('ui.per_person') }}</span>
                 </div>
-                <span class="inline-flex items-center gap-2 text-sm font-semibold text-slate-900">
-                    {{ __('ui.view_detail') }}
+                <span class="inline-flex shrink-0 items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-emerald-700 sm:text-sm">
+                    {{ __('ui.book_now') }}
                     <x-icon name="chevron-right" size="sm" class="transition group-hover:translate-x-0.5" />
                 </span>
             </div>
         </div>
     </a>
 </article>
-

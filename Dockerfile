@@ -19,12 +19,9 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 COPY ./docker/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 COPY ./docker/php/php.ini /usr/local/etc/php/conf.d/app.ini
+COPY ./docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 
-COPY . /var/www/html
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-RUN addgroup -g 1000 -S app \
-    && adduser -u 1000 -S app -G app \
-    && chown -R app:app /var/www/html
-
-USER app
-
+ENTRYPOINT ["entrypoint.sh"]
+CMD ["php-fpm"]
