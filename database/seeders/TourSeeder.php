@@ -6,6 +6,8 @@ use App\Models\Destination;
 use App\Models\Tour;
 use App\Models\TourImage;
 use App\Models\TourItinerary;
+use App\Models\TourPrice;
+use App\Models\TourPriceType;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
 
@@ -16,6 +18,10 @@ class TourSeeder extends Seeder
      */
     public function run(): void
     {
+        $priceTypeIds = TourPriceType::query()->ordered()->pluck('id', 'name');
+        $singlePriceTypeId = $priceTypeIds['Price for 1 person'] ?? $priceTypeIds->first();
+        $doublePriceTypeId = $priceTypeIds['Price for 2 people'] ?? null;
+
         $hanoi = Destination::where('slug', 'hanoi')->first();
         $halong = Destination::where('slug', 'ha-long-bay')->first();
         $danang = Destination::where('slug', 'da-nang')->first();
@@ -127,6 +133,30 @@ class TourSeeder extends Seeder
                     'path' => $path,
                     'sort_order' => $idx,
                 ]);
+            }
+
+            if ($singlePriceTypeId !== null) {
+                TourPrice::query()->where('tour_id', $tour->id)->delete();
+
+                TourPrice::create([
+                    'tour_id' => $tour->id,
+                    'tour_price_type_id' => $singlePriceTypeId,
+                    'amount' => $item['price'],
+                    'currency' => Tour::CURRENCY_USD,
+                    'sort_order' => 0,
+                    'is_default' => true,
+                ]);
+
+                if ($doublePriceTypeId !== null) {
+                    TourPrice::create([
+                        'tour_id' => $tour->id,
+                        'tour_price_type_id' => $doublePriceTypeId,
+                        'amount' => (int) round($item['price'] * 1.8),
+                        'currency' => Tour::CURRENCY_USD,
+                        'sort_order' => 1,
+                        'is_default' => false,
+                    ]);
+                }
             }
         }
     }

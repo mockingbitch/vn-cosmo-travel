@@ -3,6 +3,7 @@
 namespace App\Services\Admin;
 
 use App\Contracts\Interfaces\SettingRepositoryInterface;
+use App\Services\FeaturedTilesService;
 use App\Services\SettingsService;
 use Illuminate\Http\UploadedFile;
 
@@ -131,6 +132,74 @@ class SettingAdminService
         }
 
         return $out;
+    }
+
+    /** @param array<string, mixed> $data */
+    public function updateFeaturedTiles(array $data): void
+    {
+        $rows = $data['featured_tiles'] ?? [];
+        $rows = is_array($rows) ? $rows : [];
+
+        $this->settings->set('content.featured_tiles', $this->normalizeFeaturedTiles($rows));
+
+        $this->settingsService->forgetCache();
+    }
+
+    /**
+     * Keeps one slot per configured tile. Empty fields are stored empty on
+     * purpose: the frontend then falls back to the config default.
+     *
+     * @param  array<int, mixed>  $input
+     * @return list<array{eyebrow: string, title: string, chips: string, description: string, cta_label: string, image_url: string, tour_ids: list<int>}>
+     */
+    private function normalizeFeaturedTiles(array $input): array
+    {
+        $slots = count((array) config('featured_tiles.tiles', []));
+
+        $out = [];
+        for ($i = 0; $i < $slots; $i++) {
+            /** @var array<string, mixed> $row */
+            $row = is_array($input[$i] ?? null) ? $input[$i] : [];
+
+            $out[] = [
+                'eyebrow' => isset($row['eyebrow']) ? trim((string) $row['eyebrow']) : '',
+                'title' => isset($row['title']) ? trim((string) $row['title']) : '',
+                'chips' => isset($row['chips']) ? trim((string) $row['chips']) : '',
+                'description' => isset($row['description']) ? trim((string) $row['description']) : '',
+                'cta_label' => isset($row['cta_label']) ? trim((string) $row['cta_label']) : '',
+                'image_url' => isset($row['image_url']) ? trim((string) $row['image_url']) : '',
+                'tour_ids' => $this->normalizeTileTourIds($row['tour_ids'] ?? null),
+            ];
+        }
+
+        return $out;
+    }
+
+    /**
+     * Blank picker rows are dropped and duplicates collapsed; row order is the
+     * order the tours are shown in.
+     *
+     * @return list<int>
+     */
+    private function normalizeTileTourIds(mixed $input): array
+    {
+        if (! is_array($input)) {
+            return [];
+        }
+
+        $ids = [];
+        foreach ($input as $id) {
+            $id = (int) $id;
+            if ($id <= 0 || in_array($id, $ids, true)) {
+                continue;
+            }
+            $ids[] = $id;
+            if (count($ids) >= FeaturedTilesService::MAX_TOURS_PER_TILE) {
+                break;
+            }
+        }
+
+        return $ids;
     }
 
     /** @param array<string, mixed> $data */

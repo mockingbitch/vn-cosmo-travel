@@ -8,7 +8,9 @@ use App\Http\Requests\Admin\UpdateTourRequest;
 use App\Http\Requests\Admin\UpdateTourStatusRequest;
 use App\Models\Tour;
 use App\Services\Admin\TourAdminService;
+use App\Services\Admin\TourPriceTypeAdminService;
 use App\Services\DestinationService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -30,10 +32,25 @@ class TourController extends Controller
         ]);
     }
 
-    public function create(DestinationService $destinations): View
+    /**
+     * Feeds the tour picker screen used by the featured tiles settings.
+     */
+    public function picker(Request $request, TourAdminService $tours): JsonResponse
+    {
+        $search = trim((string) $request->query('q', ''));
+        $page = $tours->pickerPage(20, $search !== '' ? $search : null);
+
+        return response()->json([
+            'data' => $page->getCollection()->map(fn (Tour $tour) => $tours->pickerPayload($tour))->values(),
+            'next_page_url' => $page->nextPageUrl(),
+        ]);
+    }
+
+    public function create(DestinationService $destinations, TourPriceTypeAdminService $priceTypes): View
     {
         return view('admin.tours.create', [
             'destinations' => $destinations->all(),
+            'priceTypes' => $priceTypes->selectableFor(),
         ]);
     }
 
@@ -44,16 +61,18 @@ class TourController extends Controller
         return redirect()->route('admin.tours.index')->with('status', __('flash.tour.created'));
     }
 
-    public function edit(Tour $tour, DestinationService $destinations): View
+    public function edit(Tour $tour, DestinationService $destinations, TourPriceTypeAdminService $priceTypes): View
     {
         $tour->load([
             'itineraries' => fn ($q) => $q->orderBy('day'),
             'images' => fn ($q) => $q->orderBy('sort_order'),
+            'prices.priceType',
         ]);
 
         return view('admin.tours.edit', [
             'tour' => $tour,
             'destinations' => $destinations->all(),
+            'priceTypes' => $priceTypes->selectableFor($tour),
         ]);
     }
 

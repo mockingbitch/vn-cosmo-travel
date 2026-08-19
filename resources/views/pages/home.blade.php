@@ -74,8 +74,8 @@
     <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div class="flex items-end justify-between gap-6">
             <x-section-title
-                :title="__('home.featured.title')"
-                :subtitle="__('home.featured.subtitle')"
+                :title="__('home.featured_tiles.title')"
+                :subtitle="__('home.featured_tiles.subtitle')"
             />
             <div class="hidden sm:block">
                 <x-button href="{{ route('tours.index') }}" variant="secondary">
@@ -85,18 +85,7 @@
             </div>
         </div>
 
-        <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            @forelse($featuredTours as $vm)
-                <x-tour-card :vm="$vm" />
-            @empty
-                <div class="sm:col-span-2 lg:col-span-4">
-                    <div class="rounded-2xl border border-dashed border-slate-200 bg-slate-50 px-6 py-10 text-center">
-                        <p class="text-sm font-medium text-slate-900">{{ __('home.featured.empty_title') }}</p>
-                        <p class="mt-2 text-sm text-slate-600">{{ __('home.featured.empty_subtitle') }}</p>
-                    </div>
-                </div>
-            @endforelse
-        </div>
+        <x-site.featured-tiles :tiles="$featuredTiles" />
 
         <div class="mt-8 sm:hidden">
             <x-button href="{{ route('tours.index') }}" variant="secondary" class="w-full justify-center">

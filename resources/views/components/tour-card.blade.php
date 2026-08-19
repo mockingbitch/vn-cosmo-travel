@@ -25,9 +25,12 @@
                 {{ $vm->title() }}
             </h3>
             <div class="mt-3 flex items-center justify-between gap-3">
-                <div class="text-sm font-semibold text-slate-900">
+                <div class="min-w-0 text-sm font-semibold text-slate-900">
                     {{ $vm->priceLabel() }}
-                    <span class="text-xs font-medium text-slate-500">{{ __('ui.per_person') }}</span>
+                    <span class="text-xs font-medium text-slate-500">{{ $vm->priceSuffix() }}</span>
+                    @if($vm->priceOptionsLabel())
+                        <span class="mt-0.5 block text-xs font-medium text-slate-500">{{ $vm->priceOptionsLabel() }}</span>
+                    @endif
                 </div>
                 <span class="inline-flex shrink-0 items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-emerald-700 sm:text-sm">
                     {{ __('ui.book_now') }}

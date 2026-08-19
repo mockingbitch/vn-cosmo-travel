@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Collection;
 
 #[Fillable([
     'title',
@@ -65,6 +66,44 @@ class Tour extends Model
     public function formattedPrice(): string
     {
         return CurrencyFormatter::format((int) $this->price, $this->currencyCode());
+    }
+
+    /**
+     * The price row shown wherever a single "headline" price is needed
+     * (cards, hero badge, sticky bar). Mirrors the `price` column.
+     */
+    public function defaultPriceRow(): ?TourPrice
+    {
+        $rows = $this->prices;
+
+        return $rows->firstWhere('is_default', true) ?? $rows->first();
+    }
+
+    /**
+     * Admin-defined name of the headline price, e.g. "Price for 2 people".
+     */
+    public function defaultPriceTypeName(): ?string
+    {
+        $name = $this->defaultPriceRow()?->label();
+
+        return filled($name) ? $name : null;
+    }
+
+    public function hasPriceOptions(): bool
+    {
+        return $this->prices->count() > 1;
+    }
+
+    /**
+     * Price rows grouped by their type category, for the public price table.
+     *
+     * @return Collection<string, Collection<int, TourPrice>>
+     */
+    public function priceRowsByCategory(): Collection
+    {
+        return $this->prices
+            ->filter(fn (TourPrice $row): bool => $row->priceType !== null)
+            ->groupBy(fn (TourPrice $row): string => $row->categoryLabel());
     }
 
     /**
@@ -140,6 +179,11 @@ class Tour extends Model
     public function itineraries(): HasMany
     {
         return $this->hasMany(TourItinerary::class)->orderBy('day');
+    }
+
+    public function prices(): HasMany
+    {
+        return $this->hasMany(TourPrice::class)->orderBy('sort_order')->orderBy('id');
     }
 
     public function images(): HasMany

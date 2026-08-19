@@ -2,12 +2,16 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Http\Requests\Admin\Concerns\HandlesTourPriceRows;
 use App\Models\Tour;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class UpdateTourRequest extends FormRequest
 {
+    use HandlesTourPriceRows;
+
     public function authorize(): bool
     {
         return true;
@@ -34,6 +38,8 @@ class UpdateTourRequest extends FormRequest
         }
 
         $this->merge(['currency' => Tour::CURRENCY_USD]);
+
+        $this->normalizePriceRows();
     }
 
     /**
@@ -41,7 +47,7 @@ class UpdateTourRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        return $this->priceRowRules() + [
             'destination_id' => ['required', 'integer', 'exists:destinations,id'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
@@ -49,7 +55,6 @@ class UpdateTourRequest extends FormRequest
             'services.*' => ['string', 'max:120'],
             'amenities' => ['present', 'array'],
             'amenities.*' => ['string', 'max:120'],
-            'price' => ['required', 'integer', 'min:0'],
             'currency' => ['required', 'string', Rule::in([Tour::CURRENCY_USD])],
             'thumbnail' => ['nullable', 'string', 'max:2048'],
             'thumbnail_media_id' => ['nullable', 'integer', 'exists:media,id'],
@@ -63,5 +68,18 @@ class UpdateTourRequest extends FormRequest
             'gallery' => ['present', 'array'],
             'gallery.*' => ['nullable', 'string', 'max:2048'],
         ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return $this->priceRowMessages();
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $this->validatePriceRowTypesAreUnique($validator);
     }
 }

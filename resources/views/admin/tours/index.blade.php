@@ -120,7 +120,15 @@
                                     </form>
                                 </td>
                                 <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->duration }}</td>
-                                <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->formattedPrice() }}</td>
+                                <td class="px-4 py-3 text-slate-600 sm:px-6">
+                                    <div class="font-medium text-slate-900">{{ $tour->formattedPrice() }}</div>
+                                    @if($tour->defaultPriceTypeName())
+                                        <div class="text-xs text-slate-500">{{ $tour->defaultPriceTypeName() }}</div>
+                                    @endif
+                                    @if($tour->hasPriceOptions())
+                                        <div class="mt-0.5 text-xs font-medium text-slate-500">{{ __('admin.tour_form.price_options_count', ['count' => $tour->prices->count()]) }}</div>
+                                    @endif
+                                </td>
                                 @if(auth()->user()->canManageUsers())
                                     <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->creator?->name ?? '—' }}</td>
                                     <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->updatedBy?->name ?? '—' }}</td>

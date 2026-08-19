@@ -14,11 +14,13 @@ use App\Http\Controllers\Admin\ServicePageController as AdminServicePageControll
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\FeaturedTourController as AdminFeaturedTourController;
 use App\Http\Controllers\Admin\TourController as AdminTourController;
+use App\Http\Controllers\Admin\TourPriceTypeController as AdminTourPriceTypeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Frontend\AboutController;
 use App\Http\Controllers\Frontend\BlogController;
 use App\Http\Controllers\Frontend\BookingController;
 use App\Http\Controllers\Frontend\DestinationController;
+use App\Http\Controllers\Frontend\FeaturedController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\ServicePageController as FrontendServicePageController;
 use App\Http\Controllers\Frontend\TourController;
@@ -71,6 +73,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('settings/social', [AdminSettingController::class, 'updateSocial'])->name('settings.social.update');
             Route::get('settings/home-why', [AdminSettingController::class, 'editHomeWhy'])->name('settings.homeWhy.edit');
             Route::put('settings/home-why', [AdminSettingController::class, 'updateHomeWhy'])->name('settings.homeWhy.update');
+            Route::get('settings/featured-tiles', [AdminSettingController::class, 'editFeaturedTiles'])->name('settings.featuredTiles.edit');
+            Route::put('settings/featured-tiles', [AdminSettingController::class, 'updateFeaturedTiles'])->name('settings.featuredTiles.update');
             Route::get('settings/testimonials', [AdminSettingController::class, 'editTestimonials'])->name('settings.testimonials.edit');
             Route::put('settings/testimonials', [AdminSettingController::class, 'updateTestimonials'])->name('settings.testimonials.update');
 
@@ -102,8 +106,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('featured-tours', [AdminFeaturedTourController::class, 'update'])->name('featured-tours.update');
         Route::patch('featured-tours/{tour}', [AdminFeaturedTourController::class, 'updateTour'])->name('featured-tours.update-tour');
 
+        Route::get('tours/picker', [AdminTourController::class, 'picker'])->name('tours.picker');
         Route::patch('tours/{tour}/status', [AdminTourController::class, 'updateStatus'])->name('tours.update-status');
         Route::resource('tours', AdminTourController::class)->except(['show']);
+        Route::resource('tour-price-types', AdminTourPriceTypeController::class)->except(['show']);
         Route::patch('posts/{post}/status', [AdminPostController::class, 'updateStatus'])->name('posts.update-status');
         Route::resource('posts', AdminPostController::class)->except(['show']);
 
@@ -120,6 +126,8 @@ Route::name('')->group(function () {
     Route::get('/', [HomeController::class, 'index'])->name('home');
 
     Route::get('/about', [AboutController::class, 'show'])->name('about');
+
+    Route::get('/featured', [FeaturedController::class, 'show'])->name('featured');
 
     Route::get('/airport-taxi', [FrontendServicePageController::class, 'airportTaxi'])->name('airport-taxi');
 

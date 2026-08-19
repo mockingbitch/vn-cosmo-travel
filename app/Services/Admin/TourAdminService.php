@@ -6,6 +6,7 @@ use App\Contracts\Interfaces\TourRepositoryInterface;
 use App\Models\Media;
 use App\Models\Tour;
 use App\Models\TourAttribute;
+use App\ViewModels\TourCardViewModel;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
@@ -20,6 +21,61 @@ class TourAdminService
     public function paginate(int $perPage = 15, array $filters = []): LengthAwarePaginator
     {
         return $this->tours->adminPaginate($perPage, $filters);
+    }
+
+    /**
+     * How many tours exist at all — the settings form hides the picker at zero.
+     */
+    public function pickableCount(): int
+    {
+        return Tour::query()->count();
+    }
+
+    /**
+     * One page of tours for the picker screen (search by title/slug).
+     */
+    public function pickerPage(int $perPage = 20, ?string $search = null): LengthAwarePaginator
+    {
+        return $this->tours->adminPaginate($perPage, ['q' => (string) $search]);
+    }
+
+    /**
+     * Compact row used by the tour picker and by the "already picked" list.
+     *
+     * @return array{id: int, title: string, destination: string, thumbnail: string, price: string, is_active: bool}
+     */
+    public function pickerPayload(Tour $tour): array
+    {
+        return [
+            'id' => (int) $tour->id,
+            'title' => (string) $tour->title,
+            'destination' => $tour->destination?->localizedName() ?? '',
+            'thumbnail' => (new TourCardViewModel($tour))->thumbnailUrl(),
+            'price' => $tour->formattedPrice(),
+            'is_active' => $tour->status === Tour::STATUS_ACTIVE,
+        ];
+    }
+
+    /**
+     * Payloads keyed by id for the given tours, disabled ones included: an admin
+     * must still see a tour they picked before it was switched off.
+     *
+     * @param  list<int>  $ids
+     * @return array<int, array{id: int, title: string, destination: string, thumbnail: string, price: string, is_active: bool}>
+     */
+    public function pickerPayloadsById(array $ids): array
+    {
+        $ids = array_values(array_unique(array_filter(array_map('intval', $ids), fn (int $id): bool => $id > 0)));
+        if ($ids === []) {
+            return [];
+        }
+
+        return Tour::query()
+            ->with(['destination', 'prices.priceType'])
+            ->whereIn('id', $ids)
+            ->get()
+            ->mapWithKeys(fn (Tour $tour): array => [(int) $tour->id => $this->pickerPayload($tour)])
+            ->all();
     }
 
     public function listFeatured(): Collection
@@ -59,13 +115,15 @@ class TourAdminService
     {
         $itineraryRows = $this->extractItineraryRows($data);
         $galleryPaths = $this->extractGalleryPaths($data);
-        unset($data['itinerary'], $data['gallery']);
+        $priceRows = $this->extractPriceRows($data);
+        unset($data['itinerary'], $data['gallery'], $data['prices'], $data['default_price_index']);
 
         $data['duration'] = max(1, count($itineraryRows));
 
         $data = $this->applyThumbnail($data);
         $data = $this->normalizeTourLists($data);
         $data['currency'] = Tour::CURRENCY_USD;
+        $data = $this->applyHeadlinePrice($data, $priceRows);
         $this->syncAttributes($data);
         $data['slug'] = $this->uniqueSlug(null, $data['title']);
 
@@ -76,8 +134,9 @@ class TourAdminService
         $tour = $this->tours->adminCreate($data);
         $this->replaceItineraries($tour, $itineraryRows);
         $this->replaceGalleryImages($tour, $galleryPaths);
+        $this->replacePrices($tour, $priceRows);
 
-        return $tour->fresh(['itineraries', 'images']);
+        return $tour->fresh(['itineraries', 'images', 'prices.priceType']);
     }
 
     public function updateStatus(Tour $tour, string $status): void
@@ -109,13 +168,15 @@ class TourAdminService
     {
         $itineraryRows = $this->extractItineraryRows($data);
         $galleryPaths = $this->extractGalleryPaths($data);
-        unset($data['itinerary'], $data['gallery']);
+        $priceRows = $this->extractPriceRows($data);
+        unset($data['itinerary'], $data['gallery'], $data['prices'], $data['default_price_index']);
 
         $data['duration'] = max(1, count($itineraryRows));
 
         $data = $this->applyThumbnail($data);
         $data = $this->normalizeTourLists($data);
         $data['currency'] = Tour::CURRENCY_USD;
+        $data = $this->applyHeadlinePrice($data, $priceRows);
         $this->syncAttributes($data);
         $title = $data['title'] ?? $tour->title;
         $data['slug'] = $this->uniqueSlug(null, $title, $tour->id);
@@ -127,8 +188,9 @@ class TourAdminService
         $this->tours->adminUpdate($tour, $data);
         $this->replaceItineraries($tour, $itineraryRows);
         $this->replaceGalleryImages($tour, $galleryPaths);
+        $this->replacePrices($tour, $priceRows);
 
-        return $tour->fresh(['itineraries', 'images']);
+        return $tour->fresh(['itineraries', 'images', 'prices.priceType']);
     }
 
     public function delete(Tour $tour): void
@@ -182,6 +244,111 @@ class TourAdminService
         $data['thumbnail'] = null;
 
         return $data;
+    }
+
+    /**
+     * Normalizes the repeatable price rows: one row per price type, exactly one
+     * default. Blank or duplicate rows are dropped.
+     *
+     * @param  array<string, mixed>  $data
+     * @return list<array{tour_price_type_id: int, amount: int, note: string|null, sort_order: int, is_default: bool}>
+     */
+    private function extractPriceRows(array $data): array
+    {
+        if (! isset($data['prices']) || ! is_array($data['prices'])) {
+            return [];
+        }
+
+        $defaultIndex = isset($data['default_price_index']) ? (int) $data['default_price_index'] : 0;
+
+        $rows = [];
+        $seenTypes = [];
+        foreach (array_values($data['prices']) as $index => $row) {
+            if (! is_array($row)) {
+                continue;
+            }
+
+            $typeId = (int) ($row['tour_price_type_id'] ?? 0);
+            if ($typeId <= 0 || in_array($typeId, $seenTypes, true)) {
+                continue;
+            }
+            $seenTypes[] = $typeId;
+
+            $note = isset($row['note']) ? trim((string) $row['note']) : '';
+
+            $rows[] = [
+                'tour_price_type_id' => $typeId,
+                'amount' => max(0, (int) ($row['amount'] ?? 0)),
+                'note' => $note === '' ? null : $note,
+                'sort_order' => count($rows),
+                'is_default' => $index === $defaultIndex,
+            ];
+        }
+
+        if ($rows === []) {
+            return [];
+        }
+
+        $defaults = array_keys(array_filter($rows, static fn (array $row): bool => $row['is_default']));
+        if ($defaults === []) {
+            $rows[0]['is_default'] = true;
+        } else {
+            // Keep the first flagged row only, so the headline price is unambiguous.
+            foreach (array_slice($defaults, 1) as $extra) {
+                $rows[$extra]['is_default'] = false;
+            }
+        }
+
+        return $rows;
+    }
+
+    /**
+     * `tours.price` stays the headline amount, so price filters, sorting and
+     * cards keep working off a single indexed column.
+     *
+     * @param  array<string, mixed>  $data
+     * @param  list<array{amount: int, is_default: bool}>  $priceRows
+     * @return array<string, mixed>
+     */
+    private function applyHeadlinePrice(array $data, array $priceRows): array
+    {
+        if ($priceRows === []) {
+            return $data;
+        }
+
+        foreach ($priceRows as $row) {
+            if ($row['is_default']) {
+                $data['price'] = $row['amount'];
+
+                return $data;
+            }
+        }
+
+        $data['price'] = $priceRows[0]['amount'];
+
+        return $data;
+    }
+
+    /**
+     * @param  list<array{tour_price_type_id: int, amount: int, note: string|null, sort_order: int, is_default: bool}>  $rows
+     */
+    private function replacePrices(Tour $tour, array $rows): void
+    {
+        if ($rows === []) {
+            return;
+        }
+
+        $tour->prices()->delete();
+        foreach ($rows as $row) {
+            $tour->prices()->create([
+                'tour_price_type_id' => $row['tour_price_type_id'],
+                'amount' => $row['amount'],
+                'currency' => Tour::CURRENCY_USD,
+                'note' => $row['note'],
+                'sort_order' => $row['sort_order'],
+                'is_default' => $row['is_default'],
+            ]);
+        }
     }
 
     /**

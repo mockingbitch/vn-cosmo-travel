@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\UpdateContactSettingsRequest;
+use App\Http\Requests\Admin\UpdateFeaturedTilesSettingsRequest;
 use App\Http\Requests\Admin\UpdateGeneralSettingsRequest;
 use App\Http\Requests\Admin\UpdateHomeWhySettingsRequest;
 use App\Http\Requests\Admin\UpdateSocialSettingsRequest;
 use App\Http\Requests\Admin\UpdateTestimonialsSettingsRequest;
 use App\Services\Admin\SettingAdminService;
+use App\Services\Admin\TourAdminService;
+use App\Services\FeaturedTilesService;
 use App\Services\SettingsService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -40,6 +43,32 @@ class SettingController extends Controller
     {
         return view('admin.settings.home-why', [
             'settings' => $settings->all(),
+        ]);
+    }
+
+    public function editFeaturedTiles(SettingsService $settings, FeaturedTilesService $featuredTiles, TourAdminService $tours): View
+    {
+        $tiles = $featuredTiles->tiles();
+
+        // Ids to hydrate: what the form last submitted (validation bounce) or what is saved.
+        $oldTiles = old('featured_tiles');
+        $oldTiles = is_array($oldTiles) ? $oldTiles : [];
+        $tourIds = [];
+        foreach ($tiles as $i => $tile) {
+            $fromOld = $oldTiles[$i]['tour_ids'] ?? null;
+            $ids = is_array($fromOld) ? $fromOld : $tile['tour_ids'];
+            foreach ($ids as $id) {
+                $tourIds[] = (int) $id;
+            }
+        }
+
+        return view('admin.settings.featured-tiles', [
+            'settings' => $settings->all(),
+            'tiles' => $tiles,
+            'tileDefaults' => $featuredTiles->defaults(),
+            'tileShapes' => $featuredTiles->slotShapes(),
+            'tourLookup' => $tours->pickerPayloadsById($tourIds),
+            'tourCount' => $tours->pickableCount(),
         ]);
     }
 
@@ -79,6 +108,13 @@ class SettingController extends Controller
         $settings->updateHomeWhy($request->validated());
 
         return redirect()->route('admin.settings.homeWhy.edit')->with('status', __('flash.settings.updated'));
+    }
+
+    public function updateFeaturedTiles(UpdateFeaturedTilesSettingsRequest $request, SettingAdminService $settings): RedirectResponse
+    {
+        $settings->updateFeaturedTiles($request->validated());
+
+        return redirect()->route('admin.settings.featuredTiles.edit')->with('status', __('flash.settings.updated'));
     }
 
     public function updateTestimonials(UpdateTestimonialsSettingsRequest $request, SettingAdminService $settings): RedirectResponse
