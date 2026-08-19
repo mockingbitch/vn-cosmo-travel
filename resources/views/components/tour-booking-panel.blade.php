@@ -16,6 +16,26 @@
         </div>
     </div>
 
+    @if($tour->hasPriceOptions())
+        <div class="mt-4">
+            <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('tour.prices') }}</div>
+            <ul class="mt-2 divide-y divide-slate-100 rounded-xl border border-slate-200">
+                @foreach($tour->prices as $row)
+                    @continue($row->priceType === null)
+                    <li class="flex items-baseline justify-between gap-3 px-3 py-2">
+                        <span class="min-w-0 text-xs text-slate-600">
+                            {{ $row->label() }}
+                            @if(filled($row->note))
+                                <span class="mt-0.5 block text-[11px] text-slate-400">{{ $row->note }}</span>
+                            @endif
+                        </span>
+                        <span class="shrink-0 text-xs font-semibold tabular-nums text-slate-900">{{ $row->formattedAmount() }}</span>
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     @if(session('booking_success'))
         <div class="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
             {{ session('booking_success') }}

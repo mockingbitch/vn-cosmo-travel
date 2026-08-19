@@ -13,7 +13,7 @@ class TourRepository implements TourRepositoryInterface
     {
         $query = Tour::query()
             ->active()
-            ->with(['destination'])
+            ->with(['destination', 'prices.priceType'])
             ->withCount(['images', 'itineraries']);
 
         if (! empty($filters['destination'])) {
@@ -63,7 +63,7 @@ class TourRepository implements TourRepositoryInterface
         return Tour::query()
             ->active()
             ->where('is_featured', true)
-            ->with(['destination'])
+            ->with(['destination', 'prices.priceType'])
             ->orderByRaw('featured_sort IS NULL, featured_sort ASC')
             ->orderByDesc('id')
             ->limit($limit)
@@ -109,16 +109,45 @@ class TourRepository implements TourRepositoryInterface
     {
         return Tour::query()
             ->active()
-            ->with(['destination', 'images', 'itineraries'])
+            ->with(['destination', 'images', 'itineraries', 'prices.priceType'])
             ->where('slug', $slug)
             ->firstOrFail();
+    }
+
+    /**
+     * Active tours for the given ids, in the order the ids were passed
+     * (curated lists care about order; SQL does not preserve whereIn order).
+     *
+     * @param  list<int>  $ids
+     */
+    public function activeByIds(array $ids): Collection
+    {
+        if ($ids === []) {
+            return new Collection;
+        }
+
+        $tours = Tour::query()
+            ->active()
+            ->with(['destination', 'prices.priceType'])
+            ->whereIn('id', $ids)
+            ->get()
+            ->keyBy('id');
+
+        $ordered = new Collection;
+        foreach ($ids as $id) {
+            if ($tours->has($id)) {
+                $ordered->push($tours->get($id));
+            }
+        }
+
+        return $ordered;
     }
 
     public function getRelated(int $tourId, int $destinationId, int $limit = 4): Collection
     {
         return Tour::query()
             ->active()
-            ->with(['destination'])
+            ->with(['destination', 'prices.priceType'])
             ->where('destination_id', $destinationId)
             ->where('id', '!=', $tourId)
             ->latest('id')
@@ -129,7 +158,7 @@ class TourRepository implements TourRepositoryInterface
     public function adminPaginate(int $perPage = 15, array $filters = []): LengthAwarePaginator
     {
         return Tour::query()
-            ->with(['destination', 'creator', 'updatedBy'])
+            ->with(['destination', 'creator', 'updatedBy', 'prices.priceType'])
             ->when(
                 filled($filters['q'] ?? null),
                 function ($query) use ($filters): void {

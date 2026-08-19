@@ -17,7 +17,7 @@
             <form method="POST" action="{{ route('admin.tours.update', $tour) }}" class="mt-6 space-y-4">
                 @csrf
                 @method('PUT')
-                @include('admin.tours._form', ['tour' => $tour, 'destinations' => $destinations])
+                @include('admin.tours._form', ['tour' => $tour, 'destinations' => $destinations, 'priceTypes' => $priceTypes])
                 <div class="flex flex-wrap gap-3 border-t border-slate-100 pt-6">
                     <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800">
                         <x-icon name="save" size="sm" />

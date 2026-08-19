@@ -33,6 +33,23 @@ class TourCardViewModel
         return $this->tour->formattedPrice();
     }
 
+    /**
+     * What the headline price covers, e.g. "Price for 2 people".
+     */
+    public function priceSuffix(): string
+    {
+        return $this->tour->defaultPriceTypeName() ?? __('ui.per_person');
+    }
+
+    public function priceOptionsLabel(): ?string
+    {
+        if (! $this->tour->hasPriceOptions()) {
+            return null;
+        }
+
+        return __('tour.price_options_count', ['count' => $this->tour->prices->count()]);
+    }
+
     public function destinationName(): ?string
     {
         return $this->tour->destination?->localizedName();

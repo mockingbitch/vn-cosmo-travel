@@ -18,6 +18,12 @@ interface TourRepositoryInterface
 
     public function findBySlugOrFail(string $slug): Tour;
 
+    /**
+     * @param  list<int>  $ids
+     * @return Collection<int, Tour>
+     */
+    public function activeByIds(array $ids): Collection;
+
     public function getRelated(int $tourId, int $destinationId, int $limit = 4): Collection;
 
     public function adminPaginate(int $perPage = 15, array $filters = []): LengthAwarePaginator;

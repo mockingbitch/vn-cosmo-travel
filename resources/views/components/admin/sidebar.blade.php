@@ -19,6 +19,7 @@
             'items' => [
                 ['label' => __('tours'), 'route' => 'admin.tours.index', 'icon' => 'tours'],
                 ['label' => __('admin.sidebar.featured_tours'), 'route' => 'admin.featured-tours.index', 'icon' => 'sparkles'],
+                ['label' => __('admin.sidebar.tour_price_types'), 'route' => 'admin.tour-price-types.index', 'icon' => 'tag'],
                 ['label' => __('destinations'), 'route' => 'admin.destinations.index', 'icon' => 'map'],
                 ['label' => __('blog'), 'route' => 'admin.posts.index', 'icon' => 'document'],
                 ['label' => __('admin.sidebar.media'), 'route' => 'admin.media.index', 'icon' => 'folder'],
@@ -37,6 +38,7 @@
                         ['label' => __('admin.sidebar.website'), 'route' => 'admin.settings.general.edit', 'icon' => 'cog'],
                         ['label' => __('contact'), 'route' => 'admin.settings.contact.edit', 'icon' => 'phone'],
                         ['label' => __('admin.sidebar.social_links'), 'route' => 'admin.settings.social.edit', 'icon' => 'share'],
+                        ['label' => __('admin.settings.featured_tiles.section'), 'route' => 'admin.settings.featuredTiles.edit', 'icon' => 'grid-apps'],
                         ['label' => __('admin.settings.home_why.section'), 'route' => 'admin.settings.homeWhy.edit', 'icon' => 'sparkles'],
                         ['label' => __('admin.settings.testimonials.section'), 'route' => 'admin.settings.testimonials.edit', 'icon' => 'quotes'],
                         ['label' => __('nav.primary.about_us'), 'route' => 'admin.about.edit', 'icon' => 'about'],

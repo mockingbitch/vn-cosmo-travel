@@ -81,8 +81,31 @@
         ? $cleanList($oldExcluded)
         : (isset($tour) && is_array($tour->amenities) ? $cleanList($tour->amenities) : []);
 
-    $priceOld = old('price', $tour?->price);
-    $priceInitial = ($priceOld !== null && $priceOld !== '') ? (int) $priceOld : null;
+    $oldPrices = old('prices');
+    $defaultPriceIndex = (int) old('default_price_index', 0);
+    if (is_array($oldPrices) && $oldPrices !== []) {
+        $priceRowsInitial = collect($oldPrices)
+            ->filter(fn ($r) => is_array($r))
+            ->map(fn ($r) => [
+                'tour_price_type_id' => (string) ($r['tour_price_type_id'] ?? ''),
+                'amount' => filled($r['amount'] ?? null)
+                    ? (int) preg_replace('/\D/', '', (string) $r['amount'])
+                    : null,
+                'note' => (string) ($r['note'] ?? ''),
+            ])
+            ->values()
+            ->all();
+    } elseif ($tour && $tour->relationLoaded('prices') && $tour->prices->isNotEmpty()) {
+        $priceRowsInitial = $tour->prices->map(fn ($p) => [
+            'tour_price_type_id' => (string) $p->tour_price_type_id,
+            'amount' => (int) $p->amount,
+            'note' => (string) ($p->note ?? ''),
+        ])->values()->all();
+        $defaultIndexFromTour = $tour->prices->values()->search(fn ($p) => (bool) $p->is_default);
+        $defaultPriceIndex = $defaultIndexFromTour === false ? 0 : (int) $defaultIndexFromTour;
+    } else {
+        $priceRowsInitial = [];
+    }
 
     $thumbnailUrlField = old('thumbnail');
     if ($thumbnailUrlField === null) {
@@ -129,12 +152,10 @@
     @error('description')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
 </div>
 
-<x-currency-price-input
-    name="price"
-    :label="__('ui.price_usd')"
-    :value="$priceInitial"
-    currency="USD"
-    :placeholder="__('placeholder.tour_price')"
+<x-admin.tour-price-rows
+    :price-types="$priceTypes"
+    :rows="$priceRowsInitial"
+    :default-index="$defaultPriceIndex"
 />
 <input type="hidden" name="currency" value="USD">
 

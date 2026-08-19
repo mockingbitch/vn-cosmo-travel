@@ -22,7 +22,7 @@
                     </div>
                     <div class="rounded-xl bg-slate-900 px-3 py-1.5 text-xs font-semibold text-white sm:px-4 sm:py-2 sm:text-sm">
                         {{ $tour->formattedPrice() }}
-                        <span class="text-[10px] font-medium text-white/80 sm:text-xs">{{ __('ui.per_person') }}</span>
+                        <span class="text-[10px] font-medium text-white/80 sm:text-xs">{{ $tour->defaultPriceTypeName() ?? __('ui.per_person') }}</span>
                     </div>
                     <a
                         href="#tour-booking"
@@ -126,6 +126,40 @@
                         {!! nl2br(e((string) $tour->description)) !!}
                     </div>
                 </div>
+
+                @php
+                    $priceGroups = $tour->priceRowsByCategory();
+                @endphp
+                @if($priceGroups->isNotEmpty())
+                    <div class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:mt-10 sm:p-7">
+                        <h2 class="text-lg font-semibold tracking-tight text-slate-900 sm:text-xl">{{ __('tour.prices') }}</h2>
+                        <p class="mt-1 text-sm text-slate-600">{{ __('tour.prices_help') }}</p>
+
+                        <div class="mt-5 grid gap-6">
+                            @foreach($priceGroups as $categoryLabel => $rows)
+                                <div>
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ $categoryLabel }}</div>
+                                    <ul class="mt-3 divide-y divide-slate-100 rounded-xl border border-slate-200">
+                                        @foreach($rows as $row)
+                                            <li class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 px-4 py-3">
+                                                <div class="min-w-0">
+                                                    <span class="text-sm font-medium text-slate-900">{{ $row->label() }}</span>
+                                                    @if($row->is_default)
+                                                        <span class="ms-2 inline-flex rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-600">{{ __('tour.price_default_badge') }}</span>
+                                                    @endif
+                                                    @if(filled($row->note))
+                                                        <span class="mt-0.5 block text-xs text-slate-500">{{ $row->note }}</span>
+                                                    @endif
+                                                </div>
+                                                <span class="shrink-0 text-sm font-semibold tabular-nums text-slate-900">{{ $row->formattedAmount() }}</span>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
 
                 @php
                     $includedItems = \App\Models\Tour::labeledListItems($tour->includedItems(), 'services');

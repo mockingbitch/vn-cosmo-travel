@@ -21,6 +21,54 @@ class SiteContactViewModel
     }
 
     /**
+     * Digits-only WhatsApp number from the contact phone setting; VN local
+     * numbers get the 84 country code. Null when no digits can be parsed.
+     */
+    public function whatsappNumber(): ?string
+    {
+        $phone = $this->phone();
+        if ($phone === null) {
+            return null;
+        }
+
+        $digits = preg_replace('/\D+/', '', $phone) ?? '';
+        if ($digits === '') {
+            return null;
+        }
+
+        if (str_starts_with($digits, '84')) {
+            return $digits;
+        }
+
+        if (str_starts_with($digits, '0')) {
+            return '84'.substr($digits, 1);
+        }
+
+        if (strlen($digits) === 9 && str_starts_with($digits, '9')) {
+            return '84'.$digits;
+        }
+
+        return $digits;
+    }
+
+    /**
+     * wa.me link for WhatsApp-only entry points (floating button, CTAs), with
+     * an optional prefilled message. Null when the setting holds no number.
+     */
+    public function whatsappUrl(?string $message = null): ?string
+    {
+        $number = $this->whatsappNumber();
+        if ($number === null) {
+            return null;
+        }
+
+        $url = 'https://wa.me/'.$number;
+        $message = $message !== null ? trim($message) : '';
+
+        return $message === '' ? $url : $url.'?text='.rawurlencode($message);
+    }
+
+    /**
      * Link for the phone row: WhatsApp (wa.me) when digits can be parsed; otherwise tel: with spaces stripped.
      */
     public function phoneChatHref(): string
@@ -30,19 +78,9 @@ class SiteContactViewModel
             return '#';
         }
 
-        $digits = preg_replace('/\D+/', '', $phone) ?? '';
-        if ($digits !== '') {
-            if (str_starts_with($digits, '84')) {
-                $normalized = $digits;
-            } elseif (str_starts_with($digits, '0')) {
-                $normalized = '84'.substr($digits, 1);
-            } elseif (strlen($digits) === 9 && str_starts_with($digits, '9')) {
-                $normalized = '84'.$digits;
-            } else {
-                $normalized = $digits;
-            }
-
-            return 'https://wa.me/'.$normalized;
+        $number = $this->whatsappNumber();
+        if ($number !== null) {
+            return 'https://wa.me/'.$number;
         }
 
         return 'tel:'.preg_replace('/\s+/', '', $phone);

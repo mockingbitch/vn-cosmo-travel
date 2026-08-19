@@ -1,6 +1,6 @@
 @props([
     'name',
-    'size' => 'md', // sm | md | lg  → 4 | 5 | 6 (Tailwind h/w)
+    'size' => 'md', // sm | md | lg | xl  → 4 | 5 | 6 | 8 (Tailwind h/w)
     'ariaHidden' => true,
 ])
 
@@ -12,6 +12,7 @@
     $sizeClass = match ($size) {
         'sm' => 'h-4 w-4',
         'lg' => 'h-6 w-6',
+        'xl' => 'h-8 w-8',
         default => 'h-5 w-5',
     };
     $filledBrandClasses = $registryKey === 'whatsapp' ? 'stroke-none fill-current' : '';

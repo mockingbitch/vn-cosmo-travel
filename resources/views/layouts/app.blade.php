@@ -197,6 +197,13 @@
             </div>
         </div>
     </footer>
+
+    @php
+        $whatsappFloatUrl = $siteContact->whatsappUrl(__('whatsapp.float.message'));
+    @endphp
+    @if($whatsappFloatUrl !== null)
+        <x-site.whatsapp-float :url="$whatsappFloatUrl" :phone="$siteContact->phone()" />
+    @endif
 </body>
 </html>
 

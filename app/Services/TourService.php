@@ -29,6 +29,15 @@ class TourService
         return $this->tours->findBySlugOrFail($slug);
     }
 
+    /**
+     * @param  list<int>  $ids
+     * @return Collection<int, Tour>
+     */
+    public function byIds(array $ids): Collection
+    {
+        return $this->tours->activeByIds($ids);
+    }
+
     public function related(Tour $tour, int $limit = 4): Collection
     {
         return $this->tours->getRelated($tour->id, $tour->destination_id, $limit);

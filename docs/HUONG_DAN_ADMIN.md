@@ -110,13 +110,14 @@ Bảng so sánh **thực hành**:
 ### Nội dung website
 
 - **Tours** — Mỗi dòng là một **gói tour**: giá, số ngày, mô tả, ảnh, lịch trình… Hiển thị ra **trang tour** cho khách xem (nếu tour đang **bật hiển thị** — xem [mục 6](#6-tour-và-bài-blog-đăng-và-ẩn-trên-website)).
+- **Loại giá tour** — Danh mục **các loại giá** bạn tự tạo (ví dụ *Giá cho 1 người*, *Giá cho 2 người*, *Giá bao gồm xe*, *Giá không bao gồm xe*). Tên và phân loại do bạn đặt, sửa lúc nào cũng được; mỗi tour sau đó chọn ra những loại giá mà tour đó áp dụng.
 - **Destinations (Điểm đến)** — Danh mục **khu vực / thành phố** để gắn với tour và trang điểm đến phía khách.
 - **Blog** — Bài viết tin tức / cẩm nang, hiển thị ở khu **Blog** trên website.
 - **Media** — **Kho ảnh**: upload ảnh mới, sau đó khi soạn tour hoặc blog bạn **chọn ảnh** từ kho thay vì dán link lung tung.
 
 ### Chỉ **quản trị viên đầy đủ**
 
-- **Settings (Cài đặt)** — Gồm các trang kiểu **Website**, **Contact**, **Social**, **Home why section**, **Hero Banners**… dùng để chỉnh **text, logo, banner đầu trang**, **số điện thoại hiển thị**, v.v. Tuỳ team marketing đặt tên; ý nghĩa là **chỗ khách nhìn thấy ngoài trang chủ / trang liên hệ**.
+- **Settings (Cài đặt)** — Gồm các trang kiểu **Website**, **Contact**, **Social**, **Ô nổi bật trang chủ**, **Home why section**, **Hero Banners**… dùng để chỉnh **text, logo, banner đầu trang**, **số điện thoại hiển thị**, v.v. Tuỳ team marketing đặt tên; ý nghĩa là **chỗ khách nhìn thấy ngoài trang chủ / trang liên hệ**.
 - **Users (Người dùng)** — Tạo tài khoản cho đồng nghiệp, đặt **Administrator hay không**, **bật / tắt** tài khoản.
 
 ---
@@ -126,15 +127,35 @@ Bảng so sánh **thực hành**:
 ### Bạn được giao: “Đăng tour mới”
 
 1. Vào **Tours** → **Thêm tour** (hoặc nút tương đương).
-2. Điền các ô bắt buộc (thường có **điểm đến**, **tiêu đề**, **giá**, **mô tả**, **ảnh**…). Menu chọn **dịch vụ / tiện ích** nếu có — giúp tour nhất quán khi hiển thị.
-3. Chọn **Trạng thái**: **Đang hoạt động** nếu muốn khách thấy ngay trên web; **Đã tắt** nếu chỉ lưu nháp hoặc chờ duyệt nội bộ.
-4. **Lưu**. Nếu có lỗi (thiếu ô, ảnh sai định dạng…), màn hình sẽ báo đỏ ngay dưới ô đó — đọc và sửa từng dòng.
+2. Điền các ô bắt buộc (thường có **điểm đến**, **tiêu đề**, **mô tả**, **ảnh**…). Menu chọn **dịch vụ / tiện ích** nếu có — giúp tour nhất quán khi hiển thị.
+3. Tới khối **Giá tour**: mỗi dòng là **một loại giá** (chọn loại giá + nhập số tiền, ghi chú nếu cần). Bấm **Thêm giá** để có thêm dòng. Phải có **ít nhất một dòng giá**, và chọn đúng **Giá chính** — đây là giá hiện ở danh sách tour và dùng khi khách lọc / sắp xếp theo giá.
+4. Chọn **Trạng thái**: **Đang hoạt động** nếu muốn khách thấy ngay trên web; **Đã tắt** nếu chỉ lưu nháp hoặc chờ duyệt nội bộ.
+5. **Lưu**. Nếu có lỗi (thiếu ô, thiếu dòng giá, ảnh sai định dạng…), màn hình sẽ báo đỏ ngay dưới ô đó — đọc và sửa từng dòng.
 
 ### Bạn được giao: “Sửa giá tour đang chạy”
 
 1. **Tours** → bấm vào tour cần sửa (thường là **chỉnh sửa** / icon bút).
-2. Đổi **giá** hoặc nội dung khác → **Lưu**.
-3. Kiểm tra nhanh trên **website khách** (mở tab ẩn danh hoặc điện thoại) xem đã đúng chưa — đôi khi trình duyệt **cache** (lưu bản cũ); thử **tải lại trang** hoặc đợi vài phút.
+2. Tới khối **Giá tour**: sửa số tiền của dòng cần đổi, **Thêm giá** nếu tour có thêm mức giá mới, hoặc bấm thùng rác để bỏ một dòng giá. Muốn đổi giá nào hiện ở danh sách tour thì tích **Giá chính** ở dòng đó.
+3. **Lưu**.
+4. Kiểm tra nhanh trên **website khách** (mở tab ẩn danh hoặc điện thoại) xem đã đúng chưa — đôi khi trình duyệt **cache** (lưu bản cũ); thử **tải lại trang** hoặc đợi vài phút.
+
+### Bạn được giao: “Thêm / sửa loại giá”
+
+1. **Loại giá tour** → **Thêm loại giá**.
+2. **Tên loại giá** là chữ khách nhìn thấy (ví dụ *Giá cho 2 người*, *Giá bao gồm xe*). **Phân loại** là nhóm để bảng giá trên web xếp gọn theo cụm (ví dụ *Theo số khách*, *Phương tiện*) — để trống cũng được. **Thứ tự** nhỏ hiện trước.
+3. Đổi tên một loại giá sẽ **tự cập nhật trên mọi tour** đang dùng loại giá đó — không cần sửa lại từng tour.
+4. Loại giá **đang được tour sử dụng thì không xóa được**. Nếu không muốn dùng nữa, hãy **bỏ tích “Cho phép chọn khi đặt giá”**: các tour cũ giữ nguyên giá, còn form tour sẽ không cho chọn loại giá này nữa.
+
+### Bạn được giao: “Đổi chữ / ảnh / link khối ô nổi bật ở trang chủ”
+
+1. **Cài đặt** → **Ô nổi bật trang chủ**. Khối này là 5 ô ảnh lớn nhỏ ngay dưới ô tìm kiếm ở trang chủ.
+2. Mỗi ô có: **nhãn** góc trên, **tiêu đề**, **thẻ địa danh** (các tên cách nhau bằng dấu phẩy), **mô tả ngắn**, **chữ trên link**, **ảnh nền** (dán URL hoặc bấm chọn từ thư viện ảnh), và **danh sách tour của ô đó**.
+3. **Link của ô là cố định, không sửa được** — bấm vào ô là mở trang riêng của ô đó (`/featured?p=…`). Link này **sinh tự động từ tiêu đề ô**, nên sửa tiêu đề là link đổi theo (link cũ đã share sẽ không còn dùng được).
+4. Gắn tour cho ô: bấm **Thêm tour** → mở **màn hình chọn tour** có ô tìm kiếm và toàn bộ tour trong hệ thống (ảnh, điểm đến, giá, trạng thái). Bấm vào tour để thêm/bỏ, bấm lại **Xong** để đóng. Danh sách đã chọn nằm ngay dưới nút, dùng mũi tên **lên/xuống** để đổi thứ tự hiển thị và thùng rác để bỏ. Tối đa 8 tour mỗi ô; **số tour đã gắn hiện ngay trên đầu mỗi ô** trong trang cài đặt.
+5. Nếu **chưa chọn tour nào**, trang của ô tự lấy các tour thuộc **điểm đến mặc định** của ô — nên ô không bao giờ dẫn tới trang trống. Tour đang **tắt hiển thị** thì tự động không hiện trên web, khỏi cần bỏ khỏi danh sách.
+6. **Mọi ô nhập đều không bắt buộc.** Chữ mờ trong ô nhập chính là **giá trị mặc định** đang chạy: để trống thì web dùng lại đúng giá trị đó. Muốn quay về mặc định thì chỉ cần **xóa nội dung** trong ô rồi lưu.
+7. Riêng **mô tả ngắn** chỉ hiển thị ở **ô lớn** và **ô rộng hàng dưới** (hai ô nhỏ không đủ chỗ) — nội dung vẫn được lưu.
+8. **Lưu** rồi bấm **Xem trên web** để kiểm tra.
 
 ### Bạn được giao: “Viết bài blog”
 
