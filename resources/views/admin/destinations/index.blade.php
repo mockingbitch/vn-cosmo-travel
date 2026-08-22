@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="mx-auto w-full max-w-6xl">
+    <div class="mx-auto w-full">
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div class="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                 <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('destinations') }}</h1>
@@ -13,17 +13,17 @@
 
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-slate-200 text-sm">
-                    <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    <th scope="col"ead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
                         <tr>
-                            <th class="px-4 py-3 sm:px-6">{{ __('ui.name_en') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('ui.name_vi') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('region') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('slug') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('ui.name_en') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('ui.name_vi') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('region') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('slug') }}</th>
                             @if(auth()->user()->canManageUsers())
-                                <th class="px-4 py-3 sm:px-6">{{ __('audit.created_by') }}</th>
-                                <th class="px-4 py-3 sm:px-6">{{ __('audit.updated_by') }}</th>
+                                <th scope="col" class="px-4 py-3 sm:px-6">{{ __('audit.created_by') }}</th>
+                                <th scope="col" class="px-4 py-3 sm:px-6">{{ __('audit.updated_by') }}</th>
                             @endif
-                            <th class="px-4 py-3 text-right sm:px-6">{{ __('actions') }}</th>
+                            <th scope="col" class="px-4 py-3 text-right sm:px-6">{{ __('actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">

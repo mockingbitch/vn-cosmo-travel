@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="mx-auto w-full max-w-6xl space-y-6">
+    <div class="mx-auto w-full space-y-6">
         @if($errors->has('delete'))
             <div class="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-800">
                 {{ $errors->first('delete') }}
@@ -69,13 +69,13 @@
             </form>
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-slate-200 text-sm">
-                    <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    <th scope="col"ead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
                         <tr>
-                            <th class="px-4 py-3 sm:px-6">{{ __('name') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('email') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('role') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('status') }}</th>
-                            <th class="px-4 py-3 text-right sm:px-6">{{ __('actions') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('name') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('email') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('role') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('status') }}</th>
+                            <th scope="col" class="px-4 py-3 text-right sm:px-6">{{ __('actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100 bg-white">

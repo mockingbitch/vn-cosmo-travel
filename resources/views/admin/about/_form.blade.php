@@ -24,9 +24,11 @@
 
         <div class="mt-4 space-y-4">
             <div>
-                <label class="block text-sm font-medium text-slate-700">{{ __('title') }}</label>
+                <label for="about-title-{{ $loc }}" class="block text-sm font-medium text-slate-700">{{ __('title') }}</label>
                 <input
+                    id="about-title-{{ $loc }}"
                     type="text"
+                    @error('translations.'.$loc.'.title') aria-invalid="true" @enderror
                     name="translations[{{ $loc }}][title]"
                     value="{{ $blockTitle }}"
                     class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
@@ -36,18 +38,20 @@
                     <p class="mt-1 text-xs text-rose-600">{{ $message }}</p>
                 @enderror
                 @if ($loop->first)
-                    <p class="mt-1 text-xs text-slate-500">{{ __('admin.about.url_fixed_help') }}</p>
+                    <x-admin.hint>{{ __('admin.about.url_fixed_help') }}</x-admin.hint>
                 @endif
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-slate-700">{{ __('ui.content_html_allowed') }}</label>
+                <label for="about-content-{{ $loc }}" class="block text-sm font-medium text-slate-700">{{ __('ui.content_html_allowed') }}</label>
                 <p class="mt-1 text-xs text-slate-500">
                     {{ __('Use wordtohtml.net to format blog content.') }}
                     <a class="font-semibold text-slate-700 underline underline-offset-4 hover:text-slate-900" href="https://wordtohtml.net/" target="_blank" rel="noopener noreferrer">wordtohtml.net</a>.
                     {{ __('We will remove all font-family styles when saving.') }}
                 </p>
                 <textarea
+                    id="about-content-{{ $loc }}"
+                    @error('translations.'.$loc.'.content') aria-invalid="true" @enderror
                     name="translations[{{ $loc }}][content]"
                     rows="14"
                     class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 font-mono text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"

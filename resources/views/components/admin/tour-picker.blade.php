@@ -44,7 +44,7 @@
     <div class="mt-2 max-h-[22rem] space-y-2 overflow-y-auto pr-1" x-show="items.length > 0">
         <template x-for="(item, idx) in items" :key="item.id">
             <div class="flex items-center gap-2 rounded-xl border border-slate-200 bg-white p-2 shadow-sm">
-                <span class="w-4 shrink-0 text-right text-[11px] font-semibold text-slate-400" x-text="idx + 1"></span>
+                <span class="w-4 shrink-0 text-right text-[11px] font-semibold text-slate-500" x-text="idx + 1"></span>
                 <img :src="item.thumbnail" alt="" class="h-9 w-12 shrink-0 rounded-lg object-cover ring-1 ring-slate-200" loading="lazy" decoding="async" />
                 <div class="min-w-0 flex-1">
                     <div class="truncate text-xs font-semibold text-slate-900" x-text="item.title"></div>
@@ -74,7 +74,7 @@
     <x-admin.modal name="openModal" size="xl" :title="__('admin.settings.featured_tiles.picker_title')" :subtitle="__('admin.settings.featured_tiles.picker_subtitle')">
         <div>
             <label class="relative block">
-                <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
                     <x-icon name="search" size="sm" />
                 </span>
                 <input

@@ -113,6 +113,19 @@
 
     /* WhatsApp floating button: two staggered pulses ("ping ping"), then a pause.
        Max scale stays at 1.6 so the ring never clips against the viewport edge. */
+    /* Dialog height with a real fallback chain: browsers without `dvh` (Safari
+       < 15.4) drop a `min(90dvh, …)` declaration completely, which left the
+       dialog unbounded and its lower half unreachable. */
+    .admin-dialog-height {
+        max-height: calc(100vh - 4rem);
+    }
+
+    @supports (height: 1dvh) {
+        .admin-dialog-height {
+            max-height: min(90dvh, calc(100vh - 4rem));
+        }
+    }
+
     @keyframes whatsapp-ping {
         0% {
             transform: scale(1);

@@ -24,6 +24,9 @@ class GuideController extends Controller
 
         $guideHtml = $converter->convert(File::get($path))->getContent();
 
+        // Markdown tables render bare <th>; screen readers need the column scope.
+        $guideHtml = str_replace('<th>', '<th scope="col">', $guideHtml);
+
         return view('admin.guide', [
             'title' => __('admin.guide.title'),
             'guideHtml' => $guideHtml,

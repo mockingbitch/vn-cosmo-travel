@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="mx-auto w-full max-w-6xl">
+    <div class="mx-auto w-full">
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div class="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                 <div>
@@ -24,14 +24,14 @@
 
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-slate-200 text-sm">
-                    <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    <th scope="col"ead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
                         <tr>
-                            <th class="px-4 py-3 sm:px-6">{{ __('admin.price_types.name') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('admin.price_types.category') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('admin.price_types.sort_order') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('status') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('admin.price_types.usage') }}</th>
-                            <th class="px-4 py-3 text-right sm:px-6">{{ __('actions') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('admin.price_types.name') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('admin.price_types.category') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('admin.price_types.sort_order') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('status') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('admin.price_types.usage') }}</th>
+                            <th scope="col" class="px-4 py-3 text-right sm:px-6">{{ __('actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -68,7 +68,7 @@
                                                 <x-admin.action-icon icon="trash" variant="danger" :title="__('delete')" />
                                             </x-admin.confirm-delete>
                                         @else
-                                            <span class="text-xs text-slate-400" title="{{ __('flash.tour_price_type.in_use') }}">{{ __('admin.price_types.locked') }}</span>
+                                            <span class="text-xs text-slate-500" title="{{ __('flash.tour_price_type.in_use') }}">{{ __('admin.price_types.locked') }}</span>
                                         @endif
                                     </div>
                                 </td>

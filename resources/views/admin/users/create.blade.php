@@ -1,8 +1,10 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="mx-auto w-full max-w-xl">
-        <x-admin.card :title="__('ui.new_user')" :subtitle="__('admin.users.create_subtitle')">
+    <x-admin.error-summary />
+
+    <div class="mx-auto w-full">
+        <x-admin.card :title="__('ui.new_user')" :subtitle="__('admin.users.create_subtitle')" heading="h1">
             <form method="POST" action="{{ route('admin.users.store') }}" class="space-y-4">
                 @csrf
 
@@ -20,8 +22,8 @@
                 </label>
 
                 <div>
-                    <label class="block text-sm font-medium text-slate-700">{{ __('status') }}</label>
-                    <select name="status" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60">
+                    <label for="user-status" class="block text-sm font-medium text-slate-700">{{ __('status') }}</label>
+                    <select id="user-status" name="status" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60">
                         <option value="{{ \App\Models\User::STATUS_ACTIVE }}" @selected(old('status', \App\Models\User::STATUS_ACTIVE) === \App\Models\User::STATUS_ACTIVE)>{{ __('status.active') }}</option>
                         <option value="{{ \App\Models\User::STATUS_DISABLED }}" @selected(old('status', \App\Models\User::STATUS_ACTIVE) === \App\Models\User::STATUS_DISABLED)>{{ __('status.disabled') }}</option>
                     </select>
@@ -30,16 +32,15 @@
                     @enderror
                 </div>
 
-                <div class="flex flex-wrap gap-3 pt-2">
-                    <x-admin.button type="submit" variant="primary">
-                        <x-icon name="add" size="sm" />
-                        {{ __('create') }}
-                    </x-admin.button>
-                    <x-admin.button :href="route('admin.users.index')" variant="secondary">
-                        <x-icon name="arrow-left" size="sm" />
-                        {{ __('cancel') }}
-                    </x-admin.button>
-                </div>
+                <x-admin.form-actions
+                    submit-label="{{ __('create') }}"
+                    submit-icon="add"
+                    cancel-url="{{ route('admin.users.index') }}"
+                <x-admin.form-actions
+                    submit-label="{{ __('create') }}"
+                    submit-icon="add"
+                    cancel-url="{{ route('admin.users.index') }}"
+                />
             </form>
         </x-admin.card>
     </div>

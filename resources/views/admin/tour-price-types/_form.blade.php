@@ -4,7 +4,7 @@
 
 <div>
     <label class="block text-sm font-medium text-slate-700" for="price-type-name">{{ __('admin.price_types.name') }}</label>
-    <p class="mt-0.5 text-xs text-slate-500">{{ __('admin.price_types.name_help') }}</p>
+    <x-admin.hint>{{ __('admin.price_types.name_help') }}</x-admin.hint>
     <input
         id="price-type-name"
         name="name"
@@ -20,7 +20,7 @@
 
 <div>
     <label class="block text-sm font-medium text-slate-700" for="price-type-category">{{ __('admin.price_types.category') }}</label>
-    <p class="mt-0.5 text-xs text-slate-500">{{ __('admin.price_types.category_help') }}</p>
+    <x-admin.hint>{{ __('admin.price_types.category_help') }}</x-admin.hint>
     <input
         id="price-type-category"
         name="category"
@@ -41,7 +41,7 @@
 
 <div>
     <label class="block text-sm font-medium text-slate-700" for="price-type-sort">{{ __('admin.price_types.sort_order') }}</label>
-    <p class="mt-0.5 text-xs text-slate-500">{{ __('admin.price_types.sort_order_help') }}</p>
+    <x-admin.hint>{{ __('admin.price_types.sort_order_help') }}</x-admin.hint>
     <input
         id="price-type-sort"
         name="sort_order"

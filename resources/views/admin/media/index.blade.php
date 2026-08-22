@@ -12,6 +12,7 @@
                 <input
                     type="search"
                     name="q"
+                    aria-label="{{ __('admin.media.search_label') }}"
                     value="{{ $q ?? '' }}"
                     placeholder="{{ __('placeholder.media_filename') }}"
                     class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-2 text-sm text-slate-900 shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
@@ -50,7 +51,7 @@
             >
                 @csrf
 
-                <input x-ref="input" type="file" name="files[]" multiple accept="image/*" class="hidden" @change="$refs.form.submit()" />
+                <input x-ref="input" type="file" name="files[]" multiple accept="image/*" class="hidden" aria-label="{{ __('admin.media.upload') }}" @change="$refs.form.submit()" />
 
                 <div
                     class="rounded-2xl border-2 border-dashed p-6 transition"

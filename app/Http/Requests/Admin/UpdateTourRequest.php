@@ -39,6 +39,8 @@ class UpdateTourRequest extends FormRequest
 
         $this->merge(['currency' => Tour::CURRENCY_USD]);
 
+        $this->normalizeDestinationIds();
+
         $this->normalizePriceRows();
     }
 
@@ -48,7 +50,8 @@ class UpdateTourRequest extends FormRequest
     public function rules(): array
     {
         return $this->priceRowRules() + [
-            'destination_id' => ['required', 'integer', 'exists:destinations,id'],
+            'destination_ids' => ['required', 'array', 'min:1', 'max:12'],
+            'destination_ids.*' => ['required', 'integer', 'distinct', 'exists:destinations,id'],
             'title' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'services' => ['present', 'array'],
@@ -75,7 +78,12 @@ class UpdateTourRequest extends FormRequest
      */
     public function messages(): array
     {
-        return $this->priceRowMessages();
+        return $this->priceRowMessages() + [
+            'destination_ids.required' => __('validation.tour_destinations.required'),
+            'destination_ids.min' => __('validation.tour_destinations.required'),
+            'destination_ids.*.required' => __('validation.tour_destinations.required'),
+            'destination_ids.*.distinct' => __('validation.tour_destinations.duplicate'),
+        ];
     }
 
     public function withValidator(Validator $validator): void

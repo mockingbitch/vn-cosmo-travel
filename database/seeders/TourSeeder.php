@@ -31,6 +31,7 @@ class TourSeeder extends Seeder
             [
                 'destination_id' => $hanoi?->id,
                 'title' => 'Hanoi Food & Culture Essentials',
+                'extra_destinations' => ['ha-long-bay', 'ninh-binh'],
                 'duration' => 3,
                 'price' => 149,
                 'thumbnail' => 'https://images.unsplash.com/photo-1555921015-5532091f6026?auto=format&fit=crop&w=1400&q=80',
@@ -114,6 +115,17 @@ class TourSeeder extends Seeder
                     'is_featured' => $index < 4,
                     'featured_sort' => $index < 4 ? $index + 1 : null,
                 ],
+            );
+
+            $extraSlugs = $item['extra_destinations'] ?? [];
+            $destinationIds = array_values(array_unique(array_merge(
+                [$item['destination_id']],
+                Destination::query()->whereIn('slug', $extraSlugs)->pluck('id')->all()
+            )));
+            $tour->destinations()->sync(
+                collect($destinationIds)
+                    ->mapWithKeys(fn (int $id, int $index): array => [$id => ['sort_order' => $index]])
+                    ->all()
             );
 
             TourItinerary::query()->where('tour_id', $tour->id)->delete();

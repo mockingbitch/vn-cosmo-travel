@@ -12,7 +12,6 @@ use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\ServicePageController as AdminServicePageController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
-use App\Http\Controllers\Admin\FeaturedTourController as AdminFeaturedTourController;
 use App\Http\Controllers\Admin\TourController as AdminTourController;
 use App\Http\Controllers\Admin\TourPriceTypeController as AdminTourPriceTypeController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -101,10 +100,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('media/bulk', [AdminMediaController::class, 'bulkDestroy'])->name('media.bulkDestroy');
         Route::get('media/{media}/usages', [AdminMediaController::class, 'usages'])->name('media.usages');
         Route::resource('media', AdminMediaController::class)->only(['index', 'store', 'destroy', 'show']);
-
-        Route::get('featured-tours', [AdminFeaturedTourController::class, 'index'])->name('featured-tours.index');
-        Route::put('featured-tours', [AdminFeaturedTourController::class, 'update'])->name('featured-tours.update');
-        Route::patch('featured-tours/{tour}', [AdminFeaturedTourController::class, 'updateTour'])->name('featured-tours.update-tour');
 
         Route::get('tours/picker', [AdminTourController::class, 'picker'])->name('tours.picker');
         Route::patch('tours/{tour}/status', [AdminTourController::class, 'updateStatus'])->name('tours.update-status');

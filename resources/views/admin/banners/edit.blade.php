@@ -1,6 +1,8 @@
 @extends('admin.layouts.app')
 
 @section('content')
+    <x-admin.error-summary />
+
     <div class="grid gap-6 lg:grid-cols-3">
         <div class="lg:col-span-3">
             <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('admin.banners.hero_title') }}</h1>
@@ -14,12 +16,13 @@
 
                 @include('admin.banners._form', ['banner' => $banner])
 
-                <div class="mt-6 flex items-center justify-end gap-3">
-                    <x-admin.button type="submit" variant="primary">
-                        <x-icon name="save" size="sm" />
-                        {{ __('admin.settings.save_changes') }}
-                    </x-admin.button>
-                </div>
+                <x-admin.form-actions
+                    submit-label="{{ __('admin.settings.save_changes') }}"
+                    submit-icon="save"
+                <x-admin.form-actions
+                    submit-label="{{ __('admin.settings.save_changes') }}"
+                    submit-icon="save"
+                />
             </form>
         </div>
 
@@ -80,14 +83,14 @@
                         >
                             <div class="grid gap-3 text-left lg:grid-cols-2 lg:gap-4">
                                 <div class="min-w-0 lg:border-r lg:border-slate-100 lg:pr-4">
-                                    <div class="text-[10px] font-bold uppercase tracking-wide text-slate-400">{{ __('vietnamese') }}</div>
+                                    <div class="text-[10px] font-bold uppercase tracking-wide text-slate-500">{{ __('vietnamese') }}</div>
                                     <div class="mt-1 truncate text-sm font-semibold text-slate-900">{{ $titleVi }}</div>
                                     @if(filled($subtitleVi))
                                         <div class="mt-1 line-clamp-2 break-words text-sm text-slate-600">{{ $subtitleVi }}</div>
                                     @endif
                                 </div>
                                 <div class="min-w-0">
-                                    <div class="text-[10px] font-bold uppercase tracking-wide text-slate-400">{{ __('english') }}</div>
+                                    <div class="text-[10px] font-bold uppercase tracking-wide text-slate-500">{{ __('english') }}</div>
                                     <div class="mt-1 truncate text-sm font-semibold text-slate-900">{{ $titleEn }}</div>
                                     @if(filled($subtitleEn))
                                         <div class="mt-1 line-clamp-2 break-words text-sm text-slate-600">{{ $subtitleEn }}</div>

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Lang;
 
 #[Fillable([
@@ -24,9 +24,12 @@ class Destination extends Model
         return 'slug';
     }
 
-    public function tours(): HasMany
+    /**
+     * Every tour attached to this destination (a tour may cover several).
+     */
+    public function tours(): BelongsToMany
     {
-        return $this->hasMany(Tour::class);
+        return $this->belongsToMany(Tour::class)->withPivot('sort_order');
     }
 
     public function creator(): BelongsTo

@@ -28,7 +28,7 @@
     <div>
         <div class="text-sm font-medium text-slate-700">{{ $label }}</div>
         @if ($help)
-            <p class="mt-0.5 text-xs text-slate-500">{{ $help }}</p>
+            <x-admin.hint>{{ $help }}</x-admin.hint>
         @endif
     </div>
 
@@ -39,6 +39,8 @@
                     type="text"
                     class="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                     x-model="items[index]"
+                    aria-label="{{ $label }}"
+                            :aria-label="`{{ $label }} ${index + 1}`"
                     name="{{ $name }}[]"
                     maxlength="120"
                     placeholder="{{ __('admin.tour_form.list_item_placeholder') }}"

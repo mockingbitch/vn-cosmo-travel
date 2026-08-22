@@ -17,12 +17,12 @@
 
     <div class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <table class="min-w-full divide-y divide-slate-200 text-sm">
-            <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+            <th scope="col"ead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
                 <tr>
-                    <th class="px-4 py-3">{{ __('Banner') }}</th>
-                    <th class="px-4 py-3">{{ __('Order') }}</th>
-                    <th class="px-4 py-3">{{ __('status') }}</th>
-                    <th class="px-4 py-3 text-right">{{ __('actions') }}</th>
+                    <th scope="col" class="px-4 py-3">{{ __('Banner') }}</th>
+                    <th scope="col" class="px-4 py-3">{{ __('Order') }}</th>
+                    <th scope="col" class="px-4 py-3">{{ __('status') }}</th>
+                    <th scope="col" class="px-4 py-3 text-right">{{ __('actions') }}</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-200">

@@ -31,7 +31,7 @@
     x-show="{{ $name }}"
     x-effect="if ({{ $name }}) { $store.scrollLock.lock(); } else { $store.scrollLock.unlock(); }"
     x-transition.opacity
-    class="fixed inset-0 z-50 flex items-center justify-center p-4 py-8"
+    class="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto overscroll-contain p-4 py-8"
     role="presentation"
 >
     <div
@@ -49,7 +49,7 @@
         x-transition:leave="transition ease-in duration-120"
         x-transition:leave-start="opacity-100 translate-y-0 scale-100"
         x-transition:leave-end="opacity-0 translate-y-2 scale-[0.98]"
-        class="relative my-auto flex w-full {{ $sizeClass }} max-h-[min(90dvh,calc(100vh-4rem))] flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
+        class="admin-dialog-height relative my-auto flex w-full {{ $sizeClass }} flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
         role="dialog"
         aria-modal="true"
         @if ($labelledBy)

@@ -19,11 +19,6 @@ class TourService
         return $this->tours->paginateFiltered($filters, $perPage);
     }
 
-    public function featured(int $limit = 4): Collection
-    {
-        return $this->tours->getFeatured($limit);
-    }
-
     public function detail(string $slug): Tour
     {
         return $this->tours->findBySlugOrFail($slug);
@@ -40,7 +35,9 @@ class TourService
 
     public function related(Tour $tour, int $limit = 4): Collection
     {
-        return $this->tours->getRelated($tour->id, $tour->destination_id, $limit);
+        $destinationIds = $tour->destinationList()->pluck('id')->map(fn ($id): int => (int) $id)->all();
+
+        return $this->tours->getRelated($tour->id, $destinationIds, $limit);
     }
 }
 

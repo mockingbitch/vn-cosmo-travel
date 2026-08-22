@@ -2,6 +2,10 @@
 
 @section('content')
     <div class="grid gap-8">
+        <div>
+            <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('admin.sidebar.dashboard') }}</h1>
+            <x-admin.hint>{{ __('admin.dashboard.subtitle') }}</x-admin.hint>
+        </div>
         {{-- KPI: chỉ bài viết, tour, booking (số liệu thật từ DB) --}}
         <div class="grid gap-4 sm:grid-cols-3">
             <div class="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm ring-1 ring-slate-100">
@@ -37,12 +41,12 @@
                 <x-admin.card :title="__('ui.recent_posts')" :subtitle="__('ui.latest_content_updates')">
                     <div class="overflow-hidden rounded-2xl border border-slate-200">
                         <table class="min-w-full divide-y divide-slate-200 text-sm">
-                            <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+                            <th scope="col"ead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
                                 <tr>
-                                    <th class="px-4 py-3">{{ __('title') }}</th>
-                                    <th class="px-4 py-3">{{ __('status') }}</th>
-                                    <th class="px-4 py-3">{{ __('date') }}</th>
-                                    <th class="px-4 py-3 text-right">{{ __('actions') }}</th>
+                                    <th scope="col" class="px-4 py-3">{{ __('title') }}</th>
+                                    <th scope="col" class="px-4 py-3">{{ __('status') }}</th>
+                                    <th scope="col" class="px-4 py-3">{{ __('date') }}</th>
+                                    <th scope="col" class="px-4 py-3 text-right">{{ __('actions') }}</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-slate-200 bg-white">
