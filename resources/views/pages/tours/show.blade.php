@@ -6,7 +6,7 @@
             <div class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
                 <div class="min-w-0 flex-1">
                     <x-tour-book-now-badge class="mb-3" />
-                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 sm:text-sm">{{ $tour->destination?->localizedName() }}</div>
+                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500 sm:text-sm">{{ implode(' · ', $tour->destinationNames()) }}</div>
                     <h1 class="mt-1 text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">{{ $tour->title }}</h1>
                     <p class="mt-2 hidden max-w-3xl text-sm leading-7 text-slate-600 sm:block sm:text-base">
                         {{ \Illuminate\Support\Str::limit(strip_tags((string) $tour->description), 220) }}

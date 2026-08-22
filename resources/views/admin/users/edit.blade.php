@@ -1,8 +1,10 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="mx-auto w-full max-w-xl">
-        <x-admin.card :title="__('ui.edit_user')" :subtitle="__('admin.users.edit_subtitle')">
+    <x-admin.error-summary />
+
+    <div class="mx-auto w-full">
+        <x-admin.card :title="__('ui.edit_user')" :subtitle="__('admin.users.edit_subtitle')" heading="h1">
             <div class="mb-4 flex flex-wrap items-center gap-2 text-sm text-slate-600">
                 <span>{{ __('status') }}:</span>
                 @if($editUser->status === \App\Models\User::STATUS_ACTIVE)
@@ -46,16 +48,15 @@
                     <p class="text-xs text-rose-600">{{ $message }}</p>
                 @enderror
 
-                <div class="flex flex-wrap gap-3 pt-2">
-                    <x-admin.button type="submit" variant="primary">
-                        <x-icon name="save" size="sm" />
-                        {{ __('save') }}
-                    </x-admin.button>
-                    <x-admin.button :href="route('admin.users.index')" variant="secondary">
-                        <x-icon name="arrow-left" size="sm" />
-                        {{ __('cancel') }}
-                    </x-admin.button>
-                </div>
+                <x-admin.form-actions
+                    submit-label="{{ __('save') }}"
+                    submit-icon="save"
+                    cancel-url="{{ route('admin.users.index') }}"
+                <x-admin.form-actions
+                    submit-label="{{ __('save') }}"
+                    submit-icon="save"
+                    cancel-url="{{ route('admin.users.index') }}"
+                />
             </form>
         </x-admin.card>
     </div>

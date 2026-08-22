@@ -68,14 +68,14 @@
         {{-- Sticky search toolbar. Negative margins escape body padding so border-b spans full width. --}}
         <div class="sticky -top-20 z-10 -mx-6 -mt-5 mb-4 border-b border-slate-200 bg-white/95 px-6 pb-3 pt-2.5 backdrop-blur">
             <label class="relative block w-full">
-                <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
                     <x-icon name="search" size="sm" />
                 </span>
                 <input
                     type="search"
                     placeholder="{{ __('placeholder.media_filename') }}"
                     autocomplete="off"
-                    class="block w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
+                    class="block w-full rounded-xl border border-slate-200 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                     x-model="q"
                     @input.debounce.300ms="reload()"
                     @search="q = ($event.target && $event.target.value) ? $event.target.value : ''; reload()"
@@ -95,6 +95,8 @@
                         @click="toggle(m)"
                         @keydown.enter.prevent="toggle(m)"
                         :aria-pressed="selectedIds.includes(m.id).toString()"
+                        aria-label="{{ __('admin.media.select_media') }}"
+                        :aria-label="m.file_name"
                     >
                         <div class="aspect-[4/3] bg-slate-100">
                             <img :src="m.url" class="h-full w-full object-cover transition duration-200 group-hover:scale-[1.02]" alt="" loading="lazy" />
@@ -118,7 +120,7 @@
         {{-- Empty state --}}
         <template x-if="items.length === 0">
             <div class="grid place-items-center rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 px-6 py-16 text-center">
-                <div class="grid h-12 w-12 place-items-center rounded-2xl bg-white text-slate-400 shadow-sm ring-1 ring-slate-200">
+                <div class="grid h-12 w-12 place-items-center rounded-2xl bg-white text-slate-500 shadow-sm ring-1 ring-slate-200">
                     <x-icon name="photo" size="lg" />
                 </div>
                 <div class="mt-3 text-sm font-semibold text-slate-900">

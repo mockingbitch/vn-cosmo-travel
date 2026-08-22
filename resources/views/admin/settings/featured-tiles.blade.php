@@ -1,6 +1,8 @@
 @extends('admin.layouts.app')
 
 @section('content')
+    <x-admin.error-summary />
+
     @php
         /** @var list<array{eyebrow: string, title: string, chips: list<string>, description: string, destination_slug: string, image_url: string}> $tileDefaults */
         $tilesForm = old('featured_tiles', $settings['content.featured_tiles'] ?? []);
@@ -68,7 +70,7 @@
 
         <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
             <div class="text-sm font-semibold text-slate-900">{{ __('admin.settings.featured_tiles.section') }}</div>
-            <p class="mt-1 text-xs text-slate-500">{{ __('admin.settings.featured_tiles.help') }}</p>
+            <x-admin.hint>{{ __('admin.settings.featured_tiles.help') }}</x-admin.hint>
             <p class="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800 ring-1 ring-amber-200">{{ __('admin.settings.featured_tiles.fallback_note') }}</p>
 
             @foreach($tileDefaults as $i => $default)
@@ -118,7 +120,7 @@
 
                         <label class="grid gap-1 sm:col-span-3">
                             <span class="text-xs font-semibold text-slate-700">{{ __('admin.settings.featured_tiles.chips') }}</span>
-                            <p class="text-xs text-slate-500">{{ __('admin.settings.featured_tiles.chips_help', ['max' => \App\Services\FeaturedTilesService::MAX_CHIPS]) }}</p>
+                            <x-admin.hint>{{ __('admin.settings.featured_tiles.chips_help', ['max' => \App\Services\FeaturedTilesService::MAX_CHIPS]) }}</x-admin.hint>
                             <input
                                 type="text"
                                 name="featured_tiles[{{ $i }}][chips]"
@@ -133,7 +135,7 @@
                         <label class="grid gap-1 sm:col-span-3">
                             <span class="text-xs font-semibold text-slate-700">{{ __('admin.settings.featured_tiles.description') }}</span>
                             @unless($tileShapes[$i]['wide'] ?? false)
-                                <p class="text-xs text-slate-500">{{ __('admin.settings.featured_tiles.description_hidden_help') }}</p>
+                                <x-admin.hint>{{ __('admin.settings.featured_tiles.description_hidden_help') }}</x-admin.hint>
                             @endunless
                             <textarea
                                 name="featured_tiles[{{ $i }}][description]"
@@ -160,7 +162,7 @@
 
                         <div class="grid gap-1 sm:col-span-2">
                             <span class="text-xs font-semibold text-slate-700">{{ __('admin.settings.featured_tiles.url') }}</span>
-                            <p class="text-xs text-slate-500">{{ __('admin.settings.featured_tiles.url_help') }}</p>
+                            <x-admin.hint>{{ __('admin.settings.featured_tiles.url_help') }}</x-admin.hint>
                             <div class="flex flex-wrap items-center gap-2">
                                 <code class="min-w-0 flex-1 truncate rounded-xl border border-slate-200 bg-slate-100 px-3 py-2 font-mono text-xs text-slate-600">{{ route('featured', ['p' => $tiles[$i]['slug']], false) }}</code>
                                 <a
@@ -176,11 +178,13 @@
                         </div>
 
                         <div class="grid gap-1 sm:col-span-3">
-                            <span class="text-xs font-semibold text-slate-700">{{ __('admin.settings.featured_tiles.image_url') }}</span>
-                            <p class="text-xs text-slate-500">{{ __('admin.settings.featured_tiles.image_url_help') }}</p>
+                            <label for="tile-image-{{ $i }}" class="text-xs font-semibold text-slate-700">{{ __('admin.settings.featured_tiles.image_url') }}</label>
+                            <x-admin.hint :id="'tile-image-'.$i.'-hint'">{{ __('admin.settings.featured_tiles.image_url_help') }}</x-admin.hint>
                             <div class="mt-1 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
                                 <input
+                                    id="tile-image-{{ $i }}"
                                     type="text"
+                                    aria-describedby="tile-image-{{ $i }}-hint"
                                     name="featured_tiles[{{ $i }}][image_url]"
                                     x-model="imageUrls[{{ $i }}]"
                                     placeholder="{{ __('placeholder.thumbnail_url') }}"
@@ -205,7 +209,7 @@
 
                         <div class="grid gap-1 sm:col-span-3">
                             <span class="text-xs font-semibold text-slate-700">{{ __('admin.settings.featured_tiles.tours') }}</span>
-                            <p class="text-xs text-slate-500">{{ __('admin.settings.featured_tiles.tours_help', ['max' => $maxToursPerTile]) }}</p>
+                            <x-admin.hint>{{ __('admin.settings.featured_tiles.tours_help', ['max' => $maxToursPerTile]) }}</x-admin.hint>
 
                             @if($tourCount === 0)
                                 <div class="mt-1 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
@@ -230,14 +234,9 @@
 
         </div>
 
-        <div class="mt-10 flex items-center justify-end gap-3 pt-2 sm:pt-3">
-            <button
-                type="submit"
-                class="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400/60 focus:ring-offset-2"
-            >
-                <x-icon name="save" size="sm" />
-                {{ __('admin.settings.save_changes') }}
-            </button>
-        </div>
+        <x-admin.form-actions
+            submit-label="{{ __('admin.settings.save_changes') }}"
+            submit-icon="save"
+        />
     </form>
 @endsection

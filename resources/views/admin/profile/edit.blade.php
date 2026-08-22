@@ -1,8 +1,10 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="mx-auto w-full max-w-xl">
-        <x-admin.card :title="__('profile')" :subtitle="__('admin.profile.subtitle')">
+    <x-admin.error-summary />
+
+    <div class="mx-auto w-full">
+        <x-admin.card :title="__('profile')" :subtitle="__('admin.profile.subtitle')" heading="h1">
             <form method="POST" action="{{ route('admin.profile.update') }}" class="space-y-4">
                 @csrf
                 @method('PUT')
@@ -17,12 +19,13 @@
                     </div>
                 </div>
 
-                <div class="flex flex-wrap gap-3 pt-2">
-                    <x-admin.button type="submit" variant="primary">
-                        <x-icon name="save" size="sm" />
-                        {{ __('save') }}
-                    </x-admin.button>
-                </div>
+                <x-admin.form-actions
+                    submit-label="{{ __('save') }}"
+                    submit-icon="save"
+                <x-admin.form-actions
+                    submit-label="{{ __('save') }}"
+                    submit-icon="save"
+                />
             </form>
         </x-admin.card>
     </div>

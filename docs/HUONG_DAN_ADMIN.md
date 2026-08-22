@@ -111,7 +111,7 @@ Bảng so sánh **thực hành**:
 
 - **Tours** — Mỗi dòng là một **gói tour**: giá, số ngày, mô tả, ảnh, lịch trình… Hiển thị ra **trang tour** cho khách xem (nếu tour đang **bật hiển thị** — xem [mục 6](#6-tour-và-bài-blog-đăng-và-ẩn-trên-website)).
 - **Loại giá tour** — Danh mục **các loại giá** bạn tự tạo (ví dụ *Giá cho 1 người*, *Giá cho 2 người*, *Giá bao gồm xe*, *Giá không bao gồm xe*). Tên và phân loại do bạn đặt, sửa lúc nào cũng được; mỗi tour sau đó chọn ra những loại giá mà tour đó áp dụng.
-- **Destinations (Điểm đến)** — Danh mục **khu vực / thành phố** để gắn với tour và trang điểm đến phía khách.
+- **Destinations (Điểm đến)** — Danh mục **khu vực / thành phố** để gắn với tour và trang điểm đến phía khách. Một tour gắn được nhiều điểm đến.
 - **Blog** — Bài viết tin tức / cẩm nang, hiển thị ở khu **Blog** trên website.
 - **Media** — **Kho ảnh**: upload ảnh mới, sau đó khi soạn tour hoặc blog bạn **chọn ảnh** từ kho thay vì dán link lung tung.
 
@@ -127,10 +127,11 @@ Bảng so sánh **thực hành**:
 ### Bạn được giao: “Đăng tour mới”
 
 1. Vào **Tours** → **Thêm tour** (hoặc nút tương đương).
-2. Điền các ô bắt buộc (thường có **điểm đến**, **tiêu đề**, **mô tả**, **ảnh**…). Menu chọn **dịch vụ / tiện ích** nếu có — giúp tour nhất quán khi hiển thị.
-3. Tới khối **Giá tour**: mỗi dòng là **một loại giá** (chọn loại giá + nhập số tiền, ghi chú nếu cần). Bấm **Thêm giá** để có thêm dòng. Phải có **ít nhất một dòng giá**, và chọn đúng **Giá chính** — đây là giá hiện ở danh sách tour và dùng khi khách lọc / sắp xếp theo giá.
-4. Chọn **Trạng thái**: **Đang hoạt động** nếu muốn khách thấy ngay trên web; **Đã tắt** nếu chỉ lưu nháp hoặc chờ duyệt nội bộ.
-5. **Lưu**. Nếu có lỗi (thiếu ô, thiếu dòng giá, ảnh sai định dạng…), màn hình sẽ báo đỏ ngay dưới ô đó — đọc và sửa từng dòng.
+2. Điền các ô bắt buộc (**tiêu đề**, **mô tả**, **ảnh**…). Menu chọn **dịch vụ / tiện ích** nếu có — giúp tour nhất quán khi hiển thị.
+3. Khối **Điểm đến**: một tour có thể đi qua **nhiều điểm đến** — bấm **Thêm điểm đến** để thêm dòng, mỗi dòng chọn một nơi. **Dòng đầu tiên là điểm đến chính**: đó là tên hiện trên thẻ tour ngoài trang khách. Tour sẽ xuất hiện ở trang của **tất cả** điểm đến đã chọn và khi khách lọc theo bất kỳ điểm đến nào trong đó. Không chọn trùng một nơi hai lần (hệ thống tự làm mờ nơi đã chọn).
+4. Tới khối **Giá tour**: mỗi dòng là **một loại giá** (chọn loại giá + nhập số tiền, ghi chú nếu cần). Bấm **Thêm giá** để có thêm dòng. Phải có **ít nhất một dòng giá**, và chọn đúng **Giá chính** — đây là giá hiện ở danh sách tour và dùng khi khách lọc / sắp xếp theo giá.
+5. Chọn **Trạng thái**: **Đang hoạt động** nếu muốn khách thấy ngay trên web; **Đã tắt** nếu chỉ lưu nháp hoặc chờ duyệt nội bộ.
+6. **Lưu**. Nếu có lỗi (thiếu ô, thiếu điểm đến, thiếu dòng giá, ảnh sai định dạng…), màn hình sẽ báo đỏ ngay dưới ô đó — đọc và sửa từng dòng.
 
 ### Bạn được giao: “Sửa giá tour đang chạy”
 
@@ -148,7 +149,7 @@ Bảng so sánh **thực hành**:
 
 ### Bạn được giao: “Đổi chữ / ảnh / link khối ô nổi bật ở trang chủ”
 
-1. **Cài đặt** → **Ô nổi bật trang chủ**. Khối này là 5 ô ảnh lớn nhỏ ngay dưới ô tìm kiếm ở trang chủ.
+1. **Cài đặt** → **Ô nổi bật trang chủ**. Khối này là 7 ô ảnh lớn nhỏ ngay dưới ô tìm kiếm ở trang chủ.
 2. Mỗi ô có: **nhãn** góc trên, **tiêu đề**, **thẻ địa danh** (các tên cách nhau bằng dấu phẩy), **mô tả ngắn**, **chữ trên link**, **ảnh nền** (dán URL hoặc bấm chọn từ thư viện ảnh), và **danh sách tour của ô đó**.
 3. **Link của ô là cố định, không sửa được** — bấm vào ô là mở trang riêng của ô đó (`/featured?p=…`). Link này **sinh tự động từ tiêu đề ô**, nên sửa tiêu đề là link đổi theo (link cũ đã share sẽ không còn dùng được).
 4. Gắn tour cho ô: bấm **Thêm tour** → mở **màn hình chọn tour** có ô tìm kiếm và toàn bộ tour trong hệ thống (ảnh, điểm đến, giá, trạng thái). Bấm vào tour để thêm/bỏ, bấm lại **Xong** để đóng. Danh sách đã chọn nằm ngay dưới nút, dùng mũi tên **lên/xuống** để đổi thứ tự hiển thị và thùng rác để bỏ. Tối đa 8 tour mỗi ô; **số tour đã gắn hiện ngay trên đầu mỗi ô** trong trang cài đặt.

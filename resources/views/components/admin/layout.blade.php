@@ -27,12 +27,19 @@
         @keydown.escape.window="sidebarOpen = false; profileOpen = false"
         class="min-h-screen lg:flex"
     >
+        <a
+            href="#admin-content"
+            class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-xl focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-slate-900 focus:shadow-lg focus:ring-2 focus:ring-indigo-500"
+        >
+            {{ __('ui.skip_to_content') }}
+        </a>
+
         <x-admin.sidebar />
 
         <div class="min-h-screen w-full">
             <x-admin.topbar :title="$pageTitle" />
 
-            <main class="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+            <main id="admin-content" tabindex="-1" class="mx-auto w-full max-w-[96rem] px-4 py-6 sm:px-6 lg:px-8">
                 @if(session('status'))
                     <div
                         x-show="toast"

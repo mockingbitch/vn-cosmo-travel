@@ -47,17 +47,20 @@
                     class="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
                     @click="langOpen = !langOpen"
                     :aria-expanded="langOpen.toString()"
+                    aria-controls="admin-language-menu"
                     aria-label="{{ __('admin.topbar.language') }}"
                 >
                     <x-icon name="globe-alt" size="sm" class="text-slate-500" />
                     <span>{{ $currentLocaleLabel }}</span>
-                    <span class="inline-flex text-slate-400">
+                    <span class="inline-flex text-slate-500" aria-hidden="true">
                         <x-icon name="chevron-down" size="sm" />
                     </span>
                 </button>
 
                 <div
+                    id="admin-language-menu"
                     x-show="langOpen"
+                    x-cloak
                     x-transition.opacity.origin.top.right
                     class="absolute right-0 mt-2 w-44 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg"
                 >
@@ -67,7 +70,7 @@
                             class="flex items-center justify-between gap-3 px-4 py-3 text-sm font-semibold {{ $currentLocale === $key ? 'bg-slate-900 text-white' : 'text-slate-700 hover:bg-slate-50' }}"
                         >
                             <span>{{ $meta['name'] ?? ($meta['label'] ?? strtoupper((string) $key)) }}</span>
-                            <span class="text-xs {{ $currentLocale === $key ? 'text-white/80' : 'text-slate-400' }}">{{ $meta['label'] ?? strtoupper((string) $key) }}</span>
+                            <span class="text-xs {{ $currentLocale === $key ? 'text-white/80' : 'text-slate-500' }}">{{ $meta['label'] ?? strtoupper((string) $key) }}</span>
                         </a>
                     @endforeach
                 </div>
@@ -88,18 +91,22 @@
                     class="inline-flex items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50"
                     @click="profileOpen = !profileOpen"
                     :aria-expanded="profileOpen.toString()"
+                    aria-controls="admin-account-menu"
+                    aria-label="{{ __('admin.topbar.account') }}"
                 >
                     <span class="grid h-8 w-8 place-items-center rounded-xl bg-slate-900 text-xs font-semibold text-white">
                         {{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}
                     </span>
                     <span class="hidden max-w-[10rem] truncate sm:block">{{ auth()->user()->name ?? __('admin.topbar.account') }}</span>
-                    <span class="inline-flex text-slate-400">
+                    <span class="inline-flex text-slate-500" aria-hidden="true">
                         <x-icon name="chevron-down" size="sm" />
                     </span>
                 </button>
 
                 <div
+                    id="admin-account-menu"
                     x-show="profileOpen"
+                    x-cloak
                     x-transition.opacity.origin.top.right
                     class="absolute right-0 mt-2 w-56 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-lg"
                 >

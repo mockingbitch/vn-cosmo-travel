@@ -8,7 +8,6 @@ use App\Models\Tour;
 use App\Models\TourAttribute;
 use App\ViewModels\TourCardViewModel;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class TourAdminService
@@ -78,45 +77,13 @@ class TourAdminService
             ->all();
     }
 
-    public function listFeatured(): Collection
-    {
-        return $this->tours->adminFeaturedList();
-    }
-
-    public function paginateNonFeatured(int $perPage = 15, array $filters = []): LengthAwarePaginator
-    {
-        return $this->tours->adminPaginateNonFeatured($perPage, $filters);
-    }
-
-    /**
-     * @param  list<array{tour_id: int|string, featured_sort?: int|string|null}>  $rows
-     */
-    public function updateFeaturedSorts(array $rows): void
-    {
-        foreach ($rows as $row) {
-            $tourId = (int) ($row['tour_id'] ?? 0);
-            if ($tourId <= 0) {
-                continue;
-            }
-
-            $tour = Tour::query()->find($tourId);
-            if ($tour === null || ! $tour->is_featured) {
-                continue;
-            }
-
-            $sortRaw = $row['featured_sort'] ?? null;
-            $sort = ($sortRaw === null || $sortRaw === '') ? null : max(0, (int) $sortRaw);
-
-            $this->updateFeatured($tour, true, $sort);
-        }
-    }
-
     public function create(array $data): Tour
     {
         $itineraryRows = $this->extractItineraryRows($data);
         $galleryPaths = $this->extractGalleryPaths($data);
         $priceRows = $this->extractPriceRows($data);
-        unset($data['itinerary'], $data['gallery'], $data['prices'], $data['default_price_index']);
+        $destinationIds = $this->extractDestinationIds($data);
+        unset($data['itinerary'], $data['gallery'], $data['prices'], $data['default_price_index'], $data['destination_ids']);
 
         $data['duration'] = max(1, count($itineraryRows));
 
@@ -124,6 +91,7 @@ class TourAdminService
         $data = $this->normalizeTourLists($data);
         $data['currency'] = Tour::CURRENCY_USD;
         $data = $this->applyHeadlinePrice($data, $priceRows);
+        $data = $this->applyPrimaryDestination($data, $destinationIds);
         $this->syncAttributes($data);
         $data['slug'] = $this->uniqueSlug(null, $data['title']);
 
@@ -135,8 +103,9 @@ class TourAdminService
         $this->replaceItineraries($tour, $itineraryRows);
         $this->replaceGalleryImages($tour, $galleryPaths);
         $this->replacePrices($tour, $priceRows);
+        $this->syncDestinations($tour, $destinationIds);
 
-        return $tour->fresh(['itineraries', 'images', 'prices.priceType']);
+        return $tour->fresh(['itineraries', 'images', 'prices.priceType', 'destinations']);
     }
 
     public function updateStatus(Tour $tour, string $status): void
@@ -150,26 +119,13 @@ class TourAdminService
         $this->tours->adminUpdate($tour, $data);
     }
 
-    public function updateFeatured(Tour $tour, bool $isFeatured, ?int $featuredSort = null): void
-    {
-        $data = [
-            'is_featured' => $isFeatured,
-            'featured_sort' => $isFeatured ? $featuredSort : null,
-        ];
-
-        if (($uid = auth()->id()) !== null) {
-            $data['updated_by'] = $uid;
-        }
-
-        $this->tours->adminUpdate($tour, $data);
-    }
-
     public function update(Tour $tour, array $data): Tour
     {
         $itineraryRows = $this->extractItineraryRows($data);
         $galleryPaths = $this->extractGalleryPaths($data);
         $priceRows = $this->extractPriceRows($data);
-        unset($data['itinerary'], $data['gallery'], $data['prices'], $data['default_price_index']);
+        $destinationIds = $this->extractDestinationIds($data);
+        unset($data['itinerary'], $data['gallery'], $data['prices'], $data['default_price_index'], $data['destination_ids']);
 
         $data['duration'] = max(1, count($itineraryRows));
 
@@ -177,6 +133,7 @@ class TourAdminService
         $data = $this->normalizeTourLists($data);
         $data['currency'] = Tour::CURRENCY_USD;
         $data = $this->applyHeadlinePrice($data, $priceRows);
+        $data = $this->applyPrimaryDestination($data, $destinationIds);
         $this->syncAttributes($data);
         $title = $data['title'] ?? $tour->title;
         $data['slug'] = $this->uniqueSlug(null, $title, $tour->id);
@@ -189,8 +146,9 @@ class TourAdminService
         $this->replaceItineraries($tour, $itineraryRows);
         $this->replaceGalleryImages($tour, $galleryPaths);
         $this->replacePrices($tour, $priceRows);
+        $this->syncDestinations($tour, $destinationIds);
 
-        return $tour->fresh(['itineraries', 'images', 'prices.priceType']);
+        return $tour->fresh(['itineraries', 'images', 'prices.priceType', 'destinations']);
     }
 
     public function delete(Tour $tour): void
@@ -244,6 +202,63 @@ class TourAdminService
         $data['thumbnail'] = null;
 
         return $data;
+    }
+
+    /**
+     * @param  array<string, mixed>  $data
+     * @return list<int>
+     */
+    private function extractDestinationIds(array $data): array
+    {
+        $raw = $data['destination_ids'] ?? null;
+        if (! is_array($raw)) {
+            return [];
+        }
+
+        $ids = [];
+        foreach ($raw as $id) {
+            $id = (int) $id;
+            if ($id <= 0 || in_array($id, $ids, true)) {
+                continue;
+            }
+            $ids[] = $id;
+        }
+
+        return $ids;
+    }
+
+    /**
+     * First picked destination stays on `tours.destination_id`: cards, the admin
+     * list column and the destination filter all read that single column.
+     *
+     * @param  array<string, mixed>  $data
+     * @param  list<int>  $destinationIds
+     * @return array<string, mixed>
+     */
+    private function applyPrimaryDestination(array $data, array $destinationIds): array
+    {
+        if ($destinationIds !== []) {
+            $data['destination_id'] = $destinationIds[0];
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param  list<int>  $destinationIds
+     */
+    private function syncDestinations(Tour $tour, array $destinationIds): void
+    {
+        if ($destinationIds === []) {
+            return;
+        }
+
+        $pivot = [];
+        foreach ($destinationIds as $index => $id) {
+            $pivot[$id] = ['sort_order' => $index];
+        }
+
+        $tour->destinations()->sync($pivot);
     }
 
     /**

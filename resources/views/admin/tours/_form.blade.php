@@ -81,6 +81,27 @@
         ? $cleanList($oldExcluded)
         : (isset($tour) && is_array($tour->amenities) ? $cleanList($tour->amenities) : []);
 
+    $oldDestinations = old('destination_ids');
+    if (is_array($oldDestinations)) {
+        $destinationIdsInitial = array_values(array_filter(array_map(
+            static fn ($v) => (string) $v,
+            $oldDestinations
+        ), static fn (string $v): bool => $v !== ''));
+    } elseif ($tour && $tour->relationLoaded('destinations') && $tour->destinations->isNotEmpty()) {
+        $destinationIdsInitial = $tour->destinations->pluck('id')->map(fn ($id) => (string) $id)->all();
+    } elseif ($tour && $tour->destination_id) {
+        $destinationIdsInitial = [(string) $tour->destination_id];
+    } else {
+        $destinationIdsInitial = [];
+    }
+    if ($destinationIdsInitial === []) {
+        $destinationIdsInitial = [''];
+    }
+
+    $destinationsByRegion = collect($destinations)->groupBy(
+        static fn ($d) => filled($d->region) ? __('dest.region.'.$d->region) : __('ui.other')
+    );
+
     $oldPrices = old('prices');
     $defaultPriceIndex = (int) old('default_price_index', 0);
     if (is_array($oldPrices) && $oldPrices !== []) {
@@ -113,24 +134,83 @@
     }
 @endphp
 
-<div>
-    <label class="block text-sm font-medium text-slate-700">{{ __('destination') }}</label>
-    <select name="destination_id" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60">
-        @foreach($destinations as $d)
-            <option
-                value="{{ $d->id }}"
-                title="{{ $d->name_vi }}"
-                @selected(old('destination_id', $tour?->destination_id) == $d->id)
-            >{{ $d->name_en }}</option>
-        @endforeach
-    </select>
-    @error('destination_id')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
+<div
+    x-data="{
+        rows: @js(array_map(static fn ($id, $i) => ['_k' => $i + 1, 'id' => $id], $destinationIdsInitial, array_keys($destinationIdsInitial))),
+        nextKey: {{ count($destinationIdsInitial) + 1 }},
+        addRow() {
+            this.rows.push({ _k: this.nextKey++, id: '' });
+        },
+        removeRow(i) {
+            this.rows.splice(i, 1);
+            if (this.rows.length === 0) {
+                this.rows.push({ _k: this.nextKey++, id: '' });
+            }
+        },
+        /** One destination per row: the same place twice on a tour is meaningless. */
+        isTaken(id, idx) {
+            const value = String(id);
+            return this.rows.some((row, k) => k !== idx && String(row.id) === value);
+        },
+    }"
+>
+    <label class="block text-sm font-medium text-slate-700">{{ __('destinations') }}</label>
+    <x-admin.hint>{{ __('admin.tour_form.destinations_help') }}</x-admin.hint>
+
+    <div class="mt-2 space-y-2">
+        <template x-for="(row, idx) in rows" :key="row._k">
+            <div class="flex items-center gap-2">
+                <span
+                    class="w-24 shrink-0 text-xs font-semibold"
+                    :class="idx === 0 ? 'text-slate-700' : 'text-slate-500'"
+                    x-text="idx === 0 ? '{{ __('admin.tour_form.destination_primary') }}' : ''"
+                ></span>
+                <select
+                    class="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
+                    :name="`destination_ids[${idx}]`"
+                    aria-label="{{ __('destination') }}"
+                            :aria-label="`{{ __('destination') }} ${idx + 1}`"
+                    x-model="row.id"
+                >
+                    <option value="">{{ __('admin.tour_form.destination_select') }}</option>
+                    @foreach($destinationsByRegion as $regionLabel => $regionDestinations)
+                        <optgroup label="{{ $regionLabel }}">
+                            @foreach($regionDestinations as $d)
+                                <option value="{{ $d->id }}" :disabled="isTaken({{ $d->id }}, idx)" title="{{ $d->name_vi }}">{{ $d->name_en }}</option>
+                            @endforeach
+                        </optgroup>
+                    @endforeach
+                </select>
+                <button
+                    type="button"
+                    class="inline-flex shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white p-2 text-slate-500 shadow-sm hover:border-rose-200 hover:bg-rose-50 hover:text-rose-600"
+                    @click="removeRow(idx)"
+                    title="{{ __('admin.tour_form.destination_remove') }}"
+                    :aria-label="'{{ __('admin.tour_form.destination_remove') }}'"
+                >
+                    <x-icon name="trash" size="sm" />
+                </button>
+            </div>
+        </template>
+    </div>
+
+    <button
+        type="button"
+        class="mt-2 inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-800 shadow-sm hover:bg-slate-50"
+        @click="addRow"
+    >
+        <x-icon name="plus" size="sm" />
+        {{ __('admin.tour_form.destination_add') }}
+    </button>
+
+    @error('destination_ids')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
+    @error('destination_ids.*')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
 </div>
 
 @unless(isset($tour) && $tour)
 <div>
-    <label class="block text-sm font-medium text-slate-700">{{ __('status') }}</label>
-    <select name="status" class="mt-1 w-full max-w-md rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60">
+    <label for="tour-status" class="block text-sm font-medium text-slate-700">{{ __('status') }}</label>
+    <select id="tour-status" name="status" class="mt-1 w-full max-w-md rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60">
         <option value="{{ \App\Models\Tour::STATUS_ACTIVE }}" @selected(old('status', \App\Models\Tour::STATUS_ACTIVE) === \App\Models\Tour::STATUS_ACTIVE)>{{ __('status.active') }}</option>
         <option value="{{ \App\Models\Tour::STATUS_DISABLED }}" @selected(old('status', \App\Models\Tour::STATUS_ACTIVE) === \App\Models\Tour::STATUS_DISABLED)>{{ __('status.disabled') }}</option>
     </select>
@@ -139,17 +219,17 @@
 @endunless
 
 <div>
-    <label class="block text-sm font-medium text-slate-700">{{ __('title') }}</label>
-    <p class="mt-0.5 text-xs text-slate-500">{{ __('admin.tour_form.slug_auto') }}</p>
-    <input name="title" value="{{ old('title', $tour?->title) }}" placeholder="{{ __('placeholder.tour_title') }}" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60" required>
-    @error('title')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
+    <label for="tour-title" class="block text-sm font-medium text-slate-700">{{ __('title') }}</label>
+    <x-admin.hint id="tour-title-hint">{{ __('admin.tour_form.slug_auto') }}</x-admin.hint>
+    <input id="tour-title" aria-describedby="tour-title-hint @error('title') tour-title-error @enderror" @error('title') aria-invalid="true" @enderror name="title" value="{{ old('title', $tour?->title) }}" placeholder="{{ __('placeholder.tour_title') }}" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60" required>
+    <x-admin.error field="title" id="tour-title-error" />
 </div>
 
 <div>
-    <label class="block text-sm font-medium text-slate-700">{{ __('description') }}</label>
-    <p class="mt-0.5 text-xs text-slate-500">{{ __('admin.tour_form.description_hint') }}</p>
-    <textarea name="description" rows="6" placeholder="{{ __('placeholder.tour_description') }}" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60">{{ old('description', $tour?->description) }}</textarea>
-    @error('description')<p class="mt-1 text-xs text-rose-600">{{ $message }}</p>@enderror
+    <label for="tour-description" class="block text-sm font-medium text-slate-700">{{ __('description') }}</label>
+    <x-admin.hint id="tour-description-hint">{{ __('admin.tour_form.description_hint') }}</x-admin.hint>
+    <textarea id="tour-description" aria-describedby="tour-description-hint @error('description') tour-description-error @enderror" @error('description') aria-invalid="true" @enderror name="description" rows="6" placeholder="{{ __('placeholder.tour_description') }}" class="mt-1 w-full rounded-xl border border-slate-200 px-3 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60">{{ old('description', $tour?->description) }}</textarea>
+    <x-admin.error field="description" id="tour-description-error" />
 </div>
 
 <x-admin.tour-price-rows
@@ -166,12 +246,13 @@
 >
     <div>
         <label class="block text-sm font-medium text-slate-700">{{ __('thumbnail') }}</label>
-        <p class="mt-0.5 text-xs text-slate-500">{{ __('admin.tour_form.thumbnail_help') }}</p>
+        <x-admin.hint>{{ __('admin.tour_form.thumbnail_help') }}</x-admin.hint>
     </div>
     <div>
-        <label class="block text-xs font-medium text-slate-600">{{ __('admin.tour_form.thumbnail_url_label') }}</label>
+        <label for="tour-thumbnail-url" class="block text-xs font-medium text-slate-600">{{ __('admin.tour_form.thumbnail_url_label') }}</label>
         <div class="mt-1 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-3">
             <input
+                id="tour-thumbnail-url"
                 type="text"
                 name="thumbnail"
                 x-model="thumbnailUrl"
@@ -234,7 +315,7 @@
 >
     <div>
         <label class="block text-sm font-medium text-slate-700">{{ __('admin.tour_form.gallery_section_title') }}</label>
-        <p class="mt-0.5 text-xs text-slate-500">{{ __('admin.tour_form.gallery_help') }}</p>
+        <x-admin.hint>{{ __('admin.tour_form.gallery_help') }}</x-admin.hint>
     </div>
 
     <div class="space-y-4">
@@ -269,6 +350,8 @@
                             type="text"
                             class="min-w-0 flex-1 rounded-xl border border-slate-200 px-3 py-2 font-mono text-xs shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                             :name="`gallery[${idx}]`"
+                            aria-label="{{ __('admin.tour_form.gallery_row_label') }}"
+                            :aria-label="`{{ __('admin.tour_form.gallery_row_label') }} ${idx + 1}`"
                             x-model="row.url"
                             placeholder="{{ __('placeholder.gallery_item') }}"
                             autocomplete="off"
@@ -294,7 +377,7 @@
 
 <div class="rounded-2xl border border-slate-200 bg-slate-50/80 p-5">
     <div class="text-sm font-semibold text-slate-900">{{ __('admin.tour_form.included_excluded_section') }}</div>
-    <p class="mt-1 text-xs text-slate-500">{{ __('admin.tour_form.included_excluded_help') }}</p>
+    <x-admin.hint>{{ __('admin.tour_form.included_excluded_help') }}</x-admin.hint>
 
     <div class="mt-5 grid gap-6 lg:grid-cols-2">
         <x-admin.tour-list-editor
@@ -339,7 +422,7 @@
     <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
             <label class="block text-sm font-medium text-slate-700">{{ __('ui.tour_itinerary') }}</label>
-            <p class="mt-0.5 text-xs text-slate-500">{{ __('admin.tour_form.itinerary_hint') }}</p>
+            <x-admin.hint>{{ __('admin.tour_form.itinerary_hint') }}</x-admin.hint>
             <p class="mt-1 text-xs font-medium text-slate-600">{{ __('admin.tour_form.duration_from_itinerary') }}</p>
         </div>
         <button
@@ -373,6 +456,8 @@
                             placeholder="{{ __('placeholder.itinerary_title') }}"
                             x-model="row.title"
                             :name="`itinerary[${idx}][title]`"
+                            aria-label="{{ __('ui.day_title') }}"
+                            :aria-label="`{{ __('ui.day_title') }} ${idx + 1}`"
                         />
                     </div>
                     <div>
@@ -383,6 +468,8 @@
                             placeholder="{{ __('placeholder.itinerary_description') }}"
                             x-model="row.description"
                             :name="`itinerary[${idx}][description]`"
+                            aria-label="{{ __('ui.day_description') }}"
+                            :aria-label="`{{ __('ui.day_description') }} ${idx + 1}`"
                         ></textarea>
                     </div>
 
@@ -411,6 +498,8 @@
                                             placeholder="{{ __('placeholder.slot_time') }}"
                                             x-model="slot.time"
                                             :name="`itinerary[${idx}][schedule][${j}][time]`"
+                                            aria-label="{{ __('ui.itinerary_schedule') }} — {{ __('placeholder.slot_time') }}"
+                            :aria-label="`{{ __('placeholder.slot_time') }} ${j + 1}`"
                                         />
                                         <input
                                             type="text"
@@ -418,6 +507,8 @@
                                             placeholder="{{ __('placeholder.slot_title') }}"
                                             x-model="slot.title"
                                             :name="`itinerary[${idx}][schedule][${j}][title]`"
+                                            aria-label="{{ __('ui.itinerary_schedule') }} — {{ __('placeholder.slot_title') }}"
+                            :aria-label="`{{ __('placeholder.slot_title') }} ${j + 1}`"
                                         />
                                         <button
                                             type="button"
@@ -433,6 +524,8 @@
                                         placeholder="{{ __('placeholder.slot_description') }}"
                                         x-model="slot.description"
                                         :name="`itinerary[${idx}][schedule][${j}][description]`"
+                                        aria-label="{{ __('ui.itinerary_schedule') }} — {{ __('placeholder.slot_description') }}"
+                            :aria-label="`{{ __('placeholder.slot_description') }} ${j + 1}`"
                                     ></textarea>
                                 </div>
                             </template>

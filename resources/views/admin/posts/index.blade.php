@@ -61,16 +61,16 @@
             </div>
         </form>
         <table class="min-w-full divide-y divide-slate-200 text-sm">
-            <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+            <th scope="col"ead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
                 <tr>
-                    <th class="px-4 py-3">{{ __('title') }}</th>
-                    <th class="px-4 py-3">{{ __('category') }}</th>
-                    <th class="px-4 py-3">{{ __('status') }}</th>
+                    <th scope="col" class="px-4 py-3">{{ __('title') }}</th>
+                    <th scope="col" class="px-4 py-3">{{ __('category') }}</th>
+                    <th scope="col" class="px-4 py-3">{{ __('status') }}</th>
                     @if(auth()->user()->canManageUsers())
-                        <th class="px-4 py-3">{{ __('audit.created_by') }}</th>
-                        <th class="px-4 py-3">{{ __('audit.updated_by') }}</th>
+                        <th scope="col" class="px-4 py-3">{{ __('audit.created_by') }}</th>
+                        <th scope="col" class="px-4 py-3">{{ __('audit.updated_by') }}</th>
                     @endif
-                    <th class="px-4 py-3 text-right">{{ __('actions') }}</th>
+                    <th scope="col" class="px-4 py-3 text-right">{{ __('actions') }}</th>
                 </tr>
             </thead>
             <tbody class="divide-y divide-slate-100">

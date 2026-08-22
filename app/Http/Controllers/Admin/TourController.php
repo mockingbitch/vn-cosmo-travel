@@ -67,6 +67,7 @@ class TourController extends Controller
             'itineraries' => fn ($q) => $q->orderBy('day'),
             'images' => fn ($q) => $q->orderBy('sort_order'),
             'prices.priceType',
+            'destinations',
         ]);
 
         return view('admin.tours.edit', [

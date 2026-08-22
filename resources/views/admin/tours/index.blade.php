@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('content')
-    <div class="mx-auto w-full max-w-6xl">
+    <div class="mx-auto w-full">
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
             <div class="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                 <h1 class="text-2xl font-semibold tracking-tight text-slate-900">{{ __('tours') }}</h1>
@@ -58,18 +58,18 @@
 
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-slate-200 text-sm">
-                    <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+                    <th scope="col"ead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
                         <tr>
-                            <th class="px-4 py-3 sm:px-6">{{ __('title') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('destination') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('status') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('days') }}</th>
-                            <th class="px-4 py-3 sm:px-6">{{ __('ui.price_usd') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('title') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('destination') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('status') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('days') }}</th>
+                            <th scope="col" class="px-4 py-3 sm:px-6">{{ __('ui.price_usd') }}</th>
                             @if(auth()->user()->canManageUsers())
-                                <th class="px-4 py-3 sm:px-6">{{ __('audit.created_by') }}</th>
-                                <th class="px-4 py-3 sm:px-6">{{ __('audit.updated_by') }}</th>
+                                <th scope="col" class="px-4 py-3 sm:px-6">{{ __('audit.created_by') }}</th>
+                                <th scope="col" class="px-4 py-3 sm:px-6">{{ __('audit.updated_by') }}</th>
                             @endif
-                            <th class="px-4 py-3 text-right sm:px-6">{{ __('actions') }}</th>
+                            <th scope="col" class="px-4 py-3 text-right sm:px-6">{{ __('actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
@@ -90,7 +90,15 @@
                                         <span class="font-medium text-slate-900 group-hover:underline">{{ $tour->title }}</span>
                                     </a>
                                 </td>
-                                <td class="px-4 py-3 text-slate-600 sm:px-6">{{ $tour->destination?->localizedName() }}</td>
+                                <td class="px-4 py-3 text-slate-600 sm:px-6">
+                                    @php($tourDestinations = $tour->destinationNames())
+                                    <div>{{ $tourDestinations[0] ?? '—' }}</div>
+                                    @if(count($tourDestinations) > 1)
+                                        <div class="text-xs text-slate-500" title="{{ implode(', ', $tourDestinations) }}">
+                                            {{ __('admin.tour_form.destinations_more', ['count' => count($tourDestinations) - 1]) }}
+                                        </div>
+                                    @endif
+                                </td>
                                 <td class="px-4 py-3 align-middle sm:px-6">
                                     <form method="post" action="{{ route('admin.tours.update-status', $tour) }}" class="inline-block min-w-[9rem]">
                                         @csrf

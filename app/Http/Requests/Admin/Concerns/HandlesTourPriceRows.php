@@ -11,6 +11,32 @@ use Illuminate\Contracts\Validation\Validator;
 trait HandlesTourPriceRows
 {
     /**
+     * Compacts the repeatable destination selects: blanks out, duplicates kept
+     * for the validator to report, first entry stays the primary destination.
+     */
+    protected function normalizeDestinationIds(): void
+    {
+        $raw = $this->input('destination_ids');
+
+        if (! is_array($raw)) {
+            $this->merge(['destination_ids' => []]);
+
+            return;
+        }
+
+        $ids = [];
+        foreach ($raw as $id) {
+            $id = trim((string) $id);
+            if ($id === '') {
+                continue;
+            }
+            $ids[] = (int) $id;
+        }
+
+        $this->merge(['destination_ids' => $ids]);
+    }
+
+    /**
      * Drops blank rows, reduces amounts to plain integers, and re-points
      * `default_price_index` at the row it pointed to before compaction.
      */

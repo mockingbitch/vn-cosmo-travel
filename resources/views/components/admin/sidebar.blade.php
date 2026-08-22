@@ -18,7 +18,6 @@
             'title' => __('admin.sidebar.content'),
             'items' => [
                 ['label' => __('tours'), 'route' => 'admin.tours.index', 'icon' => 'tours'],
-                ['label' => __('admin.sidebar.featured_tours'), 'route' => 'admin.featured-tours.index', 'icon' => 'sparkles'],
                 ['label' => __('admin.sidebar.tour_price_types'), 'route' => 'admin.tour-price-types.index', 'icon' => 'tag'],
                 ['label' => __('destinations'), 'route' => 'admin.destinations.index', 'icon' => 'map'],
                 ['label' => __('blog'), 'route' => 'admin.posts.index', 'icon' => 'document'],
@@ -119,7 +118,7 @@
         @foreach($sections as $section)
             <div class="mt-4 first:mt-0">
                 @if(filled($section['title'] ?? null))
-                    <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400" x-show="!sidebarCollapsed" x-transition.opacity.duration.150ms>
+                    <div class="px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500" x-show="!sidebarCollapsed" x-transition.opacity.duration.150ms>
                         {{ $section['title'] }}
                     </div>
                 @endif
@@ -158,7 +157,7 @@
                                 <x-icon
                                     :name="$item['icon']"
                                     size="md"
-                                    class="shrink-0 {{ $settingsGroupActive ? 'text-indigo-700' : 'text-slate-400 group-hover:text-slate-700' }}"
+                                    class="shrink-0 {{ $settingsGroupActive ? 'text-indigo-700' : 'text-slate-500 group-hover:text-slate-700' }}"
                                 />
                                 <span class="pointer-events-none absolute left-full top-1/2 z-50 ml-3 -translate-y-1/2 whitespace-nowrap rounded-xl bg-slate-900 px-3 py-2 text-xs font-semibold text-white opacity-0 shadow-lg transition duration-150 group-hover:opacity-100">
                                     {{ $item['label'] }}
@@ -183,10 +182,10 @@
                                     <x-icon
                                         :name="$item['icon']"
                                         size="md"
-                                        class="shrink-0 text-slate-400 transition-colors group-hover:text-slate-700 {{ $settingsGroupActive ? 'text-indigo-600' : '' }}"
+                                        class="shrink-0 text-slate-500 transition-colors group-hover:text-slate-700 {{ $settingsGroupActive ? 'text-indigo-600' : '' }}"
                                     />
                                     <span class="min-w-0 flex-1">{{ $item['label'] }}</span>
-                                    <span class="inline-flex shrink-0 text-slate-400 transition-transform" :class="subOpen ? 'rotate-180' : ''">
+                                    <span class="inline-flex shrink-0 text-slate-500 transition-transform" :class="subOpen ? 'rotate-180' : ''">
                                         <x-icon name="chevron-down" size="sm" />
                                     </span>
                                 </button>
@@ -223,7 +222,7 @@
                                                 <x-icon
                                                     :name="$child['icon']"
                                                     size="sm"
-                                                    class="!h-3.5 !w-3.5 shrink-0 {{ $childActive ? 'text-indigo-600' : 'text-slate-400' }}"
+                                                    class="!h-3.5 !w-3.5 shrink-0 {{ $childActive ? 'text-indigo-600' : 'text-slate-500' }}"
                                                 />
                                             </span>
                                             <span class="min-w-0 flex-1 truncate leading-snug pe-0.5">{{ $child['label'] }}</span>
@@ -257,7 +256,7 @@
                                 <x-icon
                                     :name="$item['icon'] ?? 'home'"
                                     size="md"
-                                    class="shrink-0 transition-colors duration-200 {{ $active ? 'text-indigo-700' : 'text-slate-400 group-hover:text-slate-700' }}"
+                                    class="shrink-0 transition-colors duration-200 {{ $active ? 'text-indigo-700' : 'text-slate-500 group-hover:text-slate-700' }}"
                                 />
 
                                 <span class="min-w-0 flex-1 truncate" x-show="!sidebarCollapsed" x-transition.opacity.duration.150ms>{{ $item['label'] }}</span>

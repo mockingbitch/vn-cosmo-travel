@@ -83,19 +83,19 @@
                     @if($loop->first)
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-slate-200 text-sm">
-                                <thead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
+                                <th scope="col"ead class="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-600">
                                     <tr>
-                                        <th class="px-4 py-3">{{ __('tour') }}</th>
-                                        <th class="px-4 py-3">{{ __('guest') }}</th>
-                                        <th class="px-4 py-3">{{ __('ui.travel_date') }}</th>
-                                        <th class="px-4 py-3">{{ __('people') }}</th>
-                                        <th class="px-4 py-3">{{ __('status') }}</th>
-                                        <th class="px-4 py-3">{{ __('submitted') }}</th>
+                                        <th scope="col" class="px-4 py-3">{{ __('tour') }}</th>
+                                        <th scope="col" class="px-4 py-3">{{ __('guest') }}</th>
+                                        <th scope="col" class="px-4 py-3">{{ __('ui.travel_date') }}</th>
+                                        <th scope="col" class="px-4 py-3">{{ __('people') }}</th>
+                                        <th scope="col" class="px-4 py-3">{{ __('status') }}</th>
+                                        <th scope="col" class="px-4 py-3">{{ __('submitted') }}</th>
                                         @if(auth()->user()->canManageUsers())
-                                            <th class="px-4 py-3">{{ __('audit.created_by') }}</th>
-                                            <th class="px-4 py-3">{{ __('audit.updated_by') }}</th>
+                                            <th scope="col" class="px-4 py-3">{{ __('audit.created_by') }}</th>
+                                            <th scope="col" class="px-4 py-3">{{ __('audit.updated_by') }}</th>
                                         @endif
-                                        <th class="px-4 py-3 text-right">{{ __('actions') }}</th>
+                                        <th scope="col" class="px-4 py-3 text-right">{{ __('actions') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-100 bg-white">
@@ -136,7 +136,7 @@
                                     title="{{ __('ui.view_on_site') }}"
                                 >
                                     <span class="line-clamp-2">{{ $booking->tour->title }}</span>
-                                    <x-icon name="external-link" size="sm" class="!h-3.5 !w-3.5 shrink-0 text-slate-400" />
+                                    <x-icon name="external-link" size="sm" class="!h-3.5 !w-3.5 shrink-0 text-slate-500" />
                                 </a>
                             @else
                                 <div class="font-medium text-slate-500">—</div>
@@ -185,7 +185,7 @@
                     @endif
                 @empty
                     <div class="grid place-items-center px-6 py-16 text-center">
-                        <div class="grid h-12 w-12 place-items-center rounded-2xl bg-slate-100 text-slate-400">
+                        <div class="grid h-12 w-12 place-items-center rounded-2xl bg-slate-100 text-slate-500">
                             <x-icon name="envelope" size="lg" />
                         </div>
                         <div class="mt-3 text-sm font-semibold text-slate-900">{{ __('ui.no_bookings_yet') }}</div>
@@ -202,7 +202,7 @@
                     <div class="grid gap-5">
                         <div class="grid gap-3 sm:grid-cols-2">
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('tour') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('tour') }}</div>
                                 <div class="mt-1 text-sm font-semibold text-slate-900" x-text="detail.tour"></div>
                                 <template x-if="detail.tourFrontendUrl">
                                     <a :href="detail.tourFrontendUrl" target="_blank" rel="noopener" class="mt-1.5 inline-flex items-center gap-2 text-xs font-semibold text-indigo-700 hover:underline">
@@ -212,16 +212,16 @@
                                 </template>
                             </div>
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('submitted') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('submitted') }}</div>
                                 <div class="mt-1 text-sm text-slate-700" x-text="detail.createdAt"></div>
                             </div>
                             @if(auth()->user()->canManageUsers())
                                 <div>
-                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('audit.created_by') }}</div>
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('audit.created_by') }}</div>
                                     <div class="mt-1 text-sm text-slate-700" x-text="detail.createdBy || '—'"></div>
                                 </div>
                                 <div>
-                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('audit.updated_by') }}</div>
+                                    <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('audit.updated_by') }}</div>
                                     <div class="mt-1 text-sm text-slate-700" x-text="detail.updatedBy || '—'"></div>
                                 </div>
                             @endif
@@ -229,30 +229,30 @@
 
                         <div class="grid gap-3 rounded-2xl border border-slate-200 bg-slate-50/60 p-4 sm:grid-cols-2">
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('ui.full_name') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('ui.full_name') }}</div>
                                 <div class="mt-1 text-sm font-semibold text-slate-900" x-text="detail.name"></div>
                             </div>
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('email') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('email') }}</div>
                                 <a class="mt-1 block break-all text-sm font-medium text-indigo-700 hover:underline" :href="'mailto:' + detail.email" x-text="detail.email"></a>
                             </div>
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('phone') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('phone') }}</div>
                                 <a class="mt-1 block text-sm font-medium text-indigo-700 hover:underline" :href="'tel:' + detail.phone" x-text="detail.phone"></a>
                             </div>
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('ui.travel_date') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('ui.travel_date') }}</div>
                                 <div class="mt-1 text-sm text-slate-700" x-text="detail.travelDate"></div>
                             </div>
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('people') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('people') }}</div>
                                 <div class="mt-1 text-sm text-slate-700" x-text="detail.peopleCount"></div>
                             </div>
                         </div>
 
                         <template x-if="detail.note && detail.note.length > 0">
                             <div>
-                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-400">{{ __('note') }}</div>
+                                <div class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ __('note') }}</div>
                                 <p class="mt-1 whitespace-pre-line rounded-xl border border-slate-200 bg-white p-3 text-sm text-slate-700" x-text="detail.note"></p>
                             </div>
                         </template>

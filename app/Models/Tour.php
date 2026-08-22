@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
@@ -156,9 +157,46 @@ class Tour extends Model
         return $query->where('status', self::STATUS_ACTIVE);
     }
 
+    /**
+     * Primary destination — the first of {@see self::destinations()}, kept on the
+     * tours table so filters and list columns stay on one indexed column.
+     */
     public function destination(): BelongsTo
     {
         return $this->belongsTo(Destination::class);
+    }
+
+    public function destinations(): BelongsToMany
+    {
+        return $this->belongsToMany(Destination::class)
+            ->withPivot('sort_order')
+            ->orderByPivot('sort_order')
+            ->orderBy('destinations.name_en');
+    }
+
+    /**
+     * Every destination of the tour, primary first; falls back to the primary
+     * relation when the pivot has not been loaded/filled.
+     *
+     * @return Collection<int, Destination>
+     */
+    public function destinationList(): Collection
+    {
+        $list = $this->destinations;
+
+        if ($list->isNotEmpty()) {
+            return $list;
+        }
+
+        return $this->destination !== null ? collect([$this->destination]) : collect();
+    }
+
+    /** @return list<string> */
+    public function destinationNames(): array
+    {
+        return $this->destinationList()
+            ->map(fn (Destination $destination): string => $destination->localizedName())
+            ->all();
     }
 
     public function creator(): BelongsTo

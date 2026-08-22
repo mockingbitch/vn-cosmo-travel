@@ -17,7 +17,7 @@ class TourRepository implements TourRepositoryInterface
             ->withCount(['images', 'itineraries']);
 
         if (! empty($filters['destination'])) {
-            $query->whereHas('destination', fn ($q) => $q->where('slug', $filters['destination']));
+            $query->whereHas('destinations', fn ($q) => $q->where('destinations.slug', $filters['destination']));
         }
 
         if (! empty($filters['min_price']) || ! empty($filters['max_price'])) {
@@ -58,58 +58,11 @@ class TourRepository implements TourRepositoryInterface
         return $query->paginate($perPage)->withQueryString();
     }
 
-    public function getFeatured(int $limit = 4): Collection
-    {
-        return Tour::query()
-            ->active()
-            ->where('is_featured', true)
-            ->with(['destination', 'prices.priceType'])
-            ->orderByRaw('featured_sort IS NULL, featured_sort ASC')
-            ->orderByDesc('id')
-            ->limit($limit)
-            ->get();
-    }
-
-    public function adminFeaturedList(): Collection
-    {
-        return Tour::query()
-            ->with(['destination'])
-            ->where('is_featured', true)
-            ->orderByRaw('featured_sort IS NULL, featured_sort ASC')
-            ->orderByDesc('id')
-            ->get();
-    }
-
-    public function adminPaginateNonFeatured(int $perPage = 15, array $filters = []): LengthAwarePaginator
-    {
-        return Tour::query()
-            ->with(['destination'])
-            ->where('is_featured', false)
-            ->when(
-                filled($filters['q'] ?? null),
-                function ($query) use ($filters): void {
-                    $keyword = trim((string) $filters['q']);
-                    $query->where(function ($inner) use ($keyword): void {
-                        $inner
-                            ->where('title', 'like', '%'.$keyword.'%')
-                            ->orWhere('slug', 'like', '%'.$keyword.'%');
-                    });
-                }
-            )
-            ->when(
-                filled($filters['destination_id'] ?? null),
-                fn ($query) => $query->where('destination_id', (int) $filters['destination_id'])
-            )
-            ->latest('id')
-            ->paginate($perPage)
-            ->withQueryString();
-    }
-
     public function findBySlugOrFail(string $slug): Tour
     {
         return Tour::query()
             ->active()
-            ->with(['destination', 'images', 'itineraries', 'prices.priceType'])
+            ->with(['destination', 'destinations', 'images', 'itineraries', 'prices.priceType'])
             ->where('slug', $slug)
             ->firstOrFail();
     }
@@ -143,12 +96,19 @@ class TourRepository implements TourRepositoryInterface
         return $ordered;
     }
 
-    public function getRelated(int $tourId, int $destinationId, int $limit = 4): Collection
+    /**
+     * @param  list<int>  $destinationIds
+     */
+    public function getRelated(int $tourId, array $destinationIds, int $limit = 4): Collection
     {
+        if ($destinationIds === []) {
+            return new Collection;
+        }
+
         return Tour::query()
             ->active()
             ->with(['destination', 'prices.priceType'])
-            ->where('destination_id', $destinationId)
+            ->whereHas('destinations', fn ($q) => $q->whereIn('destinations.id', $destinationIds))
             ->where('id', '!=', $tourId)
             ->latest('id')
             ->limit($limit)
@@ -158,7 +118,7 @@ class TourRepository implements TourRepositoryInterface
     public function adminPaginate(int $perPage = 15, array $filters = []): LengthAwarePaginator
     {
         return Tour::query()
-            ->with(['destination', 'creator', 'updatedBy', 'prices.priceType'])
+            ->with(['destination', 'destinations', 'creator', 'updatedBy', 'prices.priceType'])
             ->when(
                 filled($filters['q'] ?? null),
                 function ($query) use ($filters): void {
@@ -176,7 +136,10 @@ class TourRepository implements TourRepositoryInterface
             )
             ->when(
                 filled($filters['destination_id'] ?? null),
-                fn ($query) => $query->where('destination_id', (int) $filters['destination_id'])
+                fn ($query) => $query->whereHas(
+                    'destinations',
+                    fn ($inner) => $inner->where('destinations.id', (int) $filters['destination_id'])
+                )
             )
             ->latest('id')
             ->paginate($perPage)

@@ -182,6 +182,7 @@
                                     :id="`price-type-${row._k}`"
                                     class="mt-1 w-full rounded-lg border border-slate-200 bg-white px-2 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                                     :name="`prices[${idx}][tour_price_type_id]`"
+                                    aria-label="{{ __('admin.tour_form.price_row_type') }}"
                                     x-model="row.tour_price_type_id"
                                 >
                                     <option value="">{{ __('admin.tour_form.select_price_type') }}</option>
@@ -212,6 +213,7 @@
                                         class="w-full rounded-lg border border-slate-200 bg-white py-2 pl-7 pr-3 text-sm tabular-nums shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                                         placeholder="{{ __('placeholder.tour_price') }}"
                                         :name="`prices[${idx}][amount]`"
+                                        aria-label="{{ __('admin.tour_form.price_row_amount') }}"
                                         :value="format(row.amount)"
                                         @input="onAmountInput(row, $event)"
                                     />
@@ -229,6 +231,7 @@
                                     class="mt-1 w-full rounded-lg border border-slate-200 px-2 py-2 text-sm shadow-sm focus:border-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-300/60"
                                     placeholder="{{ __('placeholder.price_row_note') }}"
                                     :name="`prices[${idx}][note]`"
+                                    aria-label="{{ __('admin.tour_form.price_row_note') }}"
                                     x-model="row.note"
                                 />
                             </div>
