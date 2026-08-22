@@ -75,10 +75,14 @@
     @click="sidebarOpen = false"
 ></div>
 
+{{-- lg:h-screen matters: as a sticky flex child its `h-full` resolved against the
+     page-tall wrapper, so the nav below never had a bounded height to scroll in
+     and the wheel scrolled the page instead. Also note the single class
+     attribute — a second one used to be dropped by the parser, killing the
+     drawer transition. --}}
 <aside
-    class="fixed inset-y-0 left-0 z-50 flex h-full flex-col border-r border-slate-200/70 bg-white/80 shadow-xl backdrop-blur supports-[backdrop-filter]:bg-white/70 lg:sticky lg:z-auto lg:shadow-none"
+    class="fixed inset-y-0 left-0 z-50 flex h-full flex-col border-r border-slate-200/70 bg-white/80 shadow-xl backdrop-blur transition-transform duration-200 ease-in-out supports-[backdrop-filter]:bg-white/70 lg:sticky lg:top-0 lg:h-screen lg:z-auto lg:shadow-none"
     :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
-    class="transition-transform duration-200 ease-in-out"
     :style="sidebarCollapsed ? 'width: 5rem;' : 'width: 18rem;'"
 >
     <div class="flex items-center justify-between gap-3 px-4 py-4">
@@ -114,7 +118,7 @@
         </div>
     </div>
 
-    <nav class="flex-1 overflow-y-auto px-3 pb-4 pt-1 [scrollbar-width:thin] [scrollbar-color:rgb(203,213,225)_transparent]">
+    <nav class="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-4 pt-1 [scrollbar-width:thin] [scrollbar-color:rgb(203,213,225)_transparent]">
         @foreach($sections as $section)
             <div class="mt-4 first:mt-0">
                 @if(filled($section['title'] ?? null))

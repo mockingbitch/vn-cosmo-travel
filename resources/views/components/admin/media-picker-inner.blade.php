@@ -66,7 +66,7 @@
 >
     <div x-init="load()" @keydown.window="modalKeydown($event)">
         {{-- Sticky search toolbar. Negative margins escape body padding so border-b spans full width. --}}
-        <div class="sticky -top-20 z-10 -mx-6 -mt-5 mb-4 border-b border-slate-200 bg-white/95 px-6 pb-3 pt-2.5 backdrop-blur">
+        <div class="sticky top-0 z-10 -mx-6 -mt-5 mb-4 border-b border-slate-200 bg-white/95 px-6 pb-3 pt-5 backdrop-blur">
             <label class="relative block w-full">
                 <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-500">
                     <x-icon name="search" size="sm" />
