@@ -18,6 +18,7 @@
         default => 'max-w-lg',
     };
     $hasHeader = isset($header);
+    $hasActions = isset($actions);
     $hasFooter = isset($footer);
     $bodyPadding = $padding ? 'px-6 py-5' : '';
     $dialogNonce = substr(Str::uuid()->toString(), 0, 8);
@@ -58,7 +59,7 @@
             aria-label="{{ $ariaLabelResolved }}"
         @endif
     >
-        @if($title || $subtitle || $showClose || $hasHeader)
+        @if($title || $subtitle || $showClose || $hasHeader || $hasActions)
             <div class="flex shrink-0 items-start justify-between gap-4 border-b border-slate-200/80 bg-white px-6 py-4">
                 <div id="{{ $dialogTitleId }}" class="min-w-0">
                     @if($title)
@@ -71,16 +72,22 @@
                         <div @class(['mt-3' => $title || $subtitle])>{{ $header }}</div>
                     @endif
                 </div>
-                @if($showClose)
-                    <button
-                        type="button"
-                        class="shrink-0 rounded-lg p-1.5 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
-                        @click="{{ $name }} = false"
-                        aria-label="{{ __('a11y.close_dialog') }}"
-                    >
-                        <x-icon name="close" size="md" />
-                    </button>
-                @endif
+                <div class="flex shrink-0 items-center gap-1">
+                    @if($hasActions)
+                        {{ $actions }}
+                    @endif
+
+                    @if($showClose)
+                        <button
+                            type="button"
+                            class="rounded-lg p-1.5 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+                            @click="{{ $name }} = false"
+                            aria-label="{{ __('a11y.close_dialog') }}"
+                        >
+                            <x-icon name="close" size="md" />
+                        </button>
+                    @endif
+                </div>
             </div>
         @endif
 
