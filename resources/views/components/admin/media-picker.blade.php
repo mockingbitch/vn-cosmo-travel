@@ -93,9 +93,13 @@
             syncUrlEvent: syncUrlEvent ?? null,
             syncUrlIndex: syncUrlIndex ?? null,
             openModal: false,
+            searchOpen: false,
             q: '',
             items: [],
             nextPageUrl: null,
+            loading: false,
+            loadingMore: false,
+            observer: null,
             selectedIds: initialIds ?? [],
             selected: [],
 
@@ -109,9 +113,34 @@
 
             open() {
                 this.openModal = true;
+                if (this.searchOpen) {
+                    this.focusSearch();
+                }
+            },
+
+            /** Header icon reveals the field; hiding it keeps the query in place
+             *  (the icon shows a dot so an active filter is never invisible). */
+            toggleSearch() {
+                this.searchOpen = ! this.searchOpen;
+                if (this.searchOpen) {
+                    this.focusSearch();
+                }
+            },
+
+            focusSearch() {
                 this.$nextTick(() => {
                     try { this.$refs.search?.focus(); } catch (e) {}
                 });
+            },
+
+            closeSearch() {
+                this.searchOpen = false;
+            },
+
+            clearSearch() {
+                this.q = '';
+                this.reload();
+                this.focusSearch();
             },
 
             modalKeydown(e) {
@@ -138,12 +167,54 @@
             },
 
             async reload() {
-                const url = new URL(pickerUrl, window.location.origin);
-                if (this.q) url.searchParams.set('q', this.q);
-                const res = await fetch(url.toString(), { headers: { 'Accept': 'application/json' } });
-                const json = await res.json();
-                this.items = json.data ?? [];
-                this.nextPageUrl = json.next_page_url ?? null;
+                this.loading = true;
+                try {
+                    const url = new URL(pickerUrl, window.location.origin);
+                    if (this.q) url.searchParams.set('q', this.q);
+                    const res = await fetch(url.toString(), { headers: { 'Accept': 'application/json' } });
+                    const json = await res.json();
+                    this.items = json.data ?? [];
+                    this.nextPageUrl = json.next_page_url ?? null;
+                } finally {
+                    this.loading = false;
+                }
+            },
+
+            /** Appends the next page; ids already on screen are skipped so a
+             *  concurrent upload shifting the pages cannot duplicate a card. */
+            async loadMore() {
+                if (! this.openModal || ! this.nextPageUrl || this.loadingMore || this.loading) {
+                    return;
+                }
+                this.loadingMore = true;
+                try {
+                    const res = await fetch(this.nextPageUrl, { headers: { 'Accept': 'application/json' } });
+                    const json = await res.json();
+                    const seen = new Set(this.items.map((m) => m.id));
+                    const fresh = (json.data ?? []).filter((m) => ! seen.has(m.id));
+                    this.items = [...this.items, ...fresh];
+                    this.nextPageUrl = json.next_page_url ?? null;
+                } finally {
+                    this.loadingMore = false;
+                }
+            },
+
+            /** Infinite scroll: watch a sentinel at the end of the list, with the
+             *  modal body as the scroll root (the page itself never scrolls here). */
+            watchSentinel(el) {
+                if (typeof IntersectionObserver === 'undefined') {
+                    return;
+                }
+                this.observer?.disconnect();
+                this.observer = new IntersectionObserver(
+                    (entries) => {
+                        if (entries.some((entry) => entry.isIntersecting)) {
+                            this.loadMore();
+                        }
+                    },
+                    { root: el.closest('.overflow-y-auto') ?? null, rootMargin: '240px 0px' }
+                );
+                this.observer.observe(el);
             },
 
             toggle(m) {
